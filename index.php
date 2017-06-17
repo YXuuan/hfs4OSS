@@ -66,11 +66,12 @@ $t2 = microtime(true);
             <div id="flowbar">
                 <div id="crumbbar">
                     <a class="crumb" href="?path=">
-                        <img class="sep" src="h5ai/images/ui/crumb.svg">
+                        <img class="sep" src="/_h5ai/public/images/ui/crumb.svg" alt=">">
                         <span class="label"><b><?php echo $site ; ?></b></span>
+                        <img class="hint" src="/_h5ai/public/images/themes/default/folder-page.svg" alt="has index page">
                     </a>
                     <a class="crumb active">
-                        <img class="sep" src="h5ai/images/ui/crumb.svg">
+                        <img class="sep" src="/_h5ai/public/images/ui/crumb.svg" alt=">">
                         <span class="label"><?php echo $_GET['path'] ;?></span>
                     </a>
                 </div>
@@ -109,16 +110,17 @@ $t2 = microtime(true);
                             echo '<li class="item folder"><a href="?path='.$floders.'"><span class="icon square"><img src="h5ai/images/themes/default/folder.svg" alt="folder"></span><span class="icon landscape"><img src="h5ai/images/themes/default/folder.svg" alt="folder"></span><span class="label">'.substr(substr($floders, 0, strlen($floders)-1), strlen($_GET['path'])).'</span><span class="size" data-bytes="null"></span></a></li>' ;
                         }
                         foreach ($object as $files){
-                            echo '<li class="item file"><a href="http://file.oovoo.site/'.$files.'" target="_blank"><span class="icon square"><img src="h5ai/images/themes/default/file.svg" alt="file"></span><span class="icon landscape"><img src="h5ai/images/themes/default/file.svg" alt="file"></span><span class="label">'.substr($files, strlen($_GET['path'])).'<span class="size" data-bytes="0">0 B</span></a></li>';
+                            echo '<li class="item file"><a href="'.$bucket_url.$files.'" target="_blank"><span class="icon square"><img src="h5ai/images/themes/default/file.svg" alt="file"></span><span class="icon landscape"><img src="h5ai/images/themes/default/file.svg" alt="file"></span><span class="label">'.substr($files, strlen($_GET['path'])).'<span class="size" data-bytes="0">0 B</span></a></li>';
                         }
                         ?>
                     </ul>
                     <div style="text-align:center; margin-top:25px">
                         <span style="color:#8E8E8E"><?php
-                        echo count($prefix).' floders, ' ;
-                        echo count($object).' items<br />' ;
-                        echo date('Y-m-d H:s:i') ;
+                        echo count($prefix).' floder(s),  ' ;
+                        echo count($object).' item(s)<br />' ;
+                        echo date('Y-m-d H:i:s') ;
                         if($stats == true){echo '<br />listObjects() takes '.floor(($t2-$t1)*1000).'ms';}
+                        echo $version ;
                         echo '</span><br />' ;
                         echo $footer ;
                         ?>
@@ -126,7 +128,6 @@ $t2 = microtime(true);
                 </div>
             </div>
         </div>
-        <div id="notification" class="hidden">loading...</div>
         <div id="pv-overlay" class="hidden">
             <div id="pv-container" style="width: 955px; height: 875px; left: 20px; top: 20px;"></div>
             <div id="pv-spinner" class="hidden" style="left: 497.5px; top: 481.5px;">

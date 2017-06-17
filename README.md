@@ -6,8 +6,18 @@ A modern HTTP File Server for oss@aliyun.
 SDK由[aliyun-oss-php-sdk](https://help.aliyun.com/document_detail/32101.html?spm=5176.doc52834.6.753.ihtpJC)-2.2.4提供，主题由[h5ai](https://larsjung.de/h5ai/)提供。
 
 ## 预览 & 下载/Demo & Download
-* 预览：http://file.oovoo.site/
-* 下载：https://github.com/YuXuan220/hfs_for_oss/releases
+* 预览：http://hfs-for-oss.oss-cn-shanghai.aliyuncs.com/demo/index.html
+* 下载：https://github.com/YuXuan220/hfs_for_oss/releases/
+
+## 更新日志/ChangeLog
+```
+version 1.0.1 2017-06-17
+	[增加] 底部程序版本信息（你要拿就拿掉吧，。）
+	[修复] items链接指向错误
+	[修复] 底部时间错误，tips：date('Y-m-d H:i:s')
+version 1.0.0 2017-06-17
+	破壳。
+```
 
 ## 部署/Build
 * 环境要求：  
@@ -33,19 +43,31 @@ PHP 5.5及以上（没有证据表明程序无法在PHP5.5以下正常运行）
 ```
 * 配置：   
 ~~~php
-/config.php: 
-<?php  
-final class Config  
-{  
-	const OSS_ACCESS_ID = '';   //Access Key ID  
-	const OSS_ACCESS_KEY = '';    //Access Key Secret  
-	const OSS_ENDPOINT = ''; //OSS EndPoint (e.g. http://oss-cn-shanghai.aliyuncs.com)  
-	const OSS_BUCKET = ''; //OSS Bucket Name  
-}  
-$site = '' ;   //Site Name  
-$footer = '';   //Footer, Stats Code Supported  
-$stats = true ;    //Display how long listObjects() takes? (true/false)  
+/config.php:
+<?php
+final class Config
+{
+	const OSS_ACCESS_ID = '';
+	//Access Key ID
+	const OSS_ACCESS_KEY = '';
+	//Access Key Secret
+	const OSS_ENDPOINT = '';
+	//OSS EndPoint (e.g. http://oss-cn-shanghai.aliyuncs.com)
+	const OSS_BUCKET = '';
+	//OSS Bucket Name
+}
+$bucket_url = '' ;
+//Index Page of oss bucket, started with "http(s)", ended with"/" (e.g. http://xxxxx.oss-cn-shanghai.aliyuncs.com/)
+$site = '' ;
+//Site Name
+$footer = '';
+//Footer, Stats Code Supported
+$stats = true ;
+//Display how long listObjects() takes? (true/false)
+$version = '<br /><br /><a href="https://github.com/YuXuan220/hfs_for_oss/" target="_blank" >hfs_for_oss</a> ver 1.0.1' ;
+//Do You Love Me?
 ~~~
+如bucket文件更新不频繁，建议配置页面缓存以加快速度。
 
 ## 后续可能的改动/Preview
 ```
@@ -54,12 +76,6 @@ $stats = true ;    //Display how long listObjects() takes? (true/false)
 [新增] 上方crumbbar路径多级显示（逐个操作字符串滤出path里的每一级路径真的很麻烦。。能用"../"就好了啊我也很绝望啊）
 [新增] 简单的object管理功能（上传，重命名等）
 [永远不可能有的功能\]（不好意思我懒，嘴角挂着和善的微笑）） 文件列表排序
-```
-
-## 更新日志/ChangeLog
-```
-version 1.0.0 2017-06-17
-	破壳。
 ```
 
 ## 开源协议/License
