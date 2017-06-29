@@ -1,51 +1,51 @@
 # hfs_for_oss
 HTTP File Server for AliYun OSS  
 A modern HTTP File Server for oss@aliyun.  
-Ò»¿îÏÖ´ú»¯µÄhttpÎÄ¼þ·þÎñÆ÷£¬Îª°¢ÀïÔÆOSS¶ÔÏó´æ´¢·þÎñÌá¹©Ö§³Ö¡£ 
-Ö÷Òª¹¦ÄÜ£ºÁÐ±íOSSÖ¸¶¨BucketÖÐËùÓÐµÄObjects£¨°üÀ¨floders²ã¼¶£©£¬²¢Ìá¹©µ¥»÷ÔÚÐÂ´°¿Ú·ÃÎÊ¹¦ÄÜ¡£
-Ê¹ÓÃ³¡¾°£ºÔÚ¾ß±¸¼ÆËãÄÜÁ¦ºÍOSS¶ÔÏó´æ´¢·þÎñµÄÇé¿öÏÂ£¬¿ÉÒÔÌá¹©×ÊÔ´·Ö·¢ÄÜÁ¦¡£
+ä¸€æ¬¾çŽ°ä»£åŒ–çš„httpæ–‡ä»¶æœåŠ¡å™¨ï¼Œä¸ºé˜¿é‡Œäº‘OSSå¯¹è±¡å­˜å‚¨æœåŠ¡æä¾›æ”¯æŒã€‚ 
+ä¸»è¦åŠŸèƒ½ï¼šåˆ—è¡¨OSSæŒ‡å®šBucketä¸­æ‰€æœ‰çš„Objectsï¼ˆåŒ…æ‹¬floderså±‚çº§ï¼‰ï¼Œå¹¶æä¾›å•å‡»åœ¨æ–°çª—å£è®¿é—®åŠŸèƒ½ã€‚  
+ä½¿ç”¨åœºæ™¯ï¼šåœ¨å…·å¤‡è®¡ç®—èƒ½åŠ›å’ŒOSSå¯¹è±¡å­˜å‚¨æœåŠ¡çš„æƒ…å†µä¸‹ï¼Œå¯ä»¥æä¾›èµ„æºåˆ†å‘èƒ½åŠ›ã€‚  
   
-SDKÓÉ[aliyun-oss-php-sdk](https://help.aliyun.com/document_detail/32101.html?spm=5176.doc52834.6.753.ihtpJC)-2.2.4Ìá¹©£¬Ö÷ÌâÓÉ[h5ai](https://larsjung.de/h5ai/)Ìá¹©¡£
+SDKç”±[aliyun-oss-php-sdk](https://help.aliyun.com/document_detail/32101.html?spm=5176.doc52834.6.753.ihtpJC)-2.2.4æä¾›ï¼Œä¸»é¢˜ç”±[h5ai](https://larsjung.de/h5ai/)æä¾›ã€‚
 
-## Ô¤ÀÀ/Demo
-* Demo£ºhttp://hfs-for-oss.oss-cn-shanghai.aliyuncs.com/demo/index.html  
-ÓÉÓÚ¸÷ÖÖÏÞÖÆ£¬demoÖÐµÄÒ³ÃæÃû³ÆÐÎÊ½²¢²»´ú±íÊµ¼Ê³ÌÐòµÄ²ÎÊý£¬Êµ¼Ê³ÌÐò²ÎÊýÐÎÈç£º/?path=dir/
+## é¢„è§ˆ/Demo
+* Demoï¼šhttp://hfs-for-oss.oss-cn-shanghai.aliyuncs.com/demo/index.html  
+ç”±äºŽå„ç§é™åˆ¶ï¼Œdemoä¸­çš„é¡µé¢åç§°å½¢å¼å¹¶ä¸ä»£è¡¨å®žé™…ç¨‹åºçš„å‚æ•°ï¼Œå®žé™…ç¨‹åºå‚æ•°å½¢å¦‚ï¼š/?path=dir/
 
-## ¸üÐÂÈÕÖ¾/ChangeLog
+## æ›´æ–°æ—¥å¿—/ChangeLog
 ```
 version 1.0.2 2017-06-17
-	[ÐÞ¸´] folder»òitem²»´æÔÚÊ±±éÀúÊý×é²úÉú±¨´íÐÅÏ¢
+	[ä¿®å¤] folderæˆ–itemä¸å­˜åœ¨æ—¶éåŽ†æ•°ç»„äº§ç”ŸæŠ¥é”™ä¿¡æ¯
 version 1.0.1 2017-06-17
-	[Ôö¼Ó] µ×²¿³ÌÐò°æ±¾ÐÅÏ¢£¨ÄãÒªÄÃ¾ÍÄÃµô°É£¬¡££©
-	[ÐÞ¸´] itemsÁ´½ÓÖ¸Ïò´íÎó
-	[ÐÞ¸´] µ×²¿Ê±¼ä´íÎó£¬tips£ºdate('Y-m-d H:i:s')
+	[å¢žåŠ ] åº•éƒ¨ç¨‹åºç‰ˆæœ¬ä¿¡æ¯ï¼ˆä½ è¦æ‹¿å°±æ‹¿æŽ‰å§ï¼Œã€‚ï¼‰
+	[ä¿®å¤] itemsé“¾æŽ¥æŒ‡å‘é”™è¯¯
+	[ä¿®å¤] åº•éƒ¨æ—¶é—´é”™è¯¯ï¼Œtipsï¼šdate('Y-m-d H:i:s')
 version 1.0.0 2017-06-17
-	ÆÆ¿Ç¡£
+	ç ´å£³ã€‚
 ```
 
-## ²¿Êð/Build
-* »·¾³ÒªÇó£º  
-PHP 5.5¼°ÒÔÉÏ£¨Ã»ÓÐÖ¤¾Ý±íÃ÷³ÌÐòÎÞ·¨ÔÚPHP5.5ÒÔÏÂÕý³£ÔËÐÐ£©
-* ÎÄ¼þ½á¹¹£º
+## éƒ¨ç½²/Build
+* çŽ¯å¢ƒè¦æ±‚ï¼š  
+PHP 5.5åŠä»¥ä¸Šï¼ˆæ²¡æœ‰è¯æ®è¡¨æ˜Žç¨‹åºæ— æ³•åœ¨PHP5.5ä»¥ä¸‹æ­£å¸¸è¿è¡Œï¼‰
+* æ–‡ä»¶ç»“æž„ï¼š
 ```
 /
-©À©¤©¤aliyun-oss-php-sdk-2.2.4/	--SDKÄ¿Â¼
-  ©À©¤©¤src/
-    ©À©¤©¤...
-  ©À©¤©¤autoload.php
-  ©¸©¤©¤common.php
-©À©¤©¤h5ai/	--h5Ä¿Â¼
-  ©À©¤©¤css/
-    ©À©¤©¤style.css  --¿É×Ô¶¨ÒåµÄcss
-  ©À©¤©¤images/
-    ©À©¤©¤...
-  ©À©¤©¤js/
-    ©À©¤©¤...
-©À©¤©¤config.php	--ÅäÖÃÎÄ¼þ
-©À©¤©¤get_files.php	--listObjects(), »ñÈ¡ÎÄ¼þÁÐ±í
-©¸©¤©¤index.php	--Ê×Ò³
+â”œâ”€â”€aliyun-oss-php-sdk-2.2.4/	--SDKç›®å½•
+  â”œâ”€â”€src/
+    â”œâ”€â”€...
+  â”œâ”€â”€autoload.php
+  â””â”€â”€common.php
+â”œâ”€â”€h5ai/	--h5ç›®å½•
+  â”œâ”€â”€css/
+    â”œâ”€â”€style.css  --å¯è‡ªå®šä¹‰çš„css
+  â”œâ”€â”€images/
+    â”œâ”€â”€...
+  â”œâ”€â”€js/
+    â”œâ”€â”€...
+â”œâ”€â”€config.php	--é…ç½®æ–‡ä»¶
+â”œâ”€â”€get_files.php	--listObjects(), èŽ·å–æ–‡ä»¶åˆ—è¡¨
+â””â”€â”€index.php	--é¦–é¡µ
 ```
-* ÅäÖÃ£º   
+* é…ç½®ï¼š   
 ~~~php
 /config.php:
 <?php
@@ -71,20 +71,20 @@ $stats = true ;
 $version = '<br /><br /><a href="https://github.com/YuXuan220/hfs_for_oss/" target="_blank" >hfs_for_oss</a> ver 1.0.1' ;
 //Do You Love Me?
 ~~~
-* ÈçbucketÎÄ¼þ¸üÐÂ²»Æµ·±£¬½¨ÒéÅäÖÃÒ³Ãæ»º´æÒÔ¼Ó¿ìËÙ¶È¡£
+* å¦‚bucketæ–‡ä»¶æ›´æ–°ä¸é¢‘ç¹ï¼Œå»ºè®®é…ç½®é¡µé¢ç¼“å­˜ä»¥åŠ å¿«é€Ÿåº¦ã€‚
 
-## ºóÐø¿ÉÄÜµÄ¸Ä¶¯/Preview
+## åŽç»­å¯èƒ½çš„æ”¹åŠ¨/Preview
 ```
-[ÐÞ¸´] Â·¾¶²ã¼¶µ½Ä³Ò»ÊýÁ¿ºóÉÏÒ»¼¶ÎÄ¼þ¼ÐÃû³ÆÏÔÊ¾²»Õý³£
-[ÐÂÔö] Êä³öitemµÄ´óÐ¡
-[ÐÂÔö] ÉÏ·½crumbbarÂ·¾¶¶à¼¶ÏÔÊ¾£¨Öð¸ö²Ù×÷×Ö·û´®ÂË³öpathÀïµÄÃ¿Ò»¼¶Â·¾¶ÕæµÄºÜÂé·³¡£¡£ÄÜÓÃ"../"¾ÍºÃÁË°¡ÎÒÒ²ºÜ¾øÍû°¡£©
-[ÐÂÔö] ÅúÁ¿ÏÂÔØ£¨·ÇÑ¹Ëõ±Õ°ü£©
-[ÐÂÔö] ¼òµ¥µÄobject¹ÜÀí¹¦ÄÜ£¨ÉÏ´«£¬ÖØÃüÃûµÈ£©
-[ÓÀÔ¶²»¿ÉÄÜÓÐµÄ¹¦ÄÜ\]£¨²»ºÃÒâË¼ÎÒÀÁ£¬×ì½Ç¹Ò×ÅºÍÉÆµÄÎ¢Ð¦£©£© ÎÄ¼þÁÐ±íÅÅÐò
+[ä¿®å¤] è·¯å¾„å±‚çº§åˆ°æŸä¸€æ•°é‡åŽä¸Šä¸€çº§æ–‡ä»¶å¤¹åç§°æ˜¾ç¤ºä¸æ­£å¸¸
+[æ–°å¢ž] è¾“å‡ºitemçš„å¤§å°
+[æ–°å¢ž] ä¸Šæ–¹crumbbarè·¯å¾„å¤šçº§æ˜¾ç¤ºï¼ˆé€ä¸ªæ“ä½œå­—ç¬¦ä¸²æ»¤å‡ºpathé‡Œçš„æ¯ä¸€çº§è·¯å¾„çœŸçš„å¾ˆéº»çƒ¦ã€‚ã€‚èƒ½ç”¨"../"å°±å¥½äº†å•Šæˆ‘ä¹Ÿå¾ˆç»æœ›å•Šï¼‰
+[æ–°å¢ž] æ‰¹é‡ä¸‹è½½ï¼ˆéžåŽ‹ç¼©é—­åŒ…ï¼‰
+[æ–°å¢ž] ç®€å•çš„objectç®¡ç†åŠŸèƒ½ï¼ˆä¸Šä¼ ï¼Œé‡å‘½åç­‰ï¼‰
+[æ°¸è¿œä¸å¯èƒ½æœ‰çš„åŠŸèƒ½\]ï¼ˆä¸å¥½æ„æ€æˆ‘æ‡’ï¼Œå˜´è§’æŒ‚ç€å’Œå–„çš„å¾®ç¬‘ï¼‰ï¼‰ æ–‡ä»¶åˆ—è¡¨æŽ’åº
 ```
 
-## ¿ªÔ´Ð­Òé/License
-£¨ËäÈ»ÎÒºÜÏëÓÃWTFPL°¡£¬£¨Ð¦~£©£©
+## å¼€æºåè®®/License
+ï¼ˆè™½ç„¶æˆ‘å¾ˆæƒ³ç”¨WTFPLå•Šï¼Œï¼ˆç¬‘~ï¼‰ï¼‰
 ```
 The MIT License (MIT) 
  
