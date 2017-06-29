@@ -37,7 +37,7 @@ $t2 = microtime(true);
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title><?php 
         if(!$_GET['path'] == ""){
-            echo substr($_GET['path'], 0, strlen($_GET['path'])-1)." - " ;
+            echo $_GET['path']." - " ;
             }
         echo $site ;
         ?></title>
@@ -106,11 +106,15 @@ $t2 = microtime(true);
  <span class="icon landscape"><img src="h5ai/images/themes/default/folder-parent.svg" alt="folder"></span>
  <span class="label"><b>'.$last_floder_name.'</b></span><span class="size" data-bytes="null"></span></a></li>' ;
                             }
-                        foreach ($prefix as $floders){
-                            echo '<li class="item folder"><a href="?path='.$floders.'"><span class="icon square"><img src="h5ai/images/themes/default/folder.svg" alt="folder"></span><span class="icon landscape"><img src="h5ai/images/themes/default/folder.svg" alt="folder"></span><span class="label">'.substr(substr($floders, 0, strlen($floders)-1), strlen($_GET['path'])).'</span><span class="size" data-bytes="null"></span></a></li>' ;
+                        if($prefix){
+                        	foreach ($prefix as $floders){
+                            	echo '<li class="item folder"><a href="?path='.$floders.'"><span class="icon square"><img src="h5ai/images/themes/default/folder.svg" alt="folder"></span><span class="icon landscape"><img src="h5ai/images/themes/default/folder.svg" alt="folder"></span><span class="label">'.substr(substr($floders, 0, strlen($floders)-1), strlen($_GET['path'])).'</span><span class="size" data-bytes="null"></span></a></li>' ;
+                        	}
                         }
-                        foreach ($object as $files){
-                            echo '<li class="item file"><a href="'.$bucket_url.$files.'" target="_blank"><span class="icon square"><img src="h5ai/images/themes/default/file.svg" alt="file"></span><span class="icon landscape"><img src="h5ai/images/themes/default/file.svg" alt="file"></span><span class="label">'.substr($files, strlen($_GET['path'])).'<span class="size" data-bytes="0">0 B</span></a></li>';
+                        if($object){
+                        	foreach ($object as $files){
+                            	echo '<li class="item file"><a href="'.$bucket_url.$files.'" target="_blank"><span class="icon square"><img src="h5ai/images/themes/default/file.svg" alt="file"></span><span class="icon landscape"><img src="h5ai/images/themes/default/file.svg" alt="file"></span><span class="label">'.substr($files, strlen($_GET['path'])).'<span class="size" data-bytes="0">0 B</span></a></li>';
+                        	}
                         }
                         ?>
                     </ul>
