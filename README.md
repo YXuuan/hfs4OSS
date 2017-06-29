@@ -2,10 +2,11 @@
 HTTP File Server for AliYun OSS  
 A modern HTTP File Server for oss@aliyun.  
 一款现代化的http文件服务器，为阿里云OSS对象存储服务提供支持。  
+  
 主要功能：列表OSS指定Bucket中所有的Objects（包括floders层级），并提供单击在新窗口访问功能。  
 使用场景：在具备计算能力和OSS对象存储服务的情况下，可以提供资源分发能力。  
   
-SDK由[aliyun-oss-php-sdk](https://help.aliyun.com/document_detail/32101.html?spm=5176.doc52834.6.753.ihtpJC)-2.2.4提供，主题由[h5ai](https://larsjung.de/h5ai/)提供。
+SDK由[aliyun-oss-php-sdk](https://help.aliyun.com/document_detail/32101.html?spm=5176.doc52834.6.753.ihtpJC)-2.2.4提供，样式由[h5ai](https://larsjung.de/h5ai/)提供。
 
 ## 预览/Demo
 * Demo：http://hfs-for-oss.oss-cn-shanghai.aliyuncs.com/demo/index.html  
