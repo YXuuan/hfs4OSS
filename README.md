@@ -14,6 +14,9 @@ SDK由[aliyun-oss-php-sdk](https://help.aliyun.com/document_detail/32101.html?sp
 
 ## 更新日志/ChangeLog
 ```
+version 1.0.3 2017-08-12
+	[优化] 获得上层目录名称和上层目录路径的算法
+	[修复] 路径层级到某一数量后上一级文件夹名称显示不正常
 version 1.0.2 2017-06-17
 	[修复] folder或item不存在时遍历数组产生报错信息
 version 1.0.1 2017-06-17
@@ -76,7 +79,6 @@ $version = '<br /><br /><a href="https://github.com/YuXuan220/hfs_for_oss/" targ
 
 ## 后续可能的改动/Preview
 ```
-[修复] 路径层级到某一数量后上一级文件夹名称显示不正常
 [新增] 输出item的大小
 [新增] 上方crumbbar路径多级显示（逐个操作字符串滤出path里的每一级路径真的很麻烦。。能用"../"就好了啊我也很绝望啊）
 [新增] 批量下载（非压缩闭包）
