@@ -1,22 +1,3 @@
-<?php
-//计算get_files()的运行时间
-$t1 = microtime(true);
-include_once 'get_files.php' ;
-listObjects($ossClient,$_GET['path']) ;
-$t2 = microtime(true);
-
-$explode_path = explode("/", $_GET['path']) ;
-
-$last_floder_name = $explode_path[count($explode_path)-2] ;	//上层目录为倒数第二个元素
-if($last_floder_name == ""){$last_floder_name = "/" ;}	//顶层目录必须为“/”，否则get_files()无法正常工作
-//$last_floder_name = substr(substr(substr("/".$_GET['path'],0,strlen("/".$_GET['path'])-1), 0, strripos(substr("/".$_GET['path'],0,strlen("/".$_GET['path'])-1), "/")), strripos(substr(substr($_GET['path'],0,strlen($_GET['path'])-1), 0, strripos(substr($_GET['path'],0,strlen($_GET['path'])-1), "/")), "/")+1);
-//获得上层目录路径
-for($i = 0; $i < count($explode_path)-2; $i++){	//拼接已拆分的数组
-	$last_floder_path = $last_floder_path."/".$explode_path[$i] ;
-}
-$last_floder_path = substr($last_floder_path."/", 1) ;	//在末尾加入“/”并去除字符串开头的“/”
-//$last_floder_path = substr(substr($_GET['path'],0,strlen($_GET['path'])-1), 0, strripos(substr($_GET['path'],0,strlen($_GET['path'])-1), "/")) ;
-?>
 
 <html class="hb-loaded" lang="en">
 
@@ -48,14 +29,14 @@ $last_floder_path = substr($last_floder_path."/", 1) ;	//在末尾加入“/”�
 		</style>
 		<meta charset="utf-8">
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
-		<title><?php echo $last_floder_name." - ".$site ;?></title>
+		<title>obj51 - hfs_for_oss-demo</title>
 		<meta name="description" content="index - powered by h5ai v0.29.0 (https://larsjung.de/h5ai/)">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="shortcut icon" href="h5ai/images/favicon/favicon-16-32.ico">
 		<link rel="apple-touch-icon-precomposed" type="image/png" href="h5ai/images/favicon/favicon-152.png">
-		<link rel="stylesheet" href="h5ai/css/styles.css">
-		<script src="h5ai/js/scripts.js" data-module="index"></script>
-		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ubuntu:300,400,700%7CUbuntu+Mono:400,700" class="x-head">
+		<link rel="stylesheet" href="h5ai/css/styles.css" tppabs="http://www.oovoo.site/hfs_for_oss/h5ai/css/styles.css">
+		<script src="h5ai/js/scripts.js" tppabs="http://www.oovoo.site/hfs_for_oss/h5ai/js/scripts.js" data-module="index"></script>
+		<link rel="stylesheet" href="../../fonts.googleapis.com/css-family=Ubuntu-300,400,700-Ubuntu+Mono-400,700.css" tppabs="http://fonts.googleapis.com/css?family=Ubuntu:300,400,700%7CUbuntu+Mono:400,700" class="x-head">
 		<!--<style class="x-head">
 		#root, input, select {
 			font-family:"Ubuntu", "Roboto", "Helvetica", "Arial", "sans-serif"!important
@@ -73,20 +54,13 @@ $last_floder_path = substr($last_floder_path."/", 1) ;	//在末尾加入“/”�
 		<div id="topbar">
 			<div id="flowbar">
 				<div id="crumbbar">
-					<a class="crumb" href="?path=">
-						<img class="sep" src="/_h5ai/public/images/ui/crumb.svg">
-						<span class="label"><b><?php echo $site ; ?></b></span>
-						<img class="hint" src="/_h5ai/public/images/themes/default/folder-page.svg">
+					<a class="crumb" href="-path=.htm" tppabs="http://www.oovoo.site/hfs_for_oss/?path=">
+						<img class="sep" src="h5ai/images/ui/crumb.svg" tppabs="http://www.oovoo.site/hfs_for_oss/h5ai/images/ui/crumb.svg">
+						<span class="label"><b>hfs_for_oss-demo</b></span>
+						<img class="hint" src="h5ai/images/themes/default/folder-page.svg" tppabs="http://www.oovoo.site/hfs_for_oss/h5ai/images/themes/default/folder-page.svg">
 					</a>
 					<a class="crumb">
-						<?php
-$i = 0 ;
-while($explode_path[$i]!==""){
-	echo '<span class="label">'.$explode_path[$i].'</span><img class="sep" src="/_h5ai/public/images/ui/crumb.svg">' ;
-	$i++ ;
-}
-						?>
-					</a>	
+						<span class="label">dir</span><img class="sep" src="h5ai/images/ui/crumb.svg" tppabs="http://www.oovoo.site/hfs_for_oss/h5ai/images/ui/crumb.svg"><span class="label">obj51</span><img class="sep" src="h5ai/images/ui/crumb.svg" tppabs="http://www.oovoo.site/hfs_for_oss/h5ai/images/ui/crumb.svg">					</a>	
 				</div>
 			</div>
 			<a id="backlink" href="https://github.com/YXuuan/" target="_blank" title="Powered by YXuuan - https://github.com/YXuuan/">
@@ -105,40 +79,13 @@ while($explode_path[$i]!==""){
 						<li class="header">
 							<a class="label ascending" href="#"><span class="l10n-name">Name</span></a>
 							<a class="size">
-								<img src="h5ai/images/ui/sort.svg" class="sort" alt="sort order"><span class="l10n-size">Size</span>
+								<img src="h5ai/images/ui/sort.svg" tppabs="http://www.oovoo.site/hfs_for_oss/h5ai/images/ui/sort.svg" class="sort" alt="sort order"><span class="l10n-size">Size</span>
 							</a>
-						</li><?php
-						if(isset($_GET['path']) && $_GET['path'] !== ""){
-							unset($object[0]) ;    //如当前目录不为“/”，则删除$object[]的第一个元素
-							echo '<li class="item folder folder-parent"><a href="?path=' ;
-							//if($last_floder_path == ""){echo $last_floder_path ;}else{echo $last_floder_path."/" ;}
-							echo $last_floder_path ;
-							echo '"> <span class="icon square"><img src="h5ai/images/themes/default/folder-parent.svg" alt="folder"></span>
- <span class="icon landscape"><img src="h5ai/images/themes/default/folder-parent.svg" alt="folder"></span>
- <span class="label"><b>'.$last_floder_name.'</b></span><span class="size" data-bytes="null"></span></a></li>' ;
-							}
-						if($prefix){
-							foreach ($prefix as $floders){
-								echo '<li class="item folder"><a href="?path='.$floders.'"><span class="icon square"><img src="h5ai/images/themes/default/folder.svg" alt="folder"></span><span class="icon landscape"><img src="h5ai/images/themes/default/folder.svg" alt="folder"></span><span class="label">'.substr(substr($floders, 0, strlen($floders)-1), strlen($_GET['path'])).'</span><span class="size" data-bytes="null"></span></a></li>' ;
-							}
-						}
-						if($object){
-							foreach ($object as $files){
-								echo '<li class="item file"><a href="'.$bucket_url.$files.'" target="_blank"><span class="icon square"><img src="h5ai/images/themes/default/file.svg" alt="file"></span><span class="icon landscape"><img src="h5ai/images/themes/default/file.svg" alt="file"></span><span class="label">'.substr($files, strlen($_GET['path'])).'<span class="size" data-bytes="0">0 B</span></a></li>';
-							}
-						}
-						?>
-					</ul>
+						</li><li class="item folder folder-parent"><a href="-path=dir-.htm" tppabs="http://www.oovoo.site/hfs_for_oss/?path=dir/"> <span class="icon square"><img src="h5ai/images/themes/default/folder-parent.svg" tppabs="http://www.oovoo.site/hfs_for_oss/h5ai/images/themes/default/folder-parent.svg" alt="folder"></span>
+ <span class="icon landscape"><img src="h5ai/images/themes/default/folder-parent.svg" tppabs="http://www.oovoo.site/hfs_for_oss/h5ai/images/themes/default/folder-parent.svg" alt="folder"></span>
+ <span class="label"><b>obj51</b></span><span class="size" data-bytes="null"></span></a></li>					</ul>
 					<div style="text-align:center; margin-top:25px">
-						<span style="color:#8E8E8E"><?php
-						echo count($prefix).' floder(s),  ' ;
-						echo count($object).' item(s)<br />' ;
-						echo date('Y-m-d H:i:s') ;
-						if($stats == true){echo '<br />listObjects() takes '.floor(($t2-$t1)*1000).'ms';}
-						echo '<br /><br /><a href="https://github.com/YXuuan/hfs_for_oss/" target="_blank" >hfs_for_oss</a> ver 1.0.4</span><br />' ;
-						echo $footer ;
-						?>
-					</div>
+						<span style="color:#8E8E8E">0 floder(s),  0 item(s)<br />2017-09-30 19:23:20<br />listObjects() takes 122ms<br /><br /><a href="https://github.com/YXuuan/hfs_for_oss/" target="_blank" >hfs_for_oss</a> ver 1.0.4</span><br />					</div>
 				</div>
 			</div>
 		</div>
@@ -146,33 +93,33 @@ while($explode_path[$i]!==""){
 			<div id="pv-container" style="width: 955px; height: 875px; left: 20px; top: 20px;"></div>
 			<div id="pv-spinner" class="hidden" style="left: 497.5px; top: 481.5px;">
 				<img class="back">
-				<img class="spinner" src="h5ai/images/ui/spinner.svg">
+				<img class="spinner" src="h5ai/images/ui/spinner.svg" tppabs="http://www.oovoo.site/hfs_for_oss/h5ai/images/ui/spinner.svg">
 			</div>
 			<div id="pv-prev-area" class="hof">
-				<img src="h5ai/images/ui/preview-prev.svg">
+				<img src="h5ai/images/ui/preview-prev.svg" tppabs="http://www.oovoo.site/hfs_for_oss/h5ai/images/ui/preview-prev.svg">
 			</div>
 			<div id="pv-next-area" class="hof">
-				<img src="h5ai/images/ui/preview-next.svg">
+				<img src="h5ai/images/ui/preview-next.svg" tppabs="http://www.oovoo.site/hfs_for_oss/h5ai/images/ui/preview-next.svg">
 			</div>
 			<div id="pv-bottombar" class="clearfix hof">
 				<ul id="pv-buttons">
 					<li id="pv-bar-close" class="bar-right bar-button">
-						<img src="h5ai/images/ui/preview-close.svg">
+						<img src="h5ai/images/ui/preview-close.svg" tppabs="http://www.oovoo.site/hfs_for_oss/h5ai/images/ui/preview-close.svg">
 					</li>
 					<li id="pv-bar-raw" class="bar-right">
 						<a class="bar-button" target="_blank">
-							<img src="h5ai/images/ui/preview-raw.svg">
+							<img src="h5ai/images/ui/preview-raw.svg" tppabs="http://www.oovoo.site/hfs_for_oss/h5ai/images/ui/preview-raw.svg">
 						</a>
 					</li>
 					<li id="pv-bar-fullscreen" class="bar-right bar-button">
-						<img src="h5ai/images/ui/preview-fullscreen.svg">
+						<img src="h5ai/images/ui/preview-fullscreen.svg" tppabs="http://www.oovoo.site/hfs_for_oss/h5ai/images/ui/preview-fullscreen.svg">
 					</li>
 					<li id="pv-bar-next" class="bar-right bar-button">
-						<img src="h5ai/images/ui/preview-next.svg">
+						<img src="h5ai/images/ui/preview-next.svg" tppabs="http://www.oovoo.site/hfs_for_oss/h5ai/images/ui/preview-next.svg">
 					</li>
 					<li id="pv-bar-idx" class="bar-right bar-label"></li>
 					<li id="pv-bar-prev" class="bar-right bar-button">
-						<img src="h5ai/images/ui/preview-prev.svg">
+						<img src="h5ai/images/ui/preview-prev.svg" tppabs="http://www.oovoo.site/hfs_for_oss/h5ai/images/ui/preview-prev.svg">
 					</li>
 				</ul>
 			</div>

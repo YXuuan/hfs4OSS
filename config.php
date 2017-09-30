@@ -18,5 +18,3 @@ $footer = '';
 //Footer, Stats Code Supported
 $stats = true ;
 //Display how long listObjects() takes? (true/false)
-$version = '<br /><br /><a href="https://github.com/YXuuan/hfs_for_oss/" target="_blank" >hfs_for_oss</a> ver 1.0.3' ;
-//Do You Love Me?
