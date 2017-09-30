@@ -9,7 +9,7 @@ A modern HTTP File Server for oss@aliyun.
 SDK由[aliyun-oss-php-sdk](https://help.aliyun.com/document_detail/32101.html?spm=5176.doc52834.6.753.ihtpJC)-2.2.4提供，样式由[h5ai](https://larsjung.de/h5ai/)提供。
 
 ## 预览/Demo
-* Demo：https://github.com/YXuuan/hfs_for_oss/demo/index.htm  
+* Demo：https://yxuuan.github.io/hfs_for_oss/demo/-path=.htm  
 由于各种限制，demo中的页面名称形式并不代表实际程序的参数，实际程序参数形如：……?path=dir/obj1/
 
 ## 更新日志/ChangeLog
