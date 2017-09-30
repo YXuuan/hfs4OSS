@@ -1,4 +1,5 @@
 # hfs_for_oss
+![image](https://yxuuan.github.io/hfs_for_oss/demo/demo.png)
 HTTP File Server for AliYun OSS  
 A modern HTTP File Server for oss@aliyun.  
 一款现代化的http文件服务器，为阿里云OSS对象存储服务提供支持。  
@@ -11,7 +12,6 @@ SDK由[aliyun-oss-php-sdk](https://help.aliyun.com/document_detail/32101.html?sp
 ## 预览/Demo
 * Demo：https://yxuuan.github.io/hfs_for_oss/demo/-path=.htm  
 由于各种限制，demo中的页面名称形式并不代表实际程序的参数，实际程序参数形如：……?path=dir/obj1/  
-![image](https://yxuuan.github.io/hfs_for_oss/demo/demo.png)
 
 ## 更新日志/ChangeLog
 ```
