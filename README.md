@@ -9,8 +9,13 @@ SDK：aliyun-oss-php-[sdk](https://promotion.aliyun.com/ntms/act/ossdoclist.html
 
 ## 更新日志/ChangeLog
 ```
+version 2.0.1 2018-04-13
+    [优化] JavaScirpt代码运行逻辑
+    [优化] 前端部分显示细节优化
+    [修复] 文件URL带特殊符号时下载不正常
 version 2.0.0 2018-04-12
-	[重构]
+	[ROOT] 代码完全重构
+
 version 1.0.4 2017-09-30
 	[优化] 上方crumbbar路径多级显示
 	[优化] 页面标题只显示当前目录名称
@@ -20,28 +25,30 @@ version 1.0.3 2017-08-12
 version 1.0.2 2017-06-17
 	[修复] folder或item不存在时遍历数组产生报错信息
 version 1.0.1 2017-06-17
-	[增加] 底部程序版本信息（你要拿就拿掉吧，。）
+	[增加] 底部程序版本信息
 	[修复] items链接指向错误
 	[修复] 底部时间错误，tips：date('Y-m-d H:i:s')
 version 1.0.0 2017-06-17
-	破壳。
+	[ROOT] 破壳。
 ```
 
 ## 部署/Build
 * 环境要求：  
-PHP 5.5及以上（没有证据表明程序无法在PHP5.5以下正常运行）
+PHP 5.5及以上
 * 配置：   
 参数说明：
 ~~~
-/config/oss.config.php	--OSS配置文件  
+/config/oss.config.php		--OSS配置文件  
 
 OSS_ACCESS_ID		：AccessKey ID
 OSS_ACCESS_KEY		：AccessKey Key
-OSS_ENDPOINT		：Endpoint，必须带前缀http://或https://
+OSS_ENDPOINT		：Endpoint
+注意：必须带前缀http://或https://
 OSS_ENDPOINT_IS_CNAME	：(true/false)如果Endpoint为自定义域名，此项为true
 OSS_BUCKET		：Bucket名
-OSS_ROOT_DIR		：根目录，类似于FTP服务器的虚拟目录显示（例如此项为photo/则会将photo文件夹下的内容当作根目录显示）
-OSS_SIGNEDURL_TIMEOUT：每次下载文件时请求的签名URL有效期（秒），缺省值：3600
+OSS_ROOT_DIR		：根目录，类似于FTP服务器的虚拟目录显示（例如此项为"photo/"则会将photo文件夹下的内容当作根目录显示）
+注意：必须以"/"结尾且开头无需用"/"表示根目录
+OSS_SIGNEDURL_TIMEOUT   ：每次下载文件时请求的签名URL有效期（秒），缺省值：3600
 
 
 /config/static.config.json	--前端配置文件 
@@ -61,7 +68,7 @@ FOOTER			：底部Footer
   ├──function/		--函数库
   └──sdk/		--SDK目录
 ├──config/	--配置文件目录
-  ├──oss.config.php		--OSS配置文件
+  ├──oss.config.php	--OSS配置文件
   ├──static.config.json	--前端配置文件
 ├──static/	--前端目录
   ├──_h5ai/		--h5ai目录

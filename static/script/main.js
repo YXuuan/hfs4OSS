@@ -9,11 +9,11 @@
 var appConfig;
 $.ajax({
     type: 'GET',
-    url: 'config/static.config.json',
+    url: 'config/static.config.json?t=' + new Date().getTime(),
     async: false,
     dataType: 'text',
     success: function(data){
-        console.log('ajaxget static.config.json succeed:\n' + data);
+        console.log('ajaxget app.config.json succeed:\n' + data);
         try{
             appConfig = JSON.parse(data);
         }catch(e){       //异常捕获： 捕获请求成功但无法解析JSON的异常，意思就是有个傻逼把app.config.json改死了
@@ -69,57 +69,10 @@ function listObjects(path = ''){
     $("#items").attr("style", "opacity: 0.5;-moz-opacit: 0.5;");
     //////////
     console.log('-----listObjects("' + path + '")-----');
-    $("#crumbbar").html(        //每次都重置crumbbar
-        '<a href="#" class="crumb">' +
-            '<span class="label">' + appConfig.SITE_NAME + '</span>' +
-            '<img class="hint" src="static/_h5ai/public/images/themes/default/folder-page.svg" alt="#">' +
-        '</a>'
-    );
-    if(path !== ''){      //通过有path参数传入判断当前不为根文件夹
-        var pathSplited = path.split("/"); //分割文件夹路径字符串为数组
-        var nowFolderName = pathSplited[pathSplited.length - 2];
-        var parentFolderName = pathSplited[pathSplited.length - 3] ? pathSplited[pathSplited.length - 3] : '/';    //上一层文件夹的名字，其中一个-1是数组下标，另一个是由于split(path)的结果最后一个元素总为空，再一个是当前文件夹名
-        var parentFolder;
-        
-        console.log('path.split() succeed:\n' + print_arr(pathSplited));
-        $("#crumbbar").append(
-            '<a href="#' + path + '" class="crumb" data="' + pathSplited[0] + '/">' +       //手动定义crumbbar的第一层data
-            //'<img class="sep" src="static/_h5ai/public/images/ui/crumb.svg" alt=">">' +
-            '<span class="label">' + pathSplited[0] + '</span>' +
-            '</a>'
-        );
-        //合成上一层文件夹路径用作“返回上一层”按钮使用，我他妈就是不写函数
-        if(pathSplited.length == 2){      //进入一级子目录时，pathSplited[0]为目录名，pathSplited[1]为空
-            parentFolder = '' ;
-        }else if(pathSplited[0] !== ''){      //存在多级子目录，别问我我也不知道怎么来的
-            parentFolder = pathSplited[0];
-            $("#crumbbar").append(
-                '<a href="#' + path + '" class="crumb" data="' + parentFolder + '/' + pathSplited[1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
-                    '<img class="sep" src="static/_h5ai/public/images/ui/crumb.svg" alt=">">' +
-                    '<span class="label">' + pathSplited[1] + '</span>' +
-                '</a>'
-                );
-            for(i = 1; i < pathSplited.length - 2; i++){      //-2是因为只要取到父级目录即可
-                if(pathSplited[i] !== ''){
-                    parentFolder = parentFolder + '/' + pathSplited[i];
-                    $("#crumbbar").append(
-                    '<a href="#' + path + '" class="crumb" data="' + parentFolder + '/' + pathSplited[i+1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
-                        '<img class="sep" src="static/_h5ai/public/images/ui/crumb.svg" alt=">">' +
-                        '<span class="label">' + pathSplited[i+1] + '</span>' +
-                    '</a>'
-                    );
-                }
-            }
-            parentFolder = parentFolder + '/';      //在路径结尾添加“/”才能正确请求
-        }
-        console.log('parentFolder: ' + parentFolder);
-        $("#crumbbar a.crumb:last").attr("class", "crumb active");           //设置crumbbar的最后一层
-        $(document).attr("title", nowFolderName + "/ - " + appConfig.SITE_NAME);
-    }
     $.ajax({
         type: 'POST',
         //async: false,
-        url: 'app/action/listObjects.action.php?',
+        url: 'app/action/listObjects.action.php',
         data: {
                 prefix: path,
         },
@@ -188,6 +141,49 @@ function listObjects(path = ''){
         },
         complete: function(){
             if(path !== ''){      //通过有path参数传入判断当前不为根文件夹
+                var pathSplited = path.split("/"); //分割文件夹路径字符串为数组
+                var nowFolderName = pathSplited[pathSplited.length - 2];
+                var parentFolderName = pathSplited[pathSplited.length - 3] ? pathSplited[pathSplited.length - 3] : '/';    //上一层文件夹的名字，其中一个-1是数组下标，另一个是由于split(path)的结果最后一个元素总为空，再一个是当前文件夹名
+                var parentFolder;
+                
+                console.log('path.split() succeed:\n' + print_arr(pathSplited));
+                $("#crumbbar").html(
+                    '<a href="#" class="crumb">' +
+                        '<span class="label">' + appConfig.SITE_NAME + '</span>' +
+                        '<img class="hint" src="static/_h5ai/public/images/themes/default/folder-page.svg" alt="#">' +
+                    '</a>' +
+                    '<a href="#' + path + '" class="crumb" data="' + pathSplited[0] + '/">' +       //手动定义crumbbar的第一层data
+                    //'<img class="sep" src="static/_h5ai/public/images/ui/crumb.svg" alt=">">' +
+                    '<span class="label">' + pathSplited[0] + '</span>' +
+                    '</a>'
+                );
+                //合成上一层文件夹路径用作“返回上一层”按钮使用，我他妈就是不写函数
+                if(pathSplited.length == 2){      //进入一级子目录时，pathSplited[0]为目录名，pathSplited[1]为空
+                    parentFolder = '' ;
+                }else if(pathSplited[0] !== ''){      //存在多级子目录，别问我我也不知道怎么来的
+                    parentFolder = pathSplited[0];
+                    $("#crumbbar").append(
+                        '<a href="#' + path + '" class="crumb" data="' + parentFolder + '/' + pathSplited[1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
+                            '<img class="sep" src="static/_h5ai/public/images/ui/crumb.svg" alt=">">' +
+                            '<span class="label">' + pathSplited[1] + '</span>' +
+                        '</a>'
+                        );
+                    for(i = 1; i < pathSplited.length - 2; i++){      //-2是因为只要取到父级目录即可
+                        if(pathSplited[i] !== ''){
+                            parentFolder = parentFolder + '/' + pathSplited[i];
+                            $("#crumbbar").append(
+                            '<a href="#' + path + '" class="crumb" data="' + parentFolder + '/' + pathSplited[i+1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
+                                '<img class="sep" src="static/_h5ai/public/images/ui/crumb.svg" alt=">">' +
+                                '<span class="label">' + pathSplited[i+1] + '</span>' +
+                            '</a>'
+                            );
+                        }
+                    }
+                    parentFolder = parentFolder + '/';      //在路径结尾添加“/”才能正确请求
+                }
+                console.log('parentFolder: ' + parentFolder);
+                $("#crumbbar a.crumb:last").attr("class", "crumb active");           //设置crumbbar的最后一层
+                $(document).attr("title", nowFolderName + " - " + appConfig.SITE_NAME);
                 $("#back").html(
                     '<li class="item folder folder-parent" data="' + parentFolder + '">' +
                         '<a href="#' + parentFolder + '">' +
@@ -206,7 +202,14 @@ function listObjects(path = ''){
                     '</li>'
                 );
             }else{
+                $("#crumbbar").html(        //每次都重置crumbbar
+                '<a href="#" class="crumb active">' +
+                    '<span class="label">' + appConfig.SITE_NAME + '</span>' +
+                    '<img class="hint" src="static/_h5ai/public/images/themes/default/folder-page.svg" alt="#">' +
+                '</a>'
+            );
                 $("#back").html('');
+                $(document).attr("title", appConfig.SITE_NAME);
             }
             $("#items").attr("style", "opacity: 1.0;-moz-opacit: 1.0;");
         }
@@ -225,10 +228,10 @@ function downloadObject(target, who){
                 target: target,
             },
             async: false,
-            dataType: 'text',
+            dataType: 'json',
             success: function(data){
                 console.log('ajaxpost getSignedUrlForGettingObject.action.php:\n' + data);
-                $(who).find('a').attr("href", data).attr("target", "_blank");
+                //$(who).find('a').attr("href", data).attr("target", "_blank");
                 //a.appendTo('body');
             },
             error: function(textStatus, errorThrown){

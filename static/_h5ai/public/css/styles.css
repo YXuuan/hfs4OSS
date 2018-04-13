@@ -1857,7 +1857,10 @@ html.no-browser .noBrowserMsg {
     /*font-weight: bold*/       /*Changed*/
 }
 
-@media only screen and (max-width:500px) {      /*Changed*/
+@media only screen and (max-width:785px) {      /*Changed*/
+    .size, .l10n-size{       /*Changed*/
+         display: none
+    }
     #crumbbar .crumb:not(.active) {
         display: none
     }
