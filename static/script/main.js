@@ -10,7 +10,7 @@ var appConfig;
 $.ajax({
     type: 'GET',
     url: 'config/static.config.json?t=' + new Date().getTime(),
-    async: false,
+    //async: false,
     dataType: 'text',
     success: function(data){
         console.log('ajaxget app.config.json succeed:\n' + data);
@@ -216,8 +216,8 @@ function listObjects(path = ''){
     });
 }
 function downloadObject(target, who){
-    $("#items").attr("style', 'opacity: 0.5;-moz-opacit: 0.5;");
     console.log('-----getObject("' + target + '")-----');
+    $(who).attr('style', 'opacity: 0.5;-moz-opacit: 0.5;');
     if(appConfig.DIRECTLY_GET_OBJECT === true){
         
     }else{
@@ -227,7 +227,7 @@ function downloadObject(target, who){
             data: {
                 target: target,
             },
-            async: false,
+            //async: false,
             dataType: 'json',
             success: function(data){
                 console.log('ajaxpost getSignedUrlForGettingObject.action.php:\n' + data);
@@ -242,7 +242,7 @@ function downloadObject(target, who){
             }
         });
     }
-    $("#items").attr("style", "opacity: 1.0;-moz-opacit: 1.0;");
+    $(who).attr("style", "opacity: 1.0;-moz-opacit: 1.0;");
 }
 function print_arr(arr, space, space2) {
     space = space || '';
