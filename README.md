@@ -1,11 +1,12 @@
-使用场景：在具备计算能力和OSS对象存储服务的情况下，提供资源分发能力。  
-主要功能：文件列表、文件列表、上传下载、资源管理）。
-![image](https://yxuuan.github.io/hfs4oss-demo/demo.png)  
+在具备PHP代码执行环境和OSS对象存储服务的条件下，作为云HTTP文件服务器，提供简单的文件列表、上传下载、管理等功能。
+相较于将文件直接存放在本地，无存储总量限制、传输速率限制、低可靠数据安全等问题。
+  
 SDK：aliyun-oss-php-[sdk](https://promotion.aliyun.com/ntms/act/ossdoclist.html)-2.3.0  
 样式：[h5ai](https://larsjung.de/h5ai/)
 
 ## 预览/Demo
 * oovoo.site：http://file.oovoo.site/
+* ![image](https://yxuuan.github.io/hfs4oss-demo/demo.png)
 
 ## 更新日志/ChangeLog
 ```
@@ -15,7 +16,7 @@ version 2.0.1 2018-04-13
 	[修复] 文件URL带特殊符号时下载不正常
 version 2.0.0 2018-04-12
 	[项目] 代码完全重构
-----------
+
 version 1.0.4 2017-09-30
 	[优化] 上方crumbbar路径多级显示
 	[优化] 页面标题只显示当前目录名称
@@ -36,9 +37,9 @@ version 1.0.0 2017-06-17
 * 环境要求：  
 PHP 5.5及以上
 * 配置：   
-参数说明：
+填写oss.config.php和static.config.json：
 ~~~
-/config/oss.config.php		--OSS配置文件  
+/config/oss.config.php：	--OSS配置文件  
 	OSS_ACCESS_ID		：AccessKey ID
 	OSS_ACCESS_KEY		：AccessKey Key
 	OSS_ENDPOINT		：Endpoint
@@ -50,7 +51,7 @@ PHP 5.5及以上
 	OSS_SIGNEDURL_TIMEOUT   ：(int)每次下载文件时请求的签名URL有效期（秒），缺省值：3600
 
 
-/config/static.config.json	--前端配置文件 
+/config/static.config.json：	--前端配置文件 
 	DIRECTLY_GET_OBJECT	：(true/false)下载文件时直接访问文件URL而不向后端请求SignedURL，Bucket为公共读时可用，否则为false
 	SITE_NAME		：站点名称
 	SHOW_STATS		：(true/false)底部显示状态信息
