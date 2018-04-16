@@ -1,12 +1,59 @@
 在具备PHP代码执行环境和OSS对象存储服务的条件下，作为云HTTP文件服务器，提供简单的文件列表、上传下载、管理等功能。
 相较于将文件直接存放在本地，无存储总量限制、传输速率限制、低可靠数据安全等问题。
   
-SDK：aliyun-oss-php-[sdk](https://promotion.aliyun.com/ntms/act/ossdoclist.html)-2.3.0
+SDK：aliyun-oss-php-[sdk](https://promotion.aliyun.com/ntms/act/ossdoclist.html)-2.3.0  
 样式：[h5ai](https://larsjung.de/h5ai/)
 
 ## 预览/Demo
-* oovoo.site：http://file.oovoo.site/
+* oovoo.site：[http://file.oovoo.site/](http://file.oovoo.site/)
 * ![image](https://yxuuan.github.io/hfs4oss-demo/demo.png)
+
+## 部署/Build
+* 要求：
+PHP 5 >= 5.5，curl()支持
+* 下载：
+Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://yxuuan.github.io/hfs4oss-demo/demo.png)，
+或使用git clone：
+~~~
+git clone https://github.com/YXuuan/hfs4OSS.git
+~~~
+* 配置：
+填写oss.config.php和static.config.json：
+~~~
+/config/oss.config.php：	--OSS配置文件
+	OSS_ACCESS_ID		：AccessKey ID
+	OSS_ACCESS_KEY		：AccessKey Key
+	OSS_ENDPOINT		：Endpoint
+		注意：必须带前缀http://或https://
+	OSS_ENDPOINT_IS_CNAME	：(true/false)如果Endpoint为自定义域名，此项为true
+	OSS_BUCKET		：Bucket名
+	OSS_ROOT_DIR		：根目录，类似于FTP服务器的虚拟目录显示（例如此项为"photo/"则会将photo文件夹下的内容当作根目录显示）
+		注意：必须以"/"结尾且开头无需用"/"表示根目录
+	OSS_SIGNEDURL_TIMEOUT   ：(int)每次下载文件时请求的签名URL有效期（秒），缺省值：3600
+
+
+/config/static.config.json：	--前端配置文件
+	DIRECTLY_GET_OBJECT	：(true/false)下载文件时直接访问文件URL而不向后端请求SignedURL，Bucket为公共读时可用，否则为false
+	SITE_NAME		：站点名称
+	SHOW_STATS		：(true/false)底部显示状态信息
+	FOOTER			：底部Footer
+~~~
+* 文件结构：
+```
+/
+├──app/		--后端目录
+  ├──action/		--后端入口目录
+  ├──class/		--类库
+  ├──function/		--函数库
+  └──sdk/		--SDK目录
+├──config/	--配置文件目录
+  ├──oss.config.php	--OSS配置文件
+  └──static.config.json	--前端配置文件
+├──static/	--前端目录
+  ├──_h5ai/		--h5ai目录
+  └──script/		--前端脚本
+└──index.html
+```
 
 ## 更新日志/ChangeLog
 ```
@@ -38,52 +85,10 @@ version 1.0.0 2017-06-17
 	[项目] 破壳。
 ```
 
-## 部署/Build
-* 环境要求：
-PHP 5.5及以上
-* 配置：
-填写oss.config.php和static.config.json：
-~~~
-/config/oss.config.php：	--OSS配置文件
-	OSS_ACCESS_ID		：AccessKey ID
-	OSS_ACCESS_KEY		：AccessKey Key
-	OSS_ENDPOINT		：Endpoint
-		注意：必须带前缀http://或https://
-	OSS_ENDPOINT_IS_CNAME	：(true/false)如果Endpoint为自定义域名，此项为true
-	OSS_BUCKET		：Bucket名
-	OSS_ROOT_DIR		：根目录，类似于FTP服务器的虚拟目录显示（例如此项为"photo/"则会将photo文件夹下的内容当作根目录显示）
-		注意：必须以"/"结尾且开头无需用"/"表示根目录
-	OSS_SIGNEDURL_TIMEOUT   ：(int)每次下载文件时请求的签名URL有效期（秒），缺省值：3600
-
-
-/config/static.config.json：	--前端配置文件
-	DIRECTLY_GET_OBJECT	：(true/false)下载文件时直接访问文件URL而不向后端请求SignedURL，Bucket为公共读时可用，否则为false
-	SITE_NAME		：站点名称
-	SHOW_STATS		：(true/false)底部显示状态信息
-	FOOTER			：底部Footer
-~~~
- 
-* 文件结构：
-```
-/
-├──app/		--后端目录
-  ├──action/		--后端入口目录
-  ├──class/		--类库
-  ├──function/		--函数库
-  └──sdk/		--SDK目录
-├──config/	--配置文件目录
-  ├──oss.config.php	--OSS配置文件
-  └──static.config.json	--前端配置文件
-├──static/	--前端目录
-  ├──_h5ai/		--h5ai目录
-  └──script/		--前端脚本
-└──index.html
-```
-
 ## 后续可能的改动/Preview
 ```
 给不同类型的文件不一样的图标
-输出item的大小
+(划掉)输出item的大小
 批量下载（非压缩闭包）
 简单的object管理功能（上传，重命名等）
 文件列表排序
