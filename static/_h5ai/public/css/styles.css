@@ -1085,7 +1085,8 @@ html.drag-select #view .item:hover,html.drag-select * #view .item:hover {
     flex: 1 1 auto;
     -ms-flex-order: 50;
     order: 50;
-    position: relative
+    position: relative;
+    overflow-y: scroll      /*Changed*/
 }
 
 #fallback {

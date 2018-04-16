@@ -30,6 +30,12 @@ $.ajax({
         console.log(textStatus);
     }
 });
+//锚点入参执行一次listObjects()
+if(window.location.hash){
+    listObjects(window.location.hash.replace("#", ""));
+}else{
+    listObjects();
+}
 //？？？？
 $(document).ready(function(){
     ////////
@@ -45,24 +51,25 @@ $(document).ready(function(){
             '<img class="hint" src="static/_h5ai/public/images/themes/default/folder-page.svg" alt="#">' +
         '</a>'
     );
-    //锚点入参执行一次listObjects()
-    if(window.location.hash){
-        listObjects(window.location.hash.replace("#", ""));
-    }else{
-        listObjects();
-    }
+    //此处Event Loop
     //对Ajax返回数据后新生成的元素进行绑定
-    $("#back").on('click', 'li.item.folder.folder-parent', function(event){     //定义的#back是为了每次覆盖
-        listObjects($(this).attr('data'));    //listObjects(当前元素的data值)
+    $("#back").on("click", "li.item.folder.folder-parent", function(event){     //定义的#back是为了每次覆盖
+        listObjects($(this).attr("data"));    //listObjects(当前元素的data值)
     });
-    $("#list").on('click', 'li.item.folder', function(event){       //定义的#list是为了不清空所有
-        listObjects($(this).attr('data'));
+    $("#list").on("click", "li.item.folder", function(event){       //定义的#list是为了不清空所有
+        listObjects($(this).attr("data"));
     });
-    $("#crumbbar").on('click', 'a.crumb', function(event){
-        listObjects($(this).attr('data'));
+    $("#crumbbar").on("click", 'a.crumb', function(event){
+        listObjects($(this).attr("data"));
     });
-    $("#list").on('click', 'li.item.file', function(event){
-        downloadObject($(this).attr('data'), this);
+    $("#list").on("click", "li.item.file", function(event){
+        //如果已经请求过一次则直接下载
+        if($(this).find("a").attr("href")){
+            this.click();
+        }else{
+            downloadObject($(this).attr("data"), this);
+            this.click();
+        }
     });
 });
 function listObjects(path = ''){
@@ -74,7 +81,7 @@ function listObjects(path = ''){
         //async: false,
         url: 'app/action/listObjects.action.php',
         data: {
-                prefix: path,
+                prefix: decodeURI(path),
         },
         dataType: 'text',
         success: function(data){
@@ -93,8 +100,8 @@ function listObjects(path = ''){
             $("#list").html('');        //清空原有内容
             $.each(result_listObjects.folderList, function(i, folder){
                 $("#list").append(
-                    '<li class="item folder" data="' + path + folder + '">' +
-                        '<a href="#' + path + folder + '">' +
+                    '<li class="item folder" data="' + encodeURI(path + folder) + '">' +
+                        '<a href="#' + encodeURI(path + folder) + '">' +
                             '<span class="icon square">' +
                                 '<img src="static/_h5ai/public/images/themes/default/folder.svg" alt="folder" />' +
                             '</span>' +
@@ -109,16 +116,16 @@ function listObjects(path = ''){
             });
             $.each(result_listObjects.fileList, function(i, file){
                 $("#list").append(
-                    '<li class="item file" data="' + path + file + '">' +
+                    '<li class="item file" data="' + encodeURI(path + file[0]) + '">' +
                         '<a>' +
                             '<span class="icon square">' +
-    			                '<img src="static/_h5ai/public/images/themes/default/file.svg" alt="file" />' +
-    				        '</span>' +
+                                '<img src="static/_h5ai/public/images/themes/default/file.svg" alt="file" />' +
+                            '</span>' +
                             '<span class="icon landscape">' +
-				                '<img src="static/_h5ai/public/images/themes/default/file.svg" alt="file">' +
-			                '</span>' +
-			                '<span class="label">' + file + '</span>' +
-	                        '<span class="size">$FILE SIZE</span>' +
+                                '<img src="static/_h5ai/public/images/themes/default/file.svg" alt="file">' +
+                            '</span>' +
+                            '<span class="label">' + file[0] + '</span>' +
+                            '<span class="size">' + file[1] + '</span>' +
                         '</a>' +
                     '</li>'
                 );
@@ -129,7 +136,7 @@ function listObjects(path = ''){
             $("#stats").html(result_listObjects['fileCount'] + ' file(s), ' + result_listObjects['folderCount'] + ' folder(s)');
             if(appConfig.SHOW_STATS){
                 //var listObjectsTakes = result_listObjects['takes'], listObjectsMemUsed = result_listObjects['memUsed'];
-                $("#stats").append('<br />listObjects takes ' + result_listObjects['takes'] + 'ms, Memory used ' + result_listObjects['memUsed'] + 'KB');
+                $("#stats").append('<br />listObjects takes ' + result_listObjects['takes'] + ', Memory used ' + result_listObjects['memUsed']);
             }
         },
         error: function(textStatus, errorThrown){
@@ -152,7 +159,7 @@ function listObjects(path = ''){
                         '<span class="label">' + appConfig.SITE_NAME + '</span>' +
                         '<img class="hint" src="static/_h5ai/public/images/themes/default/folder-page.svg" alt="#">' +
                     '</a>' +
-                    '<a href="#' + path + '" class="crumb" data="' + pathSplited[0] + '/">' +       //手动定义crumbbar的第一层data
+                    '<a href="#' + encodeURI(path) + '" class="crumb" data="' + encodeURI(pathSplited[0]) + '/">' +       //手动定义crumbbar的第一层data
                     //'<img class="sep" src="static/_h5ai/public/images/ui/crumb.svg" alt=">">' +
                     '<span class="label">' + pathSplited[0] + '</span>' +
                     '</a>'
@@ -163,7 +170,7 @@ function listObjects(path = ''){
                 }else if(pathSplited[0] !== ''){      //存在多级子目录，别问我我也不知道怎么来的
                     parentFolder = pathSplited[0];
                     $("#crumbbar").append(
-                        '<a href="#' + path + '" class="crumb" data="' + parentFolder + '/' + pathSplited[1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
+                        '<a href="#' + encodeURI(path) + '" class="crumb" data="' + encodeURI(parentFolder + '/' + pathSplited[1]) + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
                             '<img class="sep" src="static/_h5ai/public/images/ui/crumb.svg" alt=">">' +
                             '<span class="label">' + pathSplited[1] + '</span>' +
                         '</a>'
@@ -172,7 +179,7 @@ function listObjects(path = ''){
                         if(pathSplited[i] !== ''){
                             parentFolder = parentFolder + '/' + pathSplited[i];
                             $("#crumbbar").append(
-                            '<a href="#' + path + '" class="crumb" data="' + parentFolder + '/' + pathSplited[i+1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
+                            '<a href="#' + encodeURI(path) + '" class="crumb" data="' + encodeURI(parentFolder + '/' + pathSplited[i+1]) + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
                                 '<img class="sep" src="static/_h5ai/public/images/ui/crumb.svg" alt=">">' +
                                 '<span class="label">' + pathSplited[i+1] + '</span>' +
                             '</a>'
@@ -185,8 +192,8 @@ function listObjects(path = ''){
                 $("#crumbbar a.crumb:last").attr("class", "crumb active");           //设置crumbbar的最后一层
                 $(document).attr("title", nowFolderName + " - " + appConfig.SITE_NAME);
                 $("#back").html(
-                    '<li class="item folder folder-parent" data="' + parentFolder + '">' +
-                        '<a href="#' + parentFolder + '">' +
+                    '<li class="item folder folder-parent" data="' + encodeURI(parentFolder) + '">' +
+                        '<a href="#' + encodeURI(parentFolder) + '">' +
                             '<span class="icon square">' +
                             '<img src="static/_h5ai/public/images/themes/default/folder-parent.svg" alt="folder">' +
                             '</span>' +
@@ -225,13 +232,13 @@ function downloadObject(target, who){
             type: 'POST',
             url: 'app/action/getSignedUrlForGettingObject.action.php',
             data: {
-                target: target,
+                target: decodeURI(target),
             },
-            //async: false,
+            async: false,
             dataType: 'json',
             success: function(data){
                 console.log('ajaxpost getSignedUrlForGettingObject.action.php:\n' + data);
-                //$(who).find('a').attr("href", data).attr("target", "_blank");
+                $(who).find("a").attr("href", data).attr("target", "_blank");
                 //a.appendTo('body');
             },
             error: function(textStatus, errorThrown){

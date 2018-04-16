@@ -1,7 +1,7 @@
 在具备PHP代码执行环境和OSS对象存储服务的条件下，作为云HTTP文件服务器，提供简单的文件列表、上传下载、管理等功能。
 相较于将文件直接存放在本地，无存储总量限制、传输速率限制、低可靠数据安全等问题。
   
-SDK：aliyun-oss-php-[sdk](https://promotion.aliyun.com/ntms/act/ossdoclist.html)-2.3.0  
+SDK：aliyun-oss-php-[sdk](https://promotion.aliyun.com/ntms/act/ossdoclist.html)-2.3.0
 样式：[h5ai](https://larsjung.de/h5ai/)
 
 ## 预览/Demo
@@ -10,9 +10,14 @@ SDK：aliyun-oss-php-[sdk](https://promotion.aliyun.com/ntms/act/ossdoclist.html
 
 ## 更新日志/ChangeLog
 ```
+version 2.0.2 2018-04-16
+	[增加] 文件大小显示
+	[优化] encodeURL()入参的路径，防止出现莫名其妙的Bug
+	[优化] 前端点击文件下载体验，简单防止恶意请求
+	[优化] 前端部分显示细节
 version 2.0.1 2018-04-13
 	[优化] JavaScirpt代码运行逻辑
-	[优化] 前端部分显示细节优化
+	[优化] 前端部分显示细节
 	[修复] 文件URL带特殊符号时下载不正常
 version 2.0.0 2018-04-12
 	[项目] 代码完全重构
@@ -34,12 +39,12 @@ version 1.0.0 2017-06-17
 ```
 
 ## 部署/Build
-* 环境要求：  
+* 环境要求：
 PHP 5.5及以上
-* 配置：   
+* 配置：
 填写oss.config.php和static.config.json：
 ~~~
-/config/oss.config.php：	--OSS配置文件  
+/config/oss.config.php：	--OSS配置文件
 	OSS_ACCESS_ID		：AccessKey ID
 	OSS_ACCESS_KEY		：AccessKey Key
 	OSS_ENDPOINT		：Endpoint
@@ -51,7 +56,7 @@ PHP 5.5及以上
 	OSS_SIGNEDURL_TIMEOUT   ：(int)每次下载文件时请求的签名URL有效期（秒），缺省值：3600
 
 
-/config/static.config.json：	--前端配置文件 
+/config/static.config.json：	--前端配置文件
 	DIRECTLY_GET_OBJECT	：(true/false)下载文件时直接访问文件URL而不向后端请求SignedURL，Bucket为公共读时可用，否则为false
 	SITE_NAME		：站点名称
 	SHOW_STATS		：(true/false)底部显示状态信息
