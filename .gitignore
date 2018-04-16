@@ -1,2 +1,3 @@
-/config/
+/config/oss.config.php
+/config/static.config.json
 /dev/
