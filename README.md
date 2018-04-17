@@ -1,4 +1,4 @@
-在具备PHP代码执行环境和OSS对象存储服务的条件下，作为云HTTP文件服务器，提供简单的文件列表、上传下载、管理等功能。
+在具备PHP代码执行环境和OSS对象存储服务的条件下，作为云HTTP文件服务器，提供简单的文件列表、上传下载、管理等功能。  
 相较于将文件直接存放在本地，无存储总量限制、传输速率限制、低可靠数据安全等问题。
   
 SDK：aliyun-oss-php-[sdk](https://promotion.aliyun.com/ntms/act/ossdoclist.html)-2.3.0  
@@ -9,34 +9,41 @@ SDK：aliyun-oss-php-[sdk](https://promotion.aliyun.com/ntms/act/ossdoclist.html
 * ![image](https://yxuuan.github.io/hfs4oss-demo/demo.png)
 
 ## 部署/Build
-* 要求：
+* 环境：  
 PHP 5 >= 5.5，curl()支持
-* 下载：
-Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://yxuuan.github.io/hfs4oss-demo/demo.png)，
-或使用git clone：
+* 下载：  
+Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuuan/hfs4OSS/releases/)，  
+或使用git：
 ~~~
 git clone https://github.com/YXuuan/hfs4OSS.git
 ~~~
+* 更新：
+Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuuan/hfs4OSS/releases/)，  
+或使用git
+* 配置OSS服务：
+1. 开通OSS服务、新建存储空间、上传文件：[OSS新手入门](https://promotion.aliyun.com/ntms/ossedu2.html)
+2. 了解基本的OSS属性信息，得到Endpoint
+3. 申请具有对应访问权限的AccessKey
 * 配置：
 填写oss.config.php和static.config.json：
 ~~~
-/config/oss.config.php：	--OSS配置文件
-	OSS_ACCESS_ID		：AccessKey ID
-	OSS_ACCESS_KEY		：AccessKey Key
-	OSS_ENDPOINT		：Endpoint
+/config/oss.config.php：	--APP配置文件
+	OSS_ACCESS_ID		：OSS的AccessKey ID值
+	OSS_ACCESS_KEY		：OSS的AcOSS的cessKey Key值
+	OSS_ENDPOINT		：OSS的Endpoint值
 		注意：必须带前缀http://或https://
-	OSS_ENDPOINT_IS_CNAME	：(true/false)如果Endpoint为自定义域名，此项为true
-	OSS_BUCKET		：Bucket名
-	OSS_ROOT_DIR		：根目录，类似于FTP服务器的虚拟目录显示（例如此项为"photo/"则会将photo文件夹下的内容当作根目录显示）
+	OSS_ENDPOINT_IS_CNAME	：(true/false)如果OSS的Endpoint为自定义域名，此项为true
+	OSS_BUCKET		：OSS的存储空间(Bucket)名
+	ROOT_DIR		：根目录路径，类似于FTP服务器的虚拟目录显示（例如此项为"photo/"则会将photo文件夹下的内容当作根目录显示）。缺省值为空
 		注意：必须以"/"结尾且开头无需用"/"表示根目录
-	OSS_SIGNEDURL_TIMEOUT   ：(int)每次下载文件时请求的签名URL有效期（秒），缺省值：3600
+	SIGNEDURL_TIMEOUT   ：(int)每次下载文件时请求的签名URL有效期时长（秒）。缺省值：3600
 
 
 /config/static.config.json：	--前端配置文件
-	DIRECTLY_GET_OBJECT	：(true/false)下载文件时直接访问文件URL而不向后端请求SignedURL，Bucket为公共读时可用，否则为false
-	SITE_NAME		：站点名称
-	SHOW_STATS		：(true/false)底部显示状态信息
-	FOOTER			：底部Footer
+	DIRECTLY_GET_OBJECT	：(true/false)下载文件时直接通过拼接方式生成URL而不向后端请求SignedURL，Bucket ACL为公共读及以上时才可为true。缺省值为false
+	SITE_NAME		：站点名称，请遵从json语法规范
+	SHOW_STATS		：(true/false)底部是否显示状态信息，缺省值为true
+	FOOTER			：底部Footer的HTML代码，请遵从json语法规范。缺省值为空
 ~~~
 * 文件结构：
 ```
