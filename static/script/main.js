@@ -98,25 +98,25 @@ function listObjects(path = ''){
             console.log('JSON.parse() succeed');
             //我跟你说这里开始才是列表动作
             $("#list").html('');        //清空原有内容
-            $.each(result_listObjects.folderList, function(i, folder){
+            $.each(result_listObjects.folderList, function(i, folderInfo){
                 $("#list").append(
-                    '<li class="item folder" data="' + encodeURI(path + folder) + '">' +
-                        '<a href="#' + encodeURI(path + folder) + '">' +
+                    '<li class="item folder" data="' + encodeURI(path + folderInfo) + '">' +
+                        '<a href="#' + encodeURI(path + folderInfo) + '">' +
                             '<span class="icon square">' +
                                 '<img src="static/_h5ai/public/images/themes/default/folder.svg" alt="folder" />' +
                             '</span>' +
                             '<span class="icon landscape">' +
                                 '<img src="static/_h5ai/public/images/themes/default/folder.svg" alt="folder" />' +
                             '</span>' +
-                            '<span class="label">' + folder.replace("/", "") + '</span>' +
+                            '<span class="label">' + folderInfo.replace("/", "") + '</span>' +
                             '<span class="size">-</span>' +
                         '</a>' +
                     '</li>'
                 );
             });
-            $.each(result_listObjects.fileList, function(i, file){
+            $.each(result_listObjects.fileList, function(i, fileInfo){
                 $("#list").append(
-                    '<li class="item file" data="' + encodeURI(path + file[0]) + '">' +
+                    '<li class="item file" data="' + encodeURI(path + fileInfo[0]) + '">' +
                         '<a>' +
                             '<span class="icon square">' +
                                 '<img src="static/_h5ai/public/images/themes/default/file.svg" alt="file" />' +
@@ -124,8 +124,9 @@ function listObjects(path = ''){
                             '<span class="icon landscape">' +
                                 '<img src="static/_h5ai/public/images/themes/default/file.svg" alt="file">' +
                             '</span>' +
-                            '<span class="label">' + file[0] + '</span>' +
-                            '<span class="size">' + file[1] + '</span>' +
+                            '<span class="label">' + fileInfo[0] + '</span>' +
+                            '<span class="date">' +fileInfo[1] + '</span>' +
+                            '<span class="size">' + fileInfo[2] + '</span>' +
                         '</a>' +
                     '</li>'
                 );

@@ -6,7 +6,7 @@ use OSS\Core\OssException;
 class OSS{
 	public static function getOssClient(){
 		try {
-			$ossClient = new OssClient(OSSConfig::OSS_ACCESS_ID, OSSConfig::OSS_ACCESS_KEY, OSSConfig::OSS_ENDPOINT, OSSConfig::OSS_ENDPOINT_IS_CNAME);
+			$ossClient = new OssClient(APPConfig::OSS_ACCESS_ID, APPConfig::OSS_ACCESS_KEY, APPConfig::OSS_ENDPOINT, APPConfig::OSS_ENDPOINT_IS_CNAME);
 		} catch (OssException $e) {
 			printf(__FUNCTION__ . "creating OssClient instance: FAILED\n");
 			printf($e->getMessage() . "\n");
@@ -22,6 +22,8 @@ class OSS{
 			printf($e->getMessage() . "\n");
 			return;
 		}
+		return $listObjectInfo;
+		/*
 		$objectList = $listObjectInfo->getObjectList();
 		$prefixList = $listObjectInfo->getPrefixList();
 		$result = array();        //函数返回的二维数组
@@ -39,9 +41,9 @@ class OSS{
 			}
 		}
 		return $result;
+		*/
 	}
-	public static function getSignedUrlForGettingObject($ossClient, $bucket, $object){
-		$timeout = 3600;
+	public static function getSignedUrlForGettingObject($ossClient, $bucket, $object, $timeout){
 		try{
 			$signedUrl = $ossClient->signUrl($bucket, $object, $timeout);
 		} catch(OssException $e) {
@@ -50,28 +52,5 @@ class OSS{
 			return;
 		}
 		return $signedUrl;
-	}
-	public static function listObjectsAndMeta($ossClient, $bucket, $options){
-		try {
-			$listObjectInfo = $ossClient->listObjects($bucket, $options);
-		} catch (OssException $e) {
-			printf(__FUNCTION__ . ": FAILED\n");
-			printf($e->getMessage() . "\n");
-			return;
-		}
-		$objectList = $listObjectInfo->getObjectList(); // object list
-		$prefixList = $listObjectInfo->getPrefixList(); // directory list
-		$result = array();        //函数返回的二维数组
-		if (!empty($objectList)) {
-			foreach ($objectList as $object) {
-				$result["fileList"][] = array(str_replace($options["prefix"], "", $object->getKey()), $object->getSize());        //存放文件列表
-			}
-		}
-		if (!empty($prefixList)) {
-			foreach ($prefixList as $prefixInfo) {
-				 $result["folderList"][] = str_replace($options["prefix"], "", $prefixInfo->getPrefix());        //存放目录列表
-			}
-		}
-		return $result;
 	}
 }
