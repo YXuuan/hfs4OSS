@@ -64,6 +64,10 @@ Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuu
 
 ## 更新日志/ChangeLog
 ```
+version 2.0.3 2018-04-17
+	[增加] 文件最后修改时间显示
+	[优化] 前端部分显示细节
+	[项目] 优化项目逻辑结构和config参数、文件名称
 version 2.0.2 2018-04-16
 	[增加] 文件大小显示
 	[优化] encodeURL()入参的路径，防止出现莫名其妙的Bug
