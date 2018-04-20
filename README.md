@@ -64,7 +64,7 @@ Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuu
 ## 更新日志/ChangeLog
 ```
 version 2.0.4 2018-04-20
-	[修复] 懒惰导致的列表中与路径同名的项目名字无法被正常裁剪
+	[修复] 懒惰导致的列表中与路径同名的名称无法被正常裁剪
 	[优化] 前端部分显示细节
 	[项目] 弃用直接拼合方式生成文件下载URL
 version 2.0.3 2018-04-17

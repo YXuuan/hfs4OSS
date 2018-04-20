@@ -1,5 +1,5 @@
 {
-    "SITE_NAME": "",
+    "SITE_NAME": "My Files",
     "SHOW_STATS": true,
-    "FOOTER": ""
+    "FOOTER": "<a href=\"http://www.oovoo.site\" target=\"_blank\" >oOvOo.site</a>"
 }
