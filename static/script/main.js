@@ -74,8 +74,7 @@ $(document).ready(function(){
 });
 function listObjects(path = ''){
     $("#items").attr("style", "opacity: 0.5;-moz-opacit: 0.5;");
-    //////////
-    console.log('-----listObjects("' + path + '")-----');
+    console.log('-----listObjects("' + decodeURI(path) + path + ' = ' + '")-----');
     $.ajax({
         type: 'POST',
         //async: false,
@@ -85,7 +84,7 @@ function listObjects(path = ''){
         },
         dataType: 'text',
         success: function(data){
-            console.log('ajaxpost listObjects() succeed:' + data);
+            console.log('ajaxpost listObjects() succeed:' + decodeURI(data));
             try{
                     result_listObjects = JSON.parse(data);
             }catch(e){           //异常捕获： 捕获请求成功但无法解析JSON的异常，多为listObjects.action抛出的异常
@@ -96,12 +95,12 @@ function listObjects(path = ''){
                     return;
             }
             console.log('JSON.parse() succeed');
-            //我跟你说这里开始才是列表动作
+            //列表动作
             $("#list").html('');        //清空原有内容
             $.each(result_listObjects.folderList, function(i, folderInfo){
                 $("#list").append(
-                    '<li class="item folder" data="' + encodeURI(path + folderInfo) + '">' +
-                        '<a href="#' + encodeURI(path + folderInfo) + '">' +
+                    '<li class="item folder" data="' + path + encodeURI(folderInfo) + '">' +
+                        '<a href="#' + path + encodeURI(folderInfo) + '">' +
                             '<span class="icon square">' +
                                 '<img src="static/_h5ai/public/images/themes/default/folder.svg" alt="folder" />' +
                             '</span>' +
@@ -109,6 +108,7 @@ function listObjects(path = ''){
                                 '<img src="static/_h5ai/public/images/themes/default/folder.svg" alt="folder" />' +
                             '</span>' +
                             '<span class="label">' + folderInfo.replace("/", "") + '</span>' +
+                            '<span class="date">-</span>' +
                             '<span class="size">-</span>' +
                         '</a>' +
                     '</li>'
@@ -116,7 +116,7 @@ function listObjects(path = ''){
             });
             $.each(result_listObjects.fileList, function(i, fileInfo){
                 $("#list").append(
-                    '<li class="item file" data="' + encodeURI(path + fileInfo[0]) + '">' +
+                    '<li class="item file" data="' + path + encodeURI(fileInfo[0]) + '">' +
                         '<a>' +
                             '<span class="icon square">' +
                                 '<img src="static/_h5ai/public/images/themes/default/file.svg" alt="file" />' +
@@ -125,7 +125,7 @@ function listObjects(path = ''){
                                 '<img src="static/_h5ai/public/images/themes/default/file.svg" alt="file">' +
                             '</span>' +
                             '<span class="label">' + fileInfo[0] + '</span>' +
-                            '<span class="date">' +fileInfo[1] + '</span>' +
+                            '<span class="date">' + fileInfo[1] + '</span>' +
                             '<span class="size">' + fileInfo[2] + '</span>' +
                         '</a>' +
                     '</li>'
@@ -148,21 +148,23 @@ function listObjects(path = ''){
             console.log(textStatus);
         },
         complete: function(){
+        	//渲染顶部crumbbar和back按钮
             if(path !== ''){      //通过有path参数传入判断当前不为根文件夹
-                var pathSplited = path.split("/"); //分割文件夹路径字符串为数组
+                var pathSplited = decodeURI(path).split("/"); //分割文件夹路径字符串为数组，此处解码是为了防止由于js标准不同导致的对"/"的处理标准不同
                 var nowFolderName = pathSplited[pathSplited.length - 2];
                 var parentFolderName = pathSplited[pathSplited.length - 3] ? pathSplited[pathSplited.length - 3] : '/';    //上一层文件夹的名字，其中一个-1是数组下标，另一个是由于split(path)的结果最后一个元素总为空，再一个是当前文件夹名
                 var parentFolder;
-                
-                console.log('path.split() succeed:\n' + print_arr(pathSplited));
+                $.each(pathSplited, function(i){		//重新编码
+					pathSplited[i] = encodeURI(pathSplited[i]);
+				});
                 $("#crumbbar").html(
                     '<a href="#" class="crumb">' +
                         '<span class="label">' + appConfig.SITE_NAME + '</span>' +
                         '<img class="hint" src="static/_h5ai/public/images/themes/default/folder-page.svg" alt="#">' +
                     '</a>' +
-                    '<a href="#' + encodeURI(path) + '" class="crumb" data="' + encodeURI(pathSplited[0]) + '/">' +       //手动定义crumbbar的第一层data
+                    '<a href="#' + path + '" class="crumb" data="' + pathSplited[0] + '/">' +       //手动定义crumbbar的第一层data
                     //'<img class="sep" src="static/_h5ai/public/images/ui/crumb.svg" alt=">">' +
-                    '<span class="label">' + pathSplited[0] + '</span>' +
+                    '<span class="label">' + decodeURI(pathSplited[0]) + '</span>' +
                     '</a>'
                 );
                 //合成上一层文件夹路径用作“返回上一层”按钮使用，我他妈就是不写函数
@@ -171,30 +173,30 @@ function listObjects(path = ''){
                 }else if(pathSplited[0] !== ''){      //存在多级子目录，别问我我也不知道怎么来的
                     parentFolder = pathSplited[0];
                     $("#crumbbar").append(
-                        '<a href="#' + encodeURI(path) + '" class="crumb" data="' + encodeURI(parentFolder + '/' + pathSplited[1]) + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
+                        '<a href="#' + path + '" class="crumb" data="' + parentFolder + '/' + pathSplited[1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
                             '<img class="sep" src="static/_h5ai/public/images/ui/crumb.svg" alt=">">' +
-                            '<span class="label">' + pathSplited[1] + '</span>' +
+                            '<span class="label">' + decodeURI(pathSplited[1]) + '</span>' +
                         '</a>'
                         );
                     for(i = 1; i < pathSplited.length - 2; i++){      //-2是因为只要取到父级目录即可
                         if(pathSplited[i] !== ''){
                             parentFolder = parentFolder + '/' + pathSplited[i];
                             $("#crumbbar").append(
-                            '<a href="#' + encodeURI(path) + '" class="crumb" data="' + encodeURI(parentFolder + '/' + pathSplited[i+1]) + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
+                            '<a href="#' + path + '" class="crumb" data="' + parentFolder + '/' + pathSplited[i+1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
                                 '<img class="sep" src="static/_h5ai/public/images/ui/crumb.svg" alt=">">' +
-                                '<span class="label">' + pathSplited[i+1] + '</span>' +
+                                '<span class="label">' + decodeURI(pathSplited[i+1]) + '</span>' +
                             '</a>'
                             );
                         }
                     }
                     parentFolder = parentFolder + '/';      //在路径结尾添加“/”才能正确请求
                 }
-                console.log('parentFolder: ' + parentFolder);
+                console.log('parentFolder: ' + decodeURI(parentFolder));
                 $("#crumbbar a.crumb:last").attr("class", "crumb active");           //设置crumbbar的最后一层
-                $(document).attr("title", nowFolderName + " - " + appConfig.SITE_NAME);
+                $(document).attr("title", decodeURI(nowFolderName) + " - " + appConfig.SITE_NAME);
                 $("#back").html(
-                    '<li class="item folder folder-parent" data="' + encodeURI(parentFolder) + '">' +
-                        '<a href="#' + encodeURI(parentFolder) + '">' +
+                    '<li class="item folder folder-parent" data="' + parentFolder + '">' +
+                        '<a href="#' + parentFolder + '">' +
                             '<span class="icon square">' +
                             '<img src="static/_h5ai/public/images/themes/default/folder-parent.svg" alt="folder">' +
                             '</span>' +
@@ -202,7 +204,7 @@ function listObjects(path = ''){
                             '<img src="static/_h5ai/public/images/themes/default/folder-parent.svg" alt="folder">' +
                             '</span>' +
                             '<span class="label">' +
-                            '<b>' + parentFolderName + '</b>' +
+                            '<b>' + decodeURI(parentFolderName) + '</b>' +
                             '</span>' +
                             '<span class="size" data-bytes="null">' +
                             '</span>' +
@@ -210,8 +212,8 @@ function listObjects(path = ''){
                     '</li>'
                 );
             }else{
-                $("#crumbbar").html(        //每次都重置crumbbar
-                '<a href="#" class="crumb active">' +
+                $("#crumbbar").html(
+                '<a href="#" class="crumb site active">' +
                     '<span class="label">' + appConfig.SITE_NAME + '</span>' +
                     '<img class="hint" src="static/_h5ai/public/images/themes/default/folder-page.svg" alt="#">' +
                 '</a>'
@@ -224,45 +226,27 @@ function listObjects(path = ''){
     });
 }
 function downloadObject(target, who){
-    console.log('-----getObject("' + target + '")-----');
+    console.log('-----getObject("' + decodeURI(target) + '")-----');
     $(who).attr('style', 'opacity: 0.5;-moz-opacit: 0.5;');
-    if(appConfig.DIRECTLY_GET_OBJECT === true){
-        
-    }else{
-        $.ajax({
-            type: 'POST',
-            url: 'app/action/getSignedUrlForGettingObject.action.php',
-            data: {
-                target: decodeURI(target),
-            },
-            async: false,
-            dataType: 'json',
-            success: function(data){
-                console.log('ajaxpost getSignedUrlForGettingObject.action.php:\n' + data);
-                $(who).find("a").attr("href", data).attr("target", "_blank");
-                //a.appendTo('body');
-            },
-            error: function(textStatus, errorThrown){
-                alert('ERROR!\najaxget app.config failed:\nGo FLUCKING to check for console.log');
-                console.log(XMLHttpRequest.status);
-                console.log(XMLHttpRequest.readyState);
-                console.log(textStatus);
-            }
-        });
-    }
+    $.ajax({
+        type: 'POST',
+        url: 'app/action/getSignedUrlForGettingObject.action.php',
+        data: {
+            target: decodeURI(target),
+        },
+        async: false,
+        dataType: 'json',
+        success: function(data){
+            console.log('ajaxpost getSignedUrlForGettingObject.action.php:\n' + decodeURI(data));
+            $(who).find("a").attr("href", data).attr("target", "_blank");
+            //a.appendTo('body');
+        },
+        error: function(textStatus, errorThrown){
+            alert('ERROR!\najaxget app.config failed:\nGo FLUCKING to check for console.log');
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
     $(who).attr("style", "opacity: 1.0;-moz-opacit: 1.0;");
-}
-function print_arr(arr, space, space2) {
-    space = space || '';
-    space2 = space2 || '      ';
-    var str = "Array\n" + space + "(\n";
-    for (var i = 0; i < arr.length; i++) {
-    if (Object.prototype.toString.call(arr[i]) == '[object Array]') {
-        str += space2 + '[' + i + "] => " + print_arr(arr[i], space + '      ', space2 + '      ');
-    } else {
-        str += space2 + '[' + i + "] => " + arr[i] + "\n";
-    }
-    }
-    str += space + ")\n";
-    return str;
 }

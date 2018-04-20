@@ -27,8 +27,8 @@ $objectList = $listObjectInfo->getObjectList();
 $prefixList = $listObjectInfo->getPrefixList();
 if (!empty($objectList)) {
 	foreach ($objectList as $objectInfo) {
-		$listObjectsResults["fileList"][] = array(		//存放文件列表
-			str_replace($listObjectsOptions["prefix"], "", $objectInfo->getKey()),
+		$listObjectsResults["fileList"][] = array(		//取出每一个
+			substr($objectInfo->getKey(), strlen($listObjectsOptions['prefix'])),		//并去掉父级路径
 			date("Y-m-d H:i", strtotime($objectInfo->getLastModified())),
 			format_bytes($objectInfo->getSize()),
 		);
@@ -36,11 +36,13 @@ if (!empty($objectList)) {
 }
 if (!empty($prefixList)) {
 	foreach ($prefixList as $prefixInfo) {
-		$listObjectsResults["folderList"][] = str_replace($listObjectsOptions['prefix'], "", $prefixInfo->getPrefix());        //存放目录列表
+		$listObjectsResults["folderList"][] = substr($prefixInfo->getPrefix(), strlen($listObjectsOptions['prefix']));        //取出每一个并去掉父级路径放入数组
 	}
 }
 		
-@array_shift($listObjectsResults['fileList']);       //$fileList第一个object为当前目录，忽略
+if($listObjectsOptions['prefix'] !== ''){
+	@array_shift($listObjectsResults['fileList']);       //$fileList第一个object为当前目录，忽略
+}
 @$listObjectsResults['fileCount'] = count($listObjectsResults["fileList"]);
 @$listObjectsResults['folderCount'] = count($listObjectsResults["folderList"]);
 $listObjectsResults['takes'] = floor(($t2-$t1)*1000) . 'ms';

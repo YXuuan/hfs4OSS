@@ -1668,7 +1668,7 @@ html.no-browser .noBrowserMsg {
 }
 
 #view.view-details .label {
-    margin: 0 50px 0 48px      /*Changed*/
+    margin: 0 246px 0 48px      /*Changed*/
 }
 
 #view.view-details.width-0 .label {
@@ -1857,10 +1857,12 @@ html.no-browser .noBrowserMsg {
     font-size: 5em;
     /*font-weight: bold*/       /*Changed*/
 }
-
 @media only screen and (max-width:785px) {      /*Changed*/
-    .size, .l10n-size{       /*Changed*/
+	.date, .l10n-lastModified{       /*Changed*/
          display: none
+    }
+    #view.view-details .label{
+    	margin-right: 80px;
     }
     #crumbbar .crumb:not(.active) {
         display: none
@@ -1874,7 +1876,14 @@ html.no-browser .noBrowserMsg {
         display: none!important
     }
 }
-
+@media only screen and (max-width:500px) {
+	.size, .l10n-size{       /*Changed*/
+         display: none
+    }
+    #view.view-details .label{
+    	margin-right: 4px;
+    }
+}
 @media print {
     *,*:before,*:after,*:first-letter ,*:first-line {
         background: transparent!important;

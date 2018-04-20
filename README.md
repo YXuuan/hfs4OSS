@@ -40,7 +40,6 @@ Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuu
 
 
 /config/static.config.json：	--前端配置文件
-	DIRECTLY_GET_OBJECT	：(true/false)下载文件时直接通过拼接方式生成URL而不向后端请求SignedURL，Bucket ACL为公共读及以上时才可为true。缺省值为false
 	SITE_NAME		：站点名称，请遵从json语法规范
 	SHOW_STATS		：(true/false)底部是否显示状态信息，缺省值为true
 	FOOTER			：底部Footer的HTML代码，请遵从json语法规范。缺省值为空
@@ -64,6 +63,10 @@ Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuu
 
 ## 更新日志/ChangeLog
 ```
+version 2.0.4 2018-04-20
+	[修复] 懒惰导致的列表中与路径同名的项目名字无法被正常裁剪
+	[优化] 前端部分显示细节
+	[项目] 弃用直接拼合方式生成文件下载URL
 version 2.0.3 2018-04-17
 	[增加] 文件最后修改时间显示
 	[优化] 前端部分显示细节
@@ -95,6 +98,10 @@ version 1.0.1 2017-06-17
 version 1.0.0 2017-06-17
 	[项目] 破壳。
 ```
+## 已知的问题/Problems
+```
+顶部crumbbar过长时无法展示也无法收缩
+```
 
 ## 后续可能的改动/Preview
 ```
@@ -102,7 +109,7 @@ version 1.0.0 2017-06-17
 (划掉)输出item的大小
 批量下载（非压缩闭包）
 简单的object管理功能（上传，重命名等）
-文件列表排序
+列表排序
 ```
 
 ## 开源协议/License
