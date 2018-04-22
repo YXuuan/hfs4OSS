@@ -68,7 +68,7 @@ version 2.1.0 2018-04-22
 	[新增] 根据文件后缀名显示不同的图标
 	[修复] 前端ajax异步请求导致的错误
 ```
-更多：[CHANGELOG.md](https://github.com/YXuuan/hfs4OSS/CHANGELOG.md)
+更多：[CHANGELOG.md](https://github.com/YXuuan/hfs4OSS/blob/master/CHANGELOG.md)
 
 ## 已知的问题/Problems
 ```
