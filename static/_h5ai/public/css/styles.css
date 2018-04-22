@@ -1628,7 +1628,7 @@ html.no-browser .noBrowserMsg {
     display: inline-block;
     position: absolute;
     left: 16px;
-    top: -1px;
+    /*top: -1px;		*/		/*Changed*/
     padding: 8px
 }
 
@@ -1658,13 +1658,13 @@ html.no-browser .noBrowserMsg {
 }
 
 #view.view-details .square {
-    width: 16px;
-    height: 16px
+    width: 20px;		/*Changed*/
+    height: 20px			/*Changed*/
 }
-
+	
 #view.view-details .square img {
-    width: 16px;
-    height: 16px
+    width: 20px;		/*Changed*/
+    height: 20px;		/*Changed*/
 }
 
 #view.view-details .label {

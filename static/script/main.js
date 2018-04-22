@@ -10,7 +10,7 @@ var appConfig;
 $.ajax({
     type: 'GET',
     url: 'config/static.config.json?t=' + new Date().getTime(),
-    //async: false,
+    async: false,
     dataType: 'text',
     success: function(data){
         console.log('ajaxget app.config.json succeed:\n' + data);
@@ -48,7 +48,7 @@ $(document).ready(function(){
     $("#crumbbar").html(        //我也不知道为什么非要在这里加一个才能在会话创建后就显示出站点名字
         '<a href="#" class="crumb">' +
             '<span class="label">' + appConfig.SITE_NAME + '</span>' +
-            '<img class="hint" src="static/_h5ai/public/images/themes/default/folder-page.svg" alt="#">' +
+            '<img class="hint" src="static/_h5ai/public/images/themes/h5ai-0.27/folder-page.svg" alt="#">' +
         '</a>'
     );
     //此处Event Loop
@@ -102,10 +102,10 @@ function listObjects(path = ''){
                     '<li class="item folder" data="' + path + encodeURI(folderInfo) + '">' +
                         '<a href="#' + path + encodeURI(folderInfo) + '">' +
                             '<span class="icon square">' +
-                                '<img src="static/_h5ai/public/images/themes/default/folder.svg" alt="folder" />' +
+                                '<img src="static/_h5ai/public/images/themes/h5ai-0.27/folder.svg" alt="folder" />' +
                             '</span>' +
                             '<span class="icon landscape">' +
-                                '<img src="static/_h5ai/public/images/themes/default/folder.svg" alt="folder" />' +
+                                '<img src="static/_h5ai/public/images/themes/h5ai-0.27/folder.svg" alt="folder" />' +
                             '</span>' +
                             '<span class="label">' + folderInfo.replace("/", "") + '</span>' +
                             '<span class="date">-</span>' +
@@ -114,15 +114,39 @@ function listObjects(path = ''){
                     '</li>'
                 );
             });
+            var fileSuffix, fileIcon;
             $.each(result_listObjects.fileList, function(i, fileInfo){
+        		fileSuffix =  fileInfo[0].substring(fileInfo[0].lastIndexOf('.') + 1);
+            	switch(fileSuffix){
+            		case 'avi': case 'wmv': case 'mpeg': case 'mp4': case 'mov': case 'mkv': case 'flv': case 'f4v': case 'm4v': case 'rmvb': case 'rm': case '3gp': case 'dat': case 'ts': case 'mts':
+            			fileIcon = 'static/_h5ai/public/images/themes/h5ai-0.27/vid.svg';
+            			break;
+            		case 'bmp': case 'jpg': case 'png': case 'tiff': case 'gif': case 'pcx': case 'tga': case 'exif': case 'fpx': case 'svg': case 'psd': case 'cdr': case 'pcd': case 'dxf': case 'ufo': case 'eps': case 'ai': case 'raw': case 'WMF': case 'webp':
+            			fileIcon = 'static/_h5ai/public/images/themes/h5ai-0.27/img.svg';
+            			break;
+            		case 'mp3': case 'wma': case 'ape': case 'flac': case 'aac': case 'ac3': case 'mmf': case 'amr': case 'm4a': case 'm4r': case 'ogg': case 'wav': case 'mp2':
+            			fileIcon = 'static/_h5ai/public/images/themes/h5ai-0.27/aud.svg';
+            			break;
+            		case 'zip': case 'rar': case '7z': case 'tar': case 'gz':
+            			fileIcon = 'static/_h5ai/public/images/themes/h5ai-0.27/ar.svg';
+            			break;
+            		case 'exe': case 'dll': case 'com': case 'bat': case 'vbs': case 'sh':
+            			fileIcon = 'static/_h5ai/public/images/themes/h5ai-0.27/bin.svg';
+            			break;
+            		case 'txt': case 'html': case 'htm': case 'md':
+            			fileIcon = 'static/_h5ai/public/images/themes/h5ai-0.27/txt.svg';
+            			break;
+            		default:
+            			fileIcon = 'static/_h5ai/public/images/themes/h5ai-0.27/file.svg';
+            	}
                 $("#list").append(
                     '<li class="item file" data="' + path + encodeURI(fileInfo[0]) + '">' +
                         '<a>' +
                             '<span class="icon square">' +
-                                '<img src="static/_h5ai/public/images/themes/default/file.svg" alt="file" />' +
+                                '<img src="' + fileIcon + '" alt="file" />' +
                             '</span>' +
                             '<span class="icon landscape">' +
-                                '<img src="static/_h5ai/public/images/themes/default/file.svg" alt="file">' +
+                                '<img src="' + fileIcon + '" alt="file" />' +
                             '</span>' +
                             '<span class="label">' + fileInfo[0] + '</span>' +
                             '<span class="date">' + fileInfo[1] + '</span>' +
@@ -160,7 +184,7 @@ function listObjects(path = ''){
                 $("#crumbbar").html(
                     '<a href="#" class="crumb">' +
                         '<span class="label">' + appConfig.SITE_NAME + '</span>' +
-                        '<img class="hint" src="static/_h5ai/public/images/themes/default/folder-page.svg" alt="#">' +
+                        '<img class="hint" src="static/_h5ai/public/images/themes/h5ai-0.27/folder-page.svg" alt="#">' +
                     '</a>' +
                     '<a href="#' + path + '" class="crumb" data="' + pathSplited[0] + '/">' +       //手动定义crumbbar的第一层data
                     //'<img class="sep" src="static/_h5ai/public/images/ui/crumb.svg" alt=">">' +
@@ -198,10 +222,10 @@ function listObjects(path = ''){
                     '<li class="item folder folder-parent" data="' + parentFolder + '">' +
                         '<a href="#' + parentFolder + '">' +
                             '<span class="icon square">' +
-                            '<img src="static/_h5ai/public/images/themes/default/folder-parent.svg" alt="folder">' +
+                            '<img src="static/_h5ai/public/images/themes/h5ai-0.27/folder-parent.svg" alt="folder">' +
                             '</span>' +
                             '<span class="icon landscape">' +
-                            '<img src="static/_h5ai/public/images/themes/default/folder-parent.svg" alt="folder">' +
+                            '<img src="static/_h5ai/public/images/themes/h5ai-0.27/folder-parent.svg" alt="folder">' +
                             '</span>' +
                             '<span class="label">' +
                             '<b>' + decodeURI(parentFolderName) + '</b>' +
@@ -215,7 +239,7 @@ function listObjects(path = ''){
                 $("#crumbbar").html(
                 '<a href="#" class="crumb site active">' +
                     '<span class="label">' + appConfig.SITE_NAME + '</span>' +
-                    '<img class="hint" src="static/_h5ai/public/images/themes/default/folder-page.svg" alt="#">' +
+                    '<img class="hint" src="static/_h5ai/public/images/themes/h5ai-0.27/folder-page.svg" alt="#">' +
                 '</a>'
             );
                 $("#back").html('');

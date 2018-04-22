@@ -10,7 +10,7 @@ SDK：aliyun-oss-php-[sdk](https://promotion.aliyun.com/ntms/act/ossdoclist.html
 
 ## 部署/Build
 * 环境：  
-PHP 5 >= 5.5，curl()支持
+PHP 5 >= 5.3，cURL()支持
 * 下载：  
 Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuuan/hfs4OSS/releases/)，  
 或使用git：
@@ -53,7 +53,7 @@ Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuu
   ├──function/		--函数库
   └──sdk/		--SDK目录
 ├──config/	--配置文件目录
-  ├──oss.config.php	--OSS配置文件
+  ├──app.config.php	--后端配置文件
   └──static.config.json	--前端配置文件
 ├──static/	--前端目录
   ├──_h5ai/		--h5ai目录
@@ -63,16 +63,19 @@ Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuu
 
 ## 更新日志/ChangeLog
 ```
+version 2.1.0 2018-04-22
+	[新增] 根据文件后缀名显示不同的图标
+	[修复] 前端ajax异步请求导致的错误
 version 2.0.4 2018-04-20
 	[修复] 懒惰导致的列表中与路径同名的名称无法被正常裁剪
 	[优化] 前端部分显示细节
 	[项目] 弃用直接拼合方式生成文件下载URL
 version 2.0.3 2018-04-17
-	[增加] 文件最后修改时间显示
+	[新增] 文件最后修改时间显示
 	[优化] 前端部分显示细节
 	[项目] 优化项目逻辑结构和config参数、文件名称
 version 2.0.2 2018-04-16
-	[增加] 文件大小显示
+	[新增] 文件大小显示
 	[优化] encodeURL()入参的路径，防止出现莫名其妙的Bug
 	[优化] 前端点击文件下载体验，简单防止恶意请求
 	[优化] 前端部分显示细节
@@ -92,7 +95,7 @@ version 1.0.3 2017-08-12
 version 1.0.2 2017-06-17
 	[修复] folder或item不存在时遍历数组产生报错信息
 version 1.0.1 2017-06-17
-	[增加] 底部程序版本信息
+	[新增] 底部程序版本信息
 	[修复] items链接指向错误
 	[修复] 底部时间错误，tips：date('Y-m-d H:i:s')
 version 1.0.0 2017-06-17
@@ -105,7 +108,7 @@ version 1.0.0 2017-06-17
 
 ## 后续可能的改动/Preview
 ```
-给不同类型的文件不一样的图标
+(划掉)给不同类型的文件不一样的图标
 (划掉)输出item的大小
 批量下载（非压缩闭包）
 简单的object管理功能（上传，重命名等）
