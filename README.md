@@ -1,9 +1,9 @@
 # hfs4OSS
-在具备PHP代码执行环境和OSS对象存储服务的条件下，
-作为云HTTP文件服务器，提供简单的文件列表、上传下载、管理等功能。
-相较于将文件直接存放在本地，无存储总量限制、传输速率限制、低可靠数据安全等问题。
-	
-SDK：aliyun-oss-php-[sdk](https://promotion.aliyun.com/ntms/act/ossdoclist.html)-2.3.0
+在具备PHP代码执行环境和OSS对象存储服务的条件下，作为云HTTP文件服务器，提供简单的文件列表、上传下载、管理等功能。  
+相较于将文件直接存放在本地，无存储总量限制、传输速率限制、低可靠数据安全等问题。  
+对于移动终端也有良好的支持性。  
+  
+SDK：aliyun-oss-php-[sdk](https://promotion.aliyun.com/ntms/act/ossdoclist.html)-2.3.0  
 样式：[h5ai](https://larsjung.de/h5ai/) v0.29.0
 
 ## 预览/Demo
@@ -39,6 +39,7 @@ Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuu
 	ROOT_DIR		：根目录路径，类似于FTP服务器的虚拟目录显示（例如此项为"photo/"则会将photo文件夹下的内容当作根目录显示）。缺省值为空
 		注意：必须以"/"结尾且开头无需用"/"表示根目录
 	SIGNEDURL_TIMEOUT	：(int)每次下载文件时请求的签名URL有效期时长（秒）。缺省值：3600
+	INDEX_PASSWORD		：访问密码，程序将在每次请求时验证，为空则为不设置。缺省值为空
 
 
 /config/static.config.json：	--前端配置文件
@@ -64,9 +65,9 @@ Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuu
 ```
 ## 更新日志/ChangeLog
 ```
-version 2.1.0 2018-04-22
-	[新增] 根据文件后缀名显示不同的图标
-	[修复] 前端ajax异步请求导致的错误
+version 2.2.0 2018-05-04
+	[新增] 简单的访问验证功能
+	[优化] 减小程序体积，去除无用文件
 ```
 更多：[CHANGELOG.md](https://github.com/YXuuan/hfs4OSS/blob/master/CHANGELOG.md)
 
