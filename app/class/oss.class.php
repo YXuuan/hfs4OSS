@@ -23,25 +23,6 @@ class OSS{
 			return;
 		}
 		return $listObjectInfo;
-		/*
-		$objectList = $listObjectInfo->getObjectList();
-		$prefixList = $listObjectInfo->getPrefixList();
-		$result = array();        //函数返回的二维数组
-		if (!empty($objectList)) {
-			foreach ($objectList as $objectInfo) {
-				$result["fileList"][] = array(
-					str_replace($options["prefix"], "", $objectInfo->getKey()),
-					format_bytes($objectInfo->getSize()),
-				);		//存放文件列表
-			}
-		}
-		if (!empty($prefixList)) {
-			foreach ($prefixList as $prefixInfo) {
-				 $result["folderList"][] = str_replace($options['prefix'], "", $prefixInfo->getPrefix());        //存放目录列表
-			}
-		}
-		return $result;
-		*/
 	}
 	public static function getSignedUrlForGettingObject($ossClient, $bucket, $object, $timeout){
 		try{
