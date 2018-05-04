@@ -9,4 +9,5 @@ final class APPConfig
     const OSS_BUCKET = 'my-bucket';
     const ROOT_DIR = "file-public/";
     const SIGNEDURL_TIMEOUT = 3600;
+    const INDEX_PASSWORD = "";
 }
