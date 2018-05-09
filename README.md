@@ -68,6 +68,7 @@ Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuu
 version 2.2.0 2018-05-04
 	[新增] 简单的访问验证功能
 	[优化] 减小程序体积，去除无用文件
+	ATTENTION: app.config.php有更新
 ```
 更多：[CHANGELOG.md](https://github.com/YXuuan/hfs4OSS/blob/master/CHANGELOG.md)
 
