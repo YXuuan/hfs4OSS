@@ -1,11 +1,7 @@
-//会话创建后
-//读取app.config.json
-//全局变量
-var appConfig;
+var appConfig;		//全局变量
 $.ajax({
 	type: 'GET',
 	url: 'config/static.config.json?t=' + new Date().getTime(),
-	async: false,
 	dataType: 'text',
 	success: function(data){
 		console.log('ajaxget app.config.json succeed:\n' + data);
@@ -17,6 +13,19 @@ $.ajax({
 			return;
 		}
 		console.log('JSON.parse() succeed\n');
+		$(document).attr("title", appConfig.SITE_NAME);
+		if(appConfig.FOOTER !== ""){
+			$("#stats").after(
+				'<div style="margin-top:15px">' +
+					'<span id="footer">' + appConfig.FOOTER + '</span>' +
+				'</div>');
+		}
+		$("#crumbbar").html(        //我也不知道为什么非要在这里加一个才能在会话创建后就显示出站点名字
+			'<a href="#" class="crumb">' +
+				'<span class="label">' + appConfig.SITE_NAME + '</span>' +
+				'<img class="hint" src="static/h5ai/public/images/themes/h5ai-0.27/folder-page.svg" alt="#">' +
+			'</a>'
+		);
 	},
 	error: function(textStatus, errorThrown){
 		alert('ERROR!\najaxget app.config failed:\nGo FLUCKING to check for console.log');
@@ -25,27 +34,13 @@ $.ajax({
 		console.log(textStatus);
 	}
 });
-//锚点入参执行一次listObjects()
 if(window.location.hash){
-	listObjects(window.location.hash.replace("#", ""));
+	listObjects(window.location.hash.substring(1));		//截掉“#”
 }else{
 	listObjects();
 }
 $(document).ready(function(){
-	////////
-	$(document).attr("title", appConfig.SITE_NAME);
-	if(appConfig.FOOTER !== ""){
-		$("#stats").after('<div style="margin-top:15px">' +
-							'<span id="footer">' + appConfig.FOOTER + '</span>' +
-						'</div>');
-	}
-	$("#crumbbar").html(        //我也不知道为什么非要在这里加一个才能在会话创建后就显示出站点名字
-		'<a href="#" class="crumb">' +
-			'<span class="label">' + appConfig.SITE_NAME + '</span>' +
-			'<img class="hint" src="static/h5ai/public/images/themes/h5ai-0.27/folder-page.svg" alt="#">' +
-		'</a>'
-	);
-	//此处Event Loop
+	//Event Loop
 	//对Ajax返回数据后新生成的元素进行绑定
 	$("#back").on("click", "li.item.folder.folder-parent", function(event){     //定义的#back是为了每次覆盖
 		listObjects($(this).attr("data"));    //listObjects(当前元素的data值)
@@ -66,12 +61,12 @@ $(document).ready(function(){
 		}
 	});
 });
+
 function listObjects(path = ''){
 	$("#items").attr("style", "opacity: 0.5;-moz-opacit: 0.5;");
 	console.log('-----listObjects("' + decodeURI(path) + path + ' = ' + '")-----');
 	$.ajax({
 		type: 'POST',
-		//async: false,
 		url: 'app/action/listObjects.action.php',
 		data: {
 				prefix: decodeURI(path),
@@ -291,7 +286,7 @@ function exceptionHandler(msg){
 	var handlerFlag = null;
 	switch(msg){
 		case 'Exception201':
-			var inputedPassword = prompt("Invalid password, try again: ");
+			var inputedPassword = prompt(appConfig.INDEX_PASSWORD_MESSAGE + "\nPassword needed: ");
 			if(inputedPassword !== null){
 				$.cookie('hfs4OSS_indexPassword', inputedPassword);
 				listObjects();
@@ -299,7 +294,7 @@ function exceptionHandler(msg){
 			handlerFlag = true;
 			break;
 		case 'Exception202':
-			var inputedPassword = prompt("Password needed: ");
+			var inputedPassword = prompt("Invalid password, try again: ");
 			if(inputedPassword !== null){
 				$.cookie('hfs4OSS_indexPassword', inputedPassword)
 				listObjects();
