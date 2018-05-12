@@ -8,7 +8,7 @@ SDK：aliyun-oss-php-[sdk](https://promotion.aliyun.com/ntms/act/ossdoclist.html
 
 ## 预览/Demo
 * oovoo.site：[http://file.oovoo.site/](http://file.oovoo.site/)
-* ![image](https://yxuuan.github.io/hfs4oss-demo/demo.png)
+* ![image](https://yxuuan.github.io/hfs4oss-demo/v2.2.0.png)
 
 ## 部署/Build
 * 环境：
@@ -39,7 +39,7 @@ Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuu
 	ROOT_DIR		：根目录路径，类似于FTP服务器的虚拟目录显示（例如此项为"photo/"则会将photo文件夹下的内容当作根目录显示）。缺省值为空
 		注意：必须以"/"结尾且开头无需用"/"表示根目录
 	SIGNEDURL_TIMEOUT	：(int)每次下载文件时请求的签名URL有效期时长（秒）。缺省值：3600
-	INDEX_PASSWORD		：访问密码，程序将在每次请求时验证，为空则为不设置。缺省值为空
+	INDEX_PASSWORD		：访问密码，程序将在首次访问站点时要求输入，为空则为不设置。缺省值为空
 
 
 /config/static.config.json：	--前端配置文件
@@ -65,10 +65,9 @@ Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuu
 ```
 ## 更新日志/ChangeLog
 ```
-version 2.2.0 2018-05-04
-	[新增] 简单的访问验证功能
-	[优化] 减小程序体积，去除无用文件
-	ATTENTION: app.config.php有更新
+version 2.2.1 2018-05-12
+	[新增] 列表排序，可以根据名称、修改时间、大小来升降序排列
+	[优化] 数据格式化逻辑
 ```
 更多：[CHANGELOG.md](https://github.com/YXuuan/hfs4OSS/blob/master/CHANGELOG.md)
 
@@ -83,7 +82,7 @@ version 2.2.0 2018-05-04
 (划掉)输出item的大小
 批量下载（非压缩闭包）
 简单的object管理功能（上传，重命名等）
-列表排序
+(划掉)列表排序
 ```
 
 ## 开源协议/License

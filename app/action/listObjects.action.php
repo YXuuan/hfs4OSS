@@ -25,24 +25,39 @@ $objectList = $listObjectResult->getObjectList();
 $prefixList = $listObjectResult->getPrefixList();
 if (!empty($objectList)) {
 	foreach ($objectList as $objectInfo) {
-		$resultToReturn["fileList"][] = array(		//取出每一个
+		$resultToReturn["fileList"][] = array(
+			//取出每一个
 			substr($objectInfo->getKey(), strlen($options['prefix'])),		//并去掉父级路径
-			date("Y-m-d H:i", strtotime($objectInfo->getLastModified())),
-			format_bytes($objectInfo->getSize()),
+			//$objectInfo->getLastModified(),
+			strtotime($objectInfo->getLastModified()),
+			$objectInfo->getSize()
+			//format_bytes($objectInfo->getSize()),
 		);
 	}
 	if($options['prefix'] !== ''){
-	@array_shift($resultToReturn['fileList']);       //$fileList第一个object为当前目录，忽略
-}
-}
-if (!empty($prefixList)) {
-	foreach ($prefixList as $prefixInfo) {
-		$resultToReturn["folderList"][] = substr($prefixInfo->getPrefix(), strlen($options['prefix']));        //取出每一个并去掉父级路径放入数组
+		@array_shift($resultToReturn['fileList']);       //$fileList第一个object为当前目录，忽略
 	}
 }
+//取出每一个并去掉父级路径放入数组
+if (!empty($prefixList)) {
+	foreach ($prefixList as $prefixInfo) {
+		$resultToReturn["folderList"][] = substr($prefixInfo->getPrefix(), strlen($options['prefix']));
+	}
+}
+//排序相关
+if((isset($_POST['sortBy'])) && (!empty($_POST['sortBy'])) && (isset($_POST['descending'])) && (!empty($_POST['descending']))){
+	$descending = ($_POST['descending'] == "true") ? SORT_ASC : SORT_DESC ;
+	if($_POST['sortBy'] == "date"){
+		@array_multisort(array_column($resultToReturn['fileList'], 1), $descending, $resultToReturn['fileList']);
+	}elseif($_POST['sortBy'] == "size"){
+		@array_multisort(array_column($resultToReturn['fileList'], 2), $descending, $resultToReturn['fileList']);
+	}else{
+		@array_multisort(array_column($resultToReturn['fileList'], 0), $descending, $resultToReturn['fileList']);
+		@array_multisort($resultToReturn['folderList'], $descending, $resultToReturn['folderList']);
 
+	}
+}
 $t2 = microtime(true);
-
 @$resultToReturn['fileCount'] = count($resultToReturn["fileList"]);
 @$resultToReturn['folderCount'] = count($resultToReturn["folderList"]);
 $resultToReturn['takes'] = floor(($t2-$t1)*1000) . 'ms';

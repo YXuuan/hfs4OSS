@@ -1858,7 +1858,7 @@ html.no-browser .noBrowserMsg {
     /*font-weight: bold*/       /*Changed*/
 }
 @media only screen and (max-width:785px) {      /*Changed*/
-	.date, .l10n-lastModified{       /*Changed*/
+	.date, .lastModified{       /*Changed*/
          display: none
     }
     #view.view-details .label{
@@ -1877,7 +1877,7 @@ html.no-browser .noBrowserMsg {
     }
 }
 @media only screen and (max-width:500px) {
-	.size, .l10n-size{       /*Changed*/
+	.size{       /*Changed*/
          display: none
     }
     #view.view-details .label{

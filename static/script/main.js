@@ -34,13 +34,12 @@ $.ajax({
 		console.log(textStatus);
 	}
 });
-if(window.location.hash){
-	listObjects(window.location.hash.substring(1));		//截掉“#”
-}else{
-	listObjects();
-}
+listObjects(window.location.hash.substring(1));
 $(document).ready(function(){
 	//Event Loop
+	$(".header").on("click", "a", function(event){     //定义的#back是为了每次覆盖
+		sortSwitch($(this));    //listObjects(当前元素的data值)
+	});
 	//对Ajax返回数据后新生成的元素进行绑定
 	$("#back").on("click", "li.item.folder.folder-parent", function(event){     //定义的#back是为了每次覆盖
 		listObjects($(this).attr("data"));    //listObjects(当前元素的data值)
@@ -62,14 +61,16 @@ $(document).ready(function(){
 	});
 });
 
-function listObjects(path = ''){
+function listObjects(path, sortBy = "label", descending = "true"){
 	$("#items").attr("style", "opacity: 0.5;-moz-opacit: 0.5;");
-	console.log('-----listObjects("' + decodeURI(path) + path + ' = ' + '")-----');
+	console.log('-----listObjects("' + decodeURI(path) + ', ' + sortBy + ', ' + descending + ')-----');
 	$.ajax({
 		type: 'POST',
 		url: 'app/action/listObjects.action.php',
 		data: {
 				prefix: decodeURI(path),
+				sortBy: sortBy,
+				descending: descending
 		},
 		dataType: 'text',
 		success: function(data){
@@ -144,11 +145,11 @@ function listObjects(path = ''){
 							'<span class="label" title="' + decodeURI(path) + fileInfo[0] +'">' +
 								fileInfo[0] +
 							'</span>' +
-							'<span class="date" title="' + fileInfo[1] +'">' +
-								fileInfo[1] +
+							'<span class="date" title="' + getTime(fileInfo[1]) +'">' +
+							getTime(fileInfo[1]) +
 							'</span>' +
-							'<span class="size" title="' + fileInfo[2] +'">' +
-								fileInfo[2] +
+							'<span class="size" title="' + bytesToSize(fileInfo[2]) +'">' +
+								bytesToSize(fileInfo[2]) +
 							'</span>' +
 						'</a>' +
 					'</li>'
@@ -247,6 +248,21 @@ function listObjects(path = ''){
 		}
 	});
 }
+function sortSwitch(who){
+	if($(who).hasClass("ascending")){
+		$(who).removeClass("ascending");
+		listObjects(window.location.hash.substring(1), $(who).attr("class"), "true");
+		$(who).addClass("descending");
+	}else if($(who).hasClass("descending")){
+		$(who).removeClass("descending");
+		listObjects(window.location.hash.substring(1), $(who).attr("class"), "false");
+		$(who).addClass("ascending");
+	}else{
+		$(".header a").removeClass("ascending").removeClass("descending");		//清空排序方法
+		listObjects(window.location.hash.substring(1), $(who).attr("class"), "true");		//默认新一次排序为倒序
+		$(who).addClass("descending");
+	}
+}
 function downloadObject(target, who){
 	console.log('-----getObject("' + decodeURI(target) + '")-----');
 	$(who).attr('style', 'opacity: 0.5;-moz-opacit: 0.5;');
@@ -282,25 +298,22 @@ function downloadObject(target, who){
 	});
 	$(who).attr("style", "opacity: 1.0;-moz-opacit: 1.0;");
 }
-function exceptionHandler(msg){
-	var handlerFlag = null;
-	switch(msg){
-		case 'Exception201':
-			var inputedPassword = prompt(appConfig.INDEX_PASSWORD_MESSAGE + "\nPassword needed: ");
-			if(inputedPassword !== null){
-				$.cookie('hfs4OSS_indexPassword', inputedPassword);
-				listObjects();
-			}
-			handlerFlag = true;
-			break;
-		case 'Exception202':
-			var inputedPassword = prompt("Invalid password, try again: ");
-			if(inputedPassword !== null){
-				$.cookie('hfs4OSS_indexPassword', inputedPassword)
-				listObjects();
-			}
-			handlerFlag = true;
-			break;
-	}
-	return handlerFlag;
+function getTime() {
+	var ts = arguments[0] || 0;
+	var t,y,m,d,h,i,s;
+	t = ts ? new Date(ts*1000) : new Date();
+	y = t.getFullYear();
+	m = t.getMonth()+1;
+	d = t.getDate();
+	h = t.getHours();
+	i = t.getMinutes();
+	s = t.getSeconds();
+	return y+'-'+(m<10?'0'+m:m)+'-'+(d<10?'0'+d:d)+' '+(h<10?'0'+h:h)+':'+(i<10?'0'+i:i)+':'+(s<10?'0'+s:s);
+}
+function bytesToSize(bytes) {
+	if (bytes === 0) return '0 B';
+	var k = 1024;
+	sizes = ['B','KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+	i = Math.floor(Math.log(bytes) / Math.log(k))
+	return (bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i];
 }
