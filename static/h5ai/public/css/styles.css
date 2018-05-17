@@ -1785,7 +1785,7 @@ html.no-browser .noBrowserMsg {
 }
 
 #view a,#view a:active,#view a:visited {
-    display: block;
+    /*display: block;*/		/*Changed*/
     color: inherit;
     cursor: pointer;
     text-decoration: none
@@ -1858,7 +1858,7 @@ html.no-browser .noBrowserMsg {
     /*font-weight: bold*/       /*Changed*/
 }
 @media only screen and (max-width:785px) {      /*Changed*/
-	.date, .lastModified{       /*Changed*/
+	.date{       /*Changed*/
          display: none
     }
     #view.view-details .label{
