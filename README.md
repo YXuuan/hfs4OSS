@@ -65,9 +65,12 @@ Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuu
 ```
 ## 更新日志/ChangeLog
 ```
-version 2.2.1 2018-05-12
-	[新增] 列表排序，可以根据名称、修改时间、大小来升降序排列
-	[优化] 数据格式化逻辑
+version 2.2.2 2018-05-18
+	[修复] 进入新目录时排序方式出错的问题
+	[修复] 时区报错问题
+	[修复] 部分图标无法显示的问题
+	[修改] 前端显示细节
+	[优化] 后端运行逻辑
 ```
 更多：[CHANGELOG.md](https://github.com/YXuuan/hfs4OSS/blob/master/CHANGELOG.md)
 
@@ -83,6 +86,9 @@ version 2.2.1 2018-05-12
 批量下载（非压缩闭包）
 简单的object管理功能（上传，重命名等）
 (划掉)列表排序
+不同的路径不同的密码
+前端多国语言支持
+前端自定义文本支持
 ```
 
 ## 开源协议/License
