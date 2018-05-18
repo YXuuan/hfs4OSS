@@ -8,7 +8,7 @@ $options['prefix'] = @check_var($_POST['prefix']) ? APPConfig::ROOT_DIR.$_POST['
 $options['delimiter'] = @check_var($_POST['delimiter']) ? $_POST['delimiter'] : '/';        //delimiter为“/”时仅获取当前目录下内容
 $options['max-keys'] = @check_var($_POST['maxkeys']) ? $_POST['maxkeys'] : 1000;
 $options['marker'] = @check_var($_POST['marker']) ? $_POST['marker'] : '';
-$sortBy = @check_var($sortBy) ? $sortBy : false;
+$sortBy = @check_var($_POST['sortBy']) ? $_POST['sortBy'] : false;
 $descending = @check_var($_POST['descending']) ? $_POST['descending'] : false;
 
 $t1 = microtime(true);
