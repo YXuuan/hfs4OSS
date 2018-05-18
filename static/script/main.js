@@ -10,7 +10,6 @@ $.ajax({
 		}catch(e){       //异常捕获： 捕获请求成功但无法解析JSON的异常，意思就是有个傻逼把app.config.json改死了
 			alert('ERROR!\najaxget app.config succeed but JSON.parse() failed\nGo FLUCKING to check for console.log');
 			console.error('JSON.parse() error:\n' + e);
-			return;
 		}
 		console.log('JSON.parse() succeed\n');
 		$(document).attr("title", appConfig.SITE_NAME);
@@ -34,7 +33,7 @@ $.ajax({
 		console.log(textStatus);
 	}
 });
-listObjects(window.location.hash.substring(1));
+listObjects();
 $(document).ready(function(){
 	//Event Loop
 	$(".header").on("click", "a", function(event){     //定义的#back是为了每次覆盖
@@ -60,15 +59,18 @@ $(document).ready(function(){
 		}
 	});
 });
-
-function listObjects(path, sortBy = "label", descending = "true"){
+function listObjects(){
+	//有参数传入时优先使用参数，无参数传入时判断当前页面已有的状态，两者都无时走默认
+	var prefix = arguments[0] !== undefined ? decodeURI(arguments[0]) : window.location.hash.substring(1) ? decodeURI(window.location.hash.substring(1)) : "";
+	var sortBy = arguments[1] !== undefined ? arguments[1] : $(".label").hasClass("descending") || $(".label").hasClass("ascending") ? "label" : $(".date").hasClass("descending") || $(".date").hasClass("ascending") ? "date" : $(".size").hasClass("descending") || $(".size").hasClass("ascending") ? "size" : "label";
+	var descending = arguments[2] !== undefined ? arguments[2] : $(".label, .size, .date").hasClass("descending") ? "true" : $(".label, .size, .date").hasClass("ascending") ? "false" : "true";
 	$("#items").attr("style", "opacity: 0.5;-moz-opacit: 0.5;");
-	console.log('-----listObjects("' + decodeURI(path) + ', ' + sortBy + ', ' + descending + ')-----');
+	console.log('-----listObjects("' + decodeURI(prefix) + ', ' + sortBy + ', ' + descending + ')-----');
 	$.ajax({
 		type: 'POST',
 		url: 'app/action/listObjects.action.php',
 		data: {
-				prefix: decodeURI(path),
+				prefix: prefix,
 				sortBy: sortBy,
 				descending: descending
 		},
@@ -91,15 +93,15 @@ function listObjects(path, sortBy = "label", descending = "true"){
 			$("#list").html('');        //清空原有内容
 			$.each(result_listObjects.folderList, function(i, folderInfo){
 				$("#list").append(
-					'<li class="item folder" data="' + path + encodeURI(folderInfo) + '">' +
-						'<a href="#' + path + encodeURI(folderInfo) + '">' +
+					'<li class="item folder" data="' + prefix + encodeURI(folderInfo) + '">' +
+						'<a href="#' + prefix + encodeURI(folderInfo) + '">' +
 							'<span class="icon square">' +
 								'<img src="static/h5ai/public/images/themes/h5ai-0.27/folder.svg" alt="folder" />' +
 							'</span>' +
 							'<span class="icon landscape">' +
 								'<img src="static/h5ai/public/images/themes/h5ai-0.27/folder.svg" alt="folder" />' +
 							'</span>' +
-							'<span class="label" title="'+ decodeURI(path) + folderInfo.replace("/", "") + '">' +
+							'<span class="label" title="'+ decodeURI(prefix) + folderInfo.replace("/", "") + '">' +
 								folderInfo.replace("/", "") +
 							'</span>' +
 							'<span class="date" title="-">-</span>' +
@@ -134,7 +136,7 @@ function listObjects(path, sortBy = "label", descending = "true"){
 						fileIcon = 'static/h5ai/public/images/themes/h5ai-0.27/file.svg';
 				}
 				$("#list").append(
-					'<li class="item file" data="' + path + encodeURI(fileInfo[0]) + '">' +
+					'<li class="item file" data="' + prefix + encodeURI(fileInfo[0]) + '">' +
 						'<a>' +
 							'<span class="icon square">' +
 								'<img src="' + fileIcon + '" alt="file" />' +
@@ -142,7 +144,7 @@ function listObjects(path, sortBy = "label", descending = "true"){
 							'<span class="icon landscape">' +
 								'<img src="' + fileIcon + '" alt="file" />' +
 							'</span>' +
-							'<span class="label" title="' + decodeURI(path) + fileInfo[0] +'">' +
+							'<span class="label" title="' + decodeURI(prefix) + fileInfo[0] +'">' +
 								fileInfo[0] +
 							'</span>' +
 							'<span class="date" title="' + getTime(fileInfo[1]) +'">' +
@@ -160,7 +162,7 @@ function listObjects(path, sortBy = "label", descending = "true"){
 			}
 			$("#stats").html(result_listObjects.fileCount + ' file(s), ' + result_listObjects.folderCount + ' folder(s)');
 			if(appConfig.SHOW_STATS){
-				$("#stats").append('<br />listObjects takes ' + result_listObjects.takes + ', Memory used ' + result_listObjects.memUsed);
+				$("#stats").append('<br />listObjects takes ' + result_listObjects.takes + ' ms, memory used ' + bytesToSize(result_listObjects.memUsed));
 			}
 		},
 		error: function(textStatus, errorThrown){
@@ -172,42 +174,42 @@ function listObjects(path, sortBy = "label", descending = "true"){
 		},
 		complete: function(){
 			//渲染顶部crumbbar和back按钮
-			if(path !== ''){      //通过有path参数传入判断当前不为根文件夹
-				var pathSplited = decodeURI(path).split("/"); //分割文件夹路径字符串为数组，此处解码是为了防止由于js标准不同导致的对"/"的处理标准不同
-				var nowFolderName = pathSplited[pathSplited.length - 2];
-				var parentFolderName = pathSplited[pathSplited.length - 3] ? pathSplited[pathSplited.length - 3] : '/';    //上一层文件夹的名字，其中一个-1是数组下标，另一个是由于split(path)的结果最后一个元素总为空，再一个是当前文件夹名
+			if(prefix !== ''){      //通过有prefix参数传入判断当前不为根文件夹
+				var prefixSplited = decodeURI(prefix).split("/"); //分割文件夹路径字符串为数组，此处解码是为了防止由于js标准不同导致的对"/"的处理标准不同
+				var nowFolderName = prefixSplited[prefixSplited.length - 2];
+				var parentFolderName = prefixSplited[prefixSplited.length - 3] ? prefixSplited[prefixSplited.length - 3] : '/';    //上一层文件夹的名字，其中一个-1是数组下标，另一个是由于split(prefix)的结果最后一个元素总为空，再一个是当前文件夹名
 				var parentFolder;
-				$.each(pathSplited, function(i){		//重新编码
-					pathSplited[i] = encodeURI(pathSplited[i]);
+				$.each(prefixSplited, function(i){		//重新编码
+					prefixSplited[i] = encodeURI(prefixSplited[i]);
 				});
 				$("#crumbbar").html(
-					'<a href="#" class="crumb">' +
+					'<a href="#" class="crumb" data="">' +
 						'<span class="label">' + appConfig.SITE_NAME + '</span>' +
 						'<img class="hint" src="static/h5ai/public/images/themes/h5ai-0.27/folder-page.svg" alt="#">' +
 					'</a>' +
-					'<a href="#' + path + '" class="crumb" data="' + pathSplited[0] + '/">' +       //手动定义crumbbar的第一层data
+					'<a href="#' + prefix + '" class="crumb" data="' + prefixSplited[0] + '/">' +       //手动定义crumbbar的第一层data
 					//'<img class="sep" src="static/h5ai/public/images/ui/crumb.svg" alt=">">' +
-					'<span class="label">' + decodeURI(pathSplited[0]) + '</span>' +
+					'<span class="label">' + decodeURI(prefixSplited[0]) + '</span>' +
 					'</a>'
 				);
 				//合成上一层文件夹路径用作“返回上一层”按钮使用，我他妈就是不写函数
-				if(pathSplited.length == 2){      //进入一级子目录时，pathSplited[0]为目录名，pathSplited[1]为空
+				if(prefixSplited.length == 2){      //进入一级子目录时，prefixSplited[0]为目录名，prefixSplited[1]为空
 					parentFolder = '' ;
-				}else if(pathSplited[0] !== ''){      //存在多级子目录，别问我我也不知道怎么来的
-					parentFolder = pathSplited[0];
+				}else if(prefixSplited[0] !== ''){      //存在多级子目录，别问我我也不知道怎么来的
+					parentFolder = prefixSplited[0];
 					$("#crumbbar").append(
-						'<a href="#' + path + '" class="crumb" data="' + parentFolder + '/' + pathSplited[1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
+						'<a href="#' + prefix + '" class="crumb" data="' + parentFolder + '/' + prefixSplited[1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
 							'<img class="sep" src="static/h5ai/public/images/ui/crumb.svg" alt=">">' +
-							'<span class="label">' + decodeURI(pathSplited[1]) + '</span>' +
+							'<span class="label">' + decodeURI(prefixSplited[1]) + '</span>' +
 						'</a>'
 						);
-					for(i = 1; i < pathSplited.length - 2; i++){      //-2是因为只要取到父级目录即可
-						if(pathSplited[i] !== ''){
-							parentFolder = parentFolder + '/' + pathSplited[i];
+					for(i = 1; i < prefixSplited.length - 2; i++){      //-2是因为只要取到父级目录即可
+						if(prefixSplited[i] !== ''){
+							parentFolder = parentFolder + '/' + prefixSplited[i];
 							$("#crumbbar").append(
-							'<a href="#' + path + '" class="crumb" data="' + parentFolder + '/' + pathSplited[i+1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
+							'<a href="#' + prefix + '" class="crumb" data="' + parentFolder + '/' + prefixSplited[i+1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
 								'<img class="sep" src="static/h5ai/public/images/ui/crumb.svg" alt=">">' +
-								'<span class="label">' + decodeURI(pathSplited[i+1]) + '</span>' +
+								'<span class="label">' + decodeURI(prefixSplited[i+1]) + '</span>' +
 							'</a>'
 							);
 						}
@@ -248,20 +250,25 @@ function listObjects(path, sortBy = "label", descending = "true"){
 		}
 	});
 }
+function sortClear(){
+	$(".header a").removeClass("ascending").removeClass("descending");
+	return;
+}
 function sortSwitch(who){
 	if($(who).hasClass("ascending")){
-		$(who).removeClass("ascending");
+		sortClear();
 		listObjects(window.location.hash.substring(1), $(who).attr("class"), "true");
 		$(who).addClass("descending");
 	}else if($(who).hasClass("descending")){
-		$(who).removeClass("descending");
+		sortClear();
 		listObjects(window.location.hash.substring(1), $(who).attr("class"), "false");
 		$(who).addClass("ascending");
 	}else{
-		$(".header a").removeClass("ascending").removeClass("descending");		//清空排序方法
+		sortClear();
 		listObjects(window.location.hash.substring(1), $(who).attr("class"), "true");		//默认新一次排序为倒序
 		$(who).addClass("descending");
 	}
+	return;
 }
 function downloadObject(target, who){
 	console.log('-----getObject("' + decodeURI(target) + '")-----');
@@ -297,6 +304,29 @@ function downloadObject(target, who){
 		}
 	});
 	$(who).attr("style", "opacity: 1.0;-moz-opacit: 1.0;");
+	return;
+}
+function exceptionHandler(msg){
+	var handlerFlag = null;
+	switch(msg){
+		case 'Exception201':
+			var inputedPassword = prompt("Invalid password, try again: ");
+			if(inputedPassword !== null){
+				$.cookie('hfs4OSS_indexPassword', inputedPassword);
+				listObjects();
+			}
+			handlerFlag = true;
+			break;
+		case 'Exception202':
+			var inputedPassword = prompt("Password needed: ");
+			if(inputedPassword !== null){
+				$.cookie('hfs4OSS_indexPassword', inputedPassword)
+				listObjects();
+			}
+			handlerFlag = true;
+			break;
+	}
+	return handlerFlag;
 }
 function getTime() {
 	var ts = arguments[0] || 0;
