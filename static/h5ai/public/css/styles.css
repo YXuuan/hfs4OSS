@@ -1877,7 +1877,7 @@ html.no-browser .noBrowserMsg {
     }
 }
 @media only screen and (max-width:500px) {
-	.size{       /*Changed*/
+	.size, #backlink{       /*Changed*/
          display: none
     }
     #view.view-details .label{
