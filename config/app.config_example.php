@@ -3,6 +3,7 @@
 return array(
 	'ROOT_DIR' => "mydir/",
 	'SIGNEDURL_TIMEOUT' => 3600,
+	'SHOW_FILEDATE' => true,
 	'INDEX_AUTH' => array(
 		'FIRSTMET' => '请输入密码：',
 		'PASSWORD' => '2333',

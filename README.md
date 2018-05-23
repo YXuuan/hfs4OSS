@@ -29,23 +29,28 @@ Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuu
 * 配置：
 填写oss.config.php和static.config.json：
 ~~~
-/config/oss.config.php：	--APP配置文件
-	OSS_ACCESS_ID		：OSS的AccessKey ID值
-	OSS_ACCESS_KEY		：OSS的AcOSS的cessKey Key值
-	OSS_ENDPOINT		：OSS的Endpoint值
-		注意：必须带前缀http://或https://
-	OSS_ENDPOINT_IS_CNAME	：(true/false)如果OSS的Endpoint为自定义域名，此项为true
-	OSS_BUCKET		：OSS的存储空间(Bucket)名
-	ROOT_DIR		：根目录路径，类似于FTP服务器的虚拟目录显示（例如此项为"photo/"则会将photo文件夹下的内容当作根目录显示）。缺省值为空
+/config/app.config.php		--APP配置文件
+	ROOT_DIR		：(str)根目录路径，类似于FTP服务器的虚拟目录显示（例如此项为"photo/"则会将photo文件夹下的内容当作根目录显示）。缺省值为空；
 		注意：必须以"/"结尾且开头无需用"/"表示根目录
-	SIGNEDURL_TIMEOUT	：(int)每次下载文件时请求的签名URL有效期时长（秒）。缺省值：3600
-	INDEX_PASSWORD		：访问密码，程序将在首次访问站点时要求输入，为空则为不设置。缺省值为空
+	SIGNEDURL_TIMEOUT	：(int)每次下载文件时请求的签名URL有效期时长（秒）。缺省值：3600；
+	SHOW_FILEDATE		：(bool)是否展示文件修改时间；
+	INDEX_AUTH		=> ：(arr)首页访问密码配置，PASSWORD为空时即不设置
+		FIRSTMET		：(str)首次时提示的信息，
+		PASSWORD		：(str)访问密码，程序将在首次访问站点时要求输入，为空则为不设置，
+		IFWRONG			：密码错误的提示信息；
 
-
-/config/static.config.json：	--前端配置文件
-	SITE_NAME		：站点名称，请遵从json语法规范
-	SHOW_STATS		：(true/false)底部是否显示状态信息，缺省值为true
-	FOOTER			：底部Footer的HTML代码，请遵从json语法规范。缺省值为空
+/config/oss.config.php：	--OSS配置文件
+	ACCESS_ID		：(str)AccessKey ID值；
+	ACCESS_KEY		：(str)AccessKey Key值；
+	ENDPOINT		：(str)Endpoint值；
+		注意：必须带前缀http://或https://
+	ENDPOINT_IS_CNAME	：(bool)如果Endpoint为自定义域名，此项为true
+	BUCKET			：(str)存储空间(Bucket)名；
+	
+/config/static.config.json：	--前端配置文件，请注意遵从json语法规范
+	SITE_NAME		：(str)站点名称，
+	SHOW_STATS		：(bool)底部是否显示状态信息，缺省值为true，
+	FOOTER			：(str)底部Footer的HTML代码
 ~~~
 * 文件结构：
 ```
@@ -65,12 +70,15 @@ Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuu
 ```
 ## 更新日志/ChangeLog
 ```
-version 2.2.2 2018-05-18
-	[修复] 进入新目录时排序方式出错的问题
-	[修复] 时区报错问题
-	[修复] 部分图标无法显示的问题
-	[修改] 前端显示细节
-	[优化] 后端运行逻辑
+version 2.3.0 2018-05-23
+	[优化] 配置文件结构
+	[修复] 顶部crumbbar最后一级指向出错，
+	[优化] 统一前后端命名
+	[优化] 异常捕获逻辑
+	[优化] 配置文件引入逻辑
+	[优化] action输出结构
+	[优化] 前端显示细节
+ATTENTION: app.config.php、oss.config.php有更新
 ```
 更多：[CHANGELOG.md](https://github.com/YXuuan/hfs4OSS/blob/master/CHANGELOG.md)
 
@@ -89,6 +97,8 @@ version 2.2.2 2018-05-18
 不同的路径不同的密码
 前端多国语言支持
 前端自定义文本支持
+多站点配置支持
+安装向导
 ```
 
 ## 开源协议/License

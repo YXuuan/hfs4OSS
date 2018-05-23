@@ -214,7 +214,7 @@ function listObjects(){
 						if(prefixSplited[i] !== ''){
 							parentFolder = parentFolder + '/' + prefixSplited[i];
 							$("#crumbbar").append(
-							'<a href="#' + prefix + '" class="crumb" data="' + parentFolder + '/' + prefixSplited[i+1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
+							'<a href="#' + parentFolder + '/' + prefixSplited[i+1] + '" class="crumb" data="' + parentFolder + '/' + prefixSplited[i+1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
 								'<img class="sep" src="static/h5ai/public/images/ui/crumb.svg" alt=">">' +
 								'<span class="name">' + decodeURI(prefixSplited[i+1]) + '</span>' +
 							'</a>'
