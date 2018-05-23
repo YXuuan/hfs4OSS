@@ -21,7 +21,7 @@ $.ajax({
 		}
 		$("#crumbbar").html(        //我也不知道为什么非要在这里加一个才能在会话创建后就显示出站点名字
 			'<a href="#" class="crumb">' +
-				'<span class="label">' + appConfig.SITE_NAME + '</span>' +
+				'<span class="name">' + appConfig.SITE_NAME + '</span>' +
 				'<img class="hint" src="static/h5ai/public/images/themes/h5ai-0.27/folder-page.svg" alt="#">' +
 			'</a>'
 		);
@@ -62,8 +62,8 @@ $(document).ready(function(){
 function listObjects(){
 	//有参数传入时优先使用参数，无参数传入时判断当前页面已有的状态，两者都无时走默认
 	var prefix = arguments[0] !== undefined ? decodeURI(arguments[0]) : window.location.hash.substring(1) ? decodeURI(window.location.hash.substring(1)) : "";
-	var sortBy = arguments[1] !== undefined ? arguments[1] : $(".label").hasClass("descending") || $(".label").hasClass("ascending") ? "label" : $(".date").hasClass("descending") || $(".date").hasClass("ascending") ? "date" : $(".size").hasClass("descending") || $(".size").hasClass("ascending") ? "size" : "label";
-	var descending = arguments[2] !== undefined ? arguments[2] : $(".label, .size, .date").hasClass("descending") ? "true" : $(".label, .size, .date").hasClass("ascending") ? "false" : "true";
+	var sortBy = arguments[1] !== undefined ? arguments[1] : $(".name").hasClass("descending") || $(".name").hasClass("ascending") ? "name" : $(".time").hasClass("descending") || $(".time").hasClass("ascending") ? "time" : $(".size").hasClass("descending") || $(".size").hasClass("ascending") ? "size" : "name";
+	var descending = arguments[2] !== undefined ? arguments[2] : $(".name, .size, .time").hasClass("descending") ? "true" : $(".name, .size, .time").hasClass("ascending") ? "false" : "true";
 	$("#items").attr("style", "opacity: 0.5;-moz-opacit: 0.5;");
 	console.log('-----listObjects("' + decodeURI(prefix) + ', ' + sortBy + ', ' + descending + ')-----');
 	$.ajax({
@@ -77,34 +77,37 @@ function listObjects(){
 		dataType: 'text',
 		success: function(data){
 			console.log('ajaxpost listObjects() succeed:' + decodeURI(data));
+			$("#list").html('');        //清空原有内容
 			//密码相关处理
 			try{
 				result_listObjects = JSON.parse(data);
 			}catch(e){           //异常捕获： 捕获请求成功但无法解析JSON的异常，多为listObjects.action抛出的异常
-				$("#list").html('');
-				if(exceptionHandler(data) === false){
-					alert('ERROR!\najaxpostgetJSON() succeed but JSON.parse() failed:\nGo FLUCKING to check the console.log');
-					console.error('JSON.parse() error:\n' + e);
-				}
-				return;
+				alert('ERROR!\najaxpostgetJSON() succeed but JSON.parse() failed:\nGo FLUCKING to check the console.log');
+				console.error('JSON.parse() error:\n' + e);
+				return false;
 			}
 			console.log('JSON.parse() succeed');
+			if(JSON.parse(data).stat >= 200){		//错误处理
+				if(exceptionHandler(JSON.parse(data).stat, data) === false){
+					alert('Unexpected Error, \nGo FLUCKING to check the console.log');
+				}
+				return false;
+			}
 			//列表动作
-			$("#list").html('');        //清空原有内容
 			$.each(result_listObjects.folderList, function(i, folderInfo){
 				$("#list").append(
-					'<li class="item folder" data="' + prefix + encodeURI(folderInfo) + '">' +
-						'<a href="#' + prefix + encodeURI(folderInfo) + '">' +
+					'<li class="item folder" data="' + prefix + encodeURI(folderInfo.name) + '">' +
+						'<a href="#' + prefix + encodeURI(folderInfo.name) + '">' +
 							'<span class="icon square">' +
 								'<img src="static/h5ai/public/images/themes/h5ai-0.27/folder.svg" alt="folder" />' +
 							'</span>' +
 							'<span class="icon landscape">' +
 								'<img src="static/h5ai/public/images/themes/h5ai-0.27/folder.svg" alt="folder" />' +
 							'</span>' +
-							'<span class="label" title="'+ decodeURI(prefix) + folderInfo.replace("/", "") + '">' +
-								folderInfo.replace("/", "") +
+							'<span class="name" title="'+ decodeURI(prefix) + folderInfo.name.replace("/", "") + '">' +
+								folderInfo.name.replace("/", "") +
 							'</span>' +
-							'<span class="date" title="-">-</span>' +
+							'<span style="display: none;" class="time" title="-">-</span>' +
 							'<span class="size" title="-">-</span>' +
 						'</a>' +
 					'</li>'
@@ -112,7 +115,7 @@ function listObjects(){
 			});
 			var fileSuffix, fileIcon;
 			$.each(result_listObjects.fileList, function(i, fileInfo){
-				fileSuffix =  fileInfo[0].substring(fileInfo[0].lastIndexOf('.') + 1);
+				fileSuffix =  fileInfo.name.substring(fileInfo.name.lastIndexOf('.') + 1);
 				switch(fileSuffix){
 					case 'avi': case 'wmv': case 'mpeg': case 'mp4': case 'mov': case 'mkv': case 'flv': case 'f4v': case 'm4v': case 'rmvb': case 'rm': case '3gp': case 'dat': case 'ts': case 'mts':
 						fileIcon = 'static/h5ai/public/images/themes/h5ai-0.27/vid.svg';
@@ -136,7 +139,7 @@ function listObjects(){
 						fileIcon = 'static/h5ai/public/images/themes/h5ai-0.27/file.svg';
 				}
 				$("#list").append(
-					'<li class="item file" data="' + prefix + encodeURI(fileInfo[0]) + '">' +
+					'<li class="item file" data="' + prefix + encodeURI(fileInfo.name) + '">' +
 						'<a>' +
 							'<span class="icon square">' +
 								'<img src="' + fileIcon + '" alt="file" />' +
@@ -144,25 +147,29 @@ function listObjects(){
 							'<span class="icon landscape">' +
 								'<img src="' + fileIcon + '" alt="file" />' +
 							'</span>' +
-							'<span class="label" title="' + decodeURI(prefix) + fileInfo[0] +'">' +
-								fileInfo[0] +
+							'<span class="name" title="' + decodeURI(prefix) + fileInfo.name +'">' +
+								fileInfo.name +
 							'</span>' +
-							'<span class="date" title="' + getTime(fileInfo[1]) +'">' +
-							getTime(fileInfo[1]) +
+							'<span class="time" style="display: none;" title="' + fileInfo.time +'">' +
+								getTime(fileInfo.time) +
 							'</span>' +
-							'<span class="size" title="' + bytesToSize(fileInfo[2]) +'">' +
-								bytesToSize(fileInfo[2]) +
+							'<span class="size" title="' + fileInfo.size +'">' +
+								bytesToSize(fileInfo.size) +
 							'</span>' +
 						'</a>' +
 					'</li>'
 				);
 			});
+			if(result_listObjects.stat != 111){
+				$(".time").attr("style", "display: inline;");
+				//$(".name").attr("style", "margin-right: 100px;")
+			}
 			if(result_listObjects.fileCount === 0 && result_listObjects.folderCount === 0){
 				$("#list").html('<div id="view-hint" class="l10n-empty">Nothing\'s here, pal</div>');
 			}
 			$("#stats").html(result_listObjects.fileCount + ' file(s), ' + result_listObjects.folderCount + ' folder(s)');
 			if(appConfig.SHOW_STATS){
-				$("#stats").append('<br />listObjects takes ' + result_listObjects.takes + ' ms, memory used ' + bytesToSize(result_listObjects.memUsed));
+				$("#stats").append('<br>listObjects takes ' + result_listObjects.takes + ' ms, memory used ' + bytesToSize(result_listObjects.memUsed));
 			}
 		},
 		error: function(textStatus, errorThrown){
@@ -184,12 +191,12 @@ function listObjects(){
 				});
 				$("#crumbbar").html(
 					'<a href="#" class="crumb" data="">' +
-						'<span class="label">' + appConfig.SITE_NAME + '</span>' +
+						'<span class="name">' + appConfig.SITE_NAME + '</span>' +
 						'<img class="hint" src="static/h5ai/public/images/themes/h5ai-0.27/folder-page.svg" alt="#">' +
 					'</a>' +
 					'<a href="#' + prefix + '" class="crumb" data="' + prefixSplited[0] + '/">' +       //手动定义crumbbar的第一层data
 					//'<img class="sep" src="static/h5ai/public/images/ui/crumb.svg" alt=">">' +
-					'<span class="label">' + decodeURI(prefixSplited[0]) + '</span>' +
+					'<span class="name">' + decodeURI(prefixSplited[0]) + '</span>' +
 					'</a>'
 				);
 				//合成上一层文件夹路径用作“返回上一层”按钮使用，我他妈就是不写函数
@@ -198,9 +205,9 @@ function listObjects(){
 				}else if(prefixSplited[0] !== ''){      //存在多级子目录，别问我我也不知道怎么来的
 					parentFolder = prefixSplited[0];
 					$("#crumbbar").append(
-						'<a href="#' + prefix + '" class="crumb" data="' + parentFolder + '/' + prefixSplited[1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
+						'<a href="#' + parentFolder + '/' + prefixSplited[1] + '/" class="crumb" data="' + parentFolder + '/' + prefixSplited[1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
 							'<img class="sep" src="static/h5ai/public/images/ui/crumb.svg" alt=">">' +
-							'<span class="label">' + decodeURI(prefixSplited[1]) + '</span>' +
+							'<span class="name">' + decodeURI(prefixSplited[1]) + '</span>' +
 						'</a>'
 						);
 					for(i = 1; i < prefixSplited.length - 2; i++){      //-2是因为只要取到父级目录即可
@@ -209,7 +216,7 @@ function listObjects(){
 							$("#crumbbar").append(
 							'<a href="#' + prefix + '" class="crumb" data="' + parentFolder + '/' + prefixSplited[i+1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
 								'<img class="sep" src="static/h5ai/public/images/ui/crumb.svg" alt=">">' +
-								'<span class="label">' + decodeURI(prefixSplited[i+1]) + '</span>' +
+								'<span class="name">' + decodeURI(prefixSplited[i+1]) + '</span>' +
 							'</a>'
 							);
 						}
@@ -228,7 +235,7 @@ function listObjects(){
 							'<span class="icon landscape">' +
 							'<img src="static/h5ai/public/images/themes/h5ai-0.27/folder-parent.svg" alt="folder">' +
 							'</span>' +
-							'<span class="label">' +
+							'<span class="name">' +
 							'<b>' + decodeURI(parentFolderName) + '</b>' +
 							'</span>' +
 							'<span class="size" data-bytes="null">' +
@@ -239,7 +246,7 @@ function listObjects(){
 			}else{
 				$("#crumbbar").html(
 				'<a href="#" class="crumb site active">' +
-					'<span class="label">' + appConfig.SITE_NAME + '</span>' +
+					'<span class="name">' + appConfig.SITE_NAME + '</span>' +
 					'<img class="hint" src="static/h5ai/public/images/themes/h5ai-0.27/folder-page.svg" alt="#">' +
 				'</a>'
 			);
@@ -284,16 +291,20 @@ function downloadObject(target, who){
 		success: function(data){
 			try{
 				result_getSignedUrlForGettingObject = JSON.parse(data);
-			}catch(e){
-				if(exceptionHandler(data) === false){
-					alert('ERROR!\najaxget app.config succeed but JSON.parse() failed\nGo FLUCKING to check for console.log');
-					console.error('JSON.parse() error:\n' + e);
+				console.log('JSON.parse() succeed');
+			}catch(e){           //异常捕获： 捕获请求成功但无法解析JSON的异常，多为listObjects.action抛出的异常
+				alert('ERROR!\najaxpostgetJSON() succeed but JSON.parse() failed:\nGo FLUCKING to check the console.log');
+				console.error('JSON.parse() error:\n' + e);
+				return;
+			}
+			if(JSON.parse(data).stat >= 200){		//错误处理
+				if(exceptionHandler(JSON.parse(data).stat, data) === false){
+					alert('Unexpected Error, \nGo FLUCKING to check the console.log');
 				}
 				return;
 			}
-			console.log('JSON.parse() succeed\n');
-			console.log('ajaxpost getSignedUrlForGettingObject.action.php:\n' + decodeURI(result_getSignedUrlForGettingObject));
-			$(who).find("a").attr("href", result_getSignedUrlForGettingObject).attr("target", "_blank");
+			console.log('ajaxpost getSignedUrlForGettingObject.action.php:\n' + decodeURI(result_getSignedUrlForGettingObject.SignedUrlForGettingObject));
+			$(who).find("a").attr("href", result_getSignedUrlForGettingObject.SignedUrlForGettingObject).attr("target", "_blank");
 			//a.appendTo('body');
 		},
 		error: function(textStatus, errorThrown){
@@ -301,24 +312,27 @@ function downloadObject(target, who){
 			console.log(XMLHttpRequest.status);
 			console.log(XMLHttpRequest.readyState);
 			console.log(textStatus);
+		},
+		complete: function(){
+			$(who).attr("style", "opacity: 1.0;-moz-opacit: 1.0;");
 		}
 	});
 	$(who).attr("style", "opacity: 1.0;-moz-opacit: 1.0;");
 	return;
 }
-function exceptionHandler(msg){
-	var handlerFlag = null;
-	switch(msg){
-		case 'Exception201':
-			var inputedPassword = prompt("Invalid password, try again: ");
+function exceptionHandler(stat, data = ""){
+	var handlerFlag = false;
+	switch(stat){
+		case '201':
+			var inputedPassword = prompt(JSON.parse(data).msg);
 			if(inputedPassword !== null){
 				$.cookie('hfs4OSS_indexPassword', inputedPassword);
 				listObjects();
 			}
 			handlerFlag = true;
 			break;
-		case 'Exception202':
-			var inputedPassword = prompt("Password needed: ");
+		case '202':
+			var inputedPassword = prompt(JSON.parse(data).msg);
 			if(inputedPassword !== null){
 				$.cookie('hfs4OSS_indexPassword', inputedPassword)
 				listObjects();
