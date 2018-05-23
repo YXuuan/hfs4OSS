@@ -2,66 +2,70 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="">
-    <title></title>
-    <link rel="shortcut icon" href="static/h5ai/public/images/favicon/favicon-16-32.ico">
-    <link rel="apple-touch-icon-precomposed" type="image/png" href="static/h5ai/public/images/favicon/favicon-152.png">
-    <link rel="stylesheet" href="static/h5ai/public/css/styles.css">
-    <script src="static/script/jquery-3.3.1.min.js"></script>
-    <script src="static/script/jquery.cookie.js"></script>
-    <script src="static/script/main.js"></script>
+	<meta name="description" content="">
+	<title></title>
+	<link rel="shortcut icon" href="static/h5ai/public/images/favicon/favicon-16-32.ico">
+	<link rel="apple-touch-icon-precomposed" type="image/png" href="static/h5ai/public/images/favicon/favicon-152.png">
+	<link rel="stylesheet" href="static/h5ai/public/css/styles.css">
+	<script src="static/script/jquery-3.3.1.min.js"></script>
+	<script src="static/script/jquery.cookie.js"></script>
+	<script src="static/script/main.js"></script>
 </head>
 
 <body class="index" id="root">
-    <div id="topbar">
-        <div id="flowbar">
-            <div id="crumbbar">
-                <a class="crumb" href="#">
-                    <img class="sep" src="static/h5ai/public/images/themes/h5ai-0.27/folder-page.svg" alt="#">
-                    <span class="label">$SITE</span>
-                </a>
-            </div>
-        </div>
-        <a id="backlink" href="https://larsjung.de/h5ai/" target="_blank" title="Themed by h5ai - https://larsjung.de/h5ai/">
-            <div>Themed</div>
-            <div>by h5ai</div>
-        </a>
-        <a id="backlink" href="https://github.com/YXuuan/hfs4OSS" target="_blank" title="Powered by YXuuan - https://github.com/YXuuan/">
-            <div>Powered by</div>
-            <div>YXuuan/hfs4OSS</div>
-        </a>
-    </div>
-    <div id="mainrow">
-        <div id="content">
-            <div id="view" class="view-details view-size-20">
-                <ul id="items" class="clearfix">
-                    <li class="header">
-                        <a class="label descending">
-                            <span>Name</span>
-                            <img src="/_h5ai/public/images/ui/sort.svg" class="sort" alt="sort order">
-                        </a>
-                        <a class="date">
-                        	<span>Last modified</span>
-                        	<img src="/_h5ai/public/images/ui/sort.svg" class="sort" alt="sort order">
-                        </a>
-                        <a class="size">
-                            <span>Size</span>
-                            <img src="/_h5ai/public/images/ui/sort.svg" class="sort" alt="sort order">
-                        </a>
-                    </li>
-                    <div id="back"></div>
-                    <div id="list">
-                    </div>
-                </ul>
-                <div style="text-align:center; margin-top:25px; color:#8E8E8E">
-                    <span id="stats"></span>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div id="topbar">
+		<div id="flowbar">
+			<div id="crumbbar">
+				<a class="crumb" href="#">
+					<img class="sep" src="static/h5ai/public/images/themes/h5ai-0.27/folder-page.svg" alt="#">
+					<span class="name">$SITE</span>
+				</a>
+			</div>
+		</div>
+		<a id="backlink" href="https://larsjung.de/h5ai/" target="_blank" title="Themed by h5ai - https://larsjung.de/h5ai/">
+			<div>Themed</div>
+			<div>by h5ai</div>
+		</a>
+		<a id="backlink" href="https://github.com/YXuuan/hfs4OSS" target="_blank" title="Powered by YXuuan - https://github.com/YXuuan/">
+			<div>Powered by</div>
+			<div>YXuuan/hfs4OSS</div>
+		</a>
+	</div>
+	<div id="mainrow">
+		<div id="content">
+			<div id="view" class="view-details view-size-20">
+				<ul id="items" class="clearfix">
+					<li class="header">
+						<a class="name descending">
+							<span>Name</span>
+							<img src="static/h5ai/public/images/ui/sort.svg" class="sort" alt="sort order">
+						</a>
+						<a class="time" style="display: none;">
+							<span>Last modified</span>
+							<img src="static/h5ai/public/images/ui/sort.svg" class="sort" alt="sort order">
+						</a>
+						<a class="size">
+							<span>Size</span>
+							<img src="static/h5ai/public/images/ui/sort.svg" class="sort" alt="sort order">
+						</a>
+					</li>
+					<div id="back"></div>
+					<div id="list">
+					</div>
+				</ul>
+				<div style="text-align:center; margin-top:25px; color:#8E8E8E">
+					<span id="stats"></span>
+					<span id="autobacklinks">
+						<a href="https://larsjung.de/h5ai/" target="_blank" title="Themed by h5ai - https://larsjung.de/h5ai/">Themed by h5ai</a><br>
+						<a href="https://github.com/YXuuan/hfs4OSS" target="_blank" title="Powered by YXuuan - https://github.com/YXuuan/">Powered by YXuuan/hfs4OSS</a>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 
 </html>
