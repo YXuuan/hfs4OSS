@@ -6,7 +6,7 @@ use OSS\Core\OssException;
 class OSS{
 	public static function getOssClient(){
 		try {
-			$ossClient = new OssClient(APPConfig::OSS_ACCESS_ID, APPConfig::OSS_ACCESS_KEY, APPConfig::OSS_ENDPOINT, APPConfig::OSS_ENDPOINT_IS_CNAME);
+			$ossClient = new OssClient(OSSConfig::ACCESS_ID, OSSConfig::ACCESS_KEY, OSSConfig::ENDPOINT, OSSConfig::ENDPOINT_IS_CNAME);
 		} catch (OssException $e) {
 			printf(__FUNCTION__ . "creating OssClient instance: FAILED\n");
 			printf($e->getMessage() . "\n");
