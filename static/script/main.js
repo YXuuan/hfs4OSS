@@ -1,17 +1,16 @@
-var appConfig;		//全局变量
+var hfs4OSS_cookies = $.cookie('hfs4OSS_cookies') ? JSON.parse($.cookie('hfs4OSS_cookies')) : {};
+var appConfig = {};
 $.ajax({
 	type: 'GET',
 	url: 'config/static.config.json?t=' + new Date().getTime(),
 	dataType: 'text',
-	success: function(data){
-		console.log('ajaxget app.config.json succeed:\n' + data);
+	success: function(resultRow){
 		try{
-			appConfig = JSON.parse(data);
+			appConfig = JSON.parse(resultRow);
 		}catch(e){       //异常捕获： 捕获请求成功但无法解析JSON的异常，意思就是有个傻逼把app.config.json改死了
-			alert('ERROR!\najaxget app.config succeed but JSON.parse() failed\nGo FLUCKING to check for console.log');
+			alert('ERROR!\najaxget app.config succeed but JSON.parse() failed\nGo FLUCKING to check for the console');
 			console.error('JSON.parse() error:\n' + e);
 		}
-		console.log('JSON.parse() succeed\n');
 		$(document).attr("title", appConfig.SITE_NAME);
 		if(appConfig.FOOTER !== ""){
 			$("#stats").after(
@@ -27,17 +26,17 @@ $.ajax({
 		);
 	},
 	error: function(textStatus, errorThrown){
-		alert('ERROR!\najaxget app.config failed:\nGo FLUCKING to check for console.log');
-		console.log(XMLHttpRequest.status);
-		console.log(XMLHttpRequest.readyState);
-		console.log(textStatus);
+		alert('ERROR!\najaxget app.config failed:\nGo FLUCKING to check for the console');
+		console.error(XMLHttpRequest.status);
+		console.error(XMLHttpRequest.readyState);
+		console.error(textStatus);
 	}
 });
-listObjects();
+listObjects(window.location.hash.substring(1));
 $(document).ready(function(){
 	//Event Loop
 	$(".header").on("click", "a", function(event){     //定义的#back是为了每次覆盖
-		sortSwitch($(this));    //listObjects(当前元素的data值)
+		sortSwitch($(this));
 	});
 	//对Ajax返回数据后新生成的元素进行绑定
 	$("#back").on("click", "li.item.folder.folder-parent", function(event){     //定义的#back是为了每次覆盖
@@ -59,13 +58,16 @@ $(document).ready(function(){
 		}
 	});
 });
-function listObjects(){
+function listObjects(prefix = ""){
 	//有参数传入时优先使用参数，无参数传入时判断当前页面已有的状态，两者都无时走默认
-	var prefix = arguments[0] !== undefined ? decodeURI(arguments[0]) : window.location.hash.substring(1) ? decodeURI(window.location.hash.substring(1)) : "";
+	//哪段程序体现了暴力美学?
+	/*var prefix = arguments[0] !== undefined ? decodeURI(arguments[0]) : window.location.hash.substring(1) ? decodeURI(window.location.hash.substring(1)) : "";
+	*/
+	prefix = decodeURI(prefix);
 	var sortBy = arguments[1] !== undefined ? arguments[1] : $(".name").hasClass("descending") || $(".name").hasClass("ascending") ? "name" : $(".time").hasClass("descending") || $(".time").hasClass("ascending") ? "time" : $(".size").hasClass("descending") || $(".size").hasClass("ascending") ? "size" : "name";
 	var descending = arguments[2] !== undefined ? arguments[2] : $(".name, .size, .time").hasClass("descending") ? "true" : $(".name, .size, .time").hasClass("ascending") ? "false" : "true";
 	$("#items").attr("style", "opacity: 0.5;-moz-opacit: 0.5;");
-	console.log('-----listObjects("' + decodeURI(prefix) + ', ' + sortBy + ', ' + descending + ')-----');
+	console.log('listObjects(' + decodeURI(prefix) + ', ' + sortBy + ', ' + descending + '): ');
 	$.ajax({
 		type: 'POST',
 		url: 'app/action/listObjects.action.php',
@@ -75,26 +77,25 @@ function listObjects(){
 				descending: descending
 		},
 		dataType: 'text',
-		success: function(data){
-			console.log('ajaxpost listObjects() succeed:' + decodeURI(data));
+		success: function(resultRow){
+			console.log(resultRow);
 			$("#list").html('');        //清空原有内容
 			//密码相关处理
 			try{
-				result_listObjects = JSON.parse(data);
+				result = JSON.parse(resultRow);
 			}catch(e){           //异常捕获： 捕获请求成功但无法解析JSON的异常，多为listObjects.action抛出的异常
-				alert('ERROR!\najaxpostgetJSON() succeed but JSON.parse() failed:\nGo FLUCKING to check the console.log');
+				alert('ERROR!\najax listObjects.action succeed but JSON.parse() failed:\nGo FLUCKING to check the console');
 				console.error('JSON.parse() error:\n' + e);
 				return false;
 			}
-			console.log('JSON.parse() succeed');
-			if(JSON.parse(data).stat >= 200){		//错误处理
-				if(exceptionHandler(JSON.parse(data).stat, data) === false){
-					alert('Unexpected Error, \nGo FLUCKING to check the console.log');
+			if(!(result.stat >= 100 && result.stat <= 199)){
+				if(exceptionHandler(result.stat, result, prefix) === true){
+					listObjects(prefix);
 				}
-				return false;
+				return;
 			}
 			//列表动作
-			$.each(result_listObjects.folderList, function(i, folderInfo){
+			$.each(result.folderList, function(i, folderInfo){
 				$("#list").append(
 					'<li class="item folder" data="' + prefix + encodeURI(folderInfo.name) + '">' +
 						'<a href="#' + prefix + encodeURI(folderInfo.name) + '">' +
@@ -113,8 +114,9 @@ function listObjects(){
 					'</li>'
 				);
 			});
-			var fileSuffix, fileIcon;
-			$.each(result_listObjects.fileList, function(i, fileInfo){
+			var fileSuffix = "";
+			var fileIcon = "";
+			$.each(result.fileList, function(i, fileInfo){
 				fileSuffix =  fileInfo.name.substring(fileInfo.name.lastIndexOf('.') + 1);
 				switch(fileSuffix){
 					case 'avi': case 'wmv': case 'mpeg': case 'mp4': case 'mov': case 'mkv': case 'flv': case 'f4v': case 'm4v': case 'rmvb': case 'rm': case '3gp': case 'dat': case 'ts': case 'mts':
@@ -160,24 +162,24 @@ function listObjects(){
 					'</li>'
 				);
 			});
-			if(result_listObjects.stat != 111){
+			if(result.stat != 111){
 				$(".time").attr("style", "display: inline;");
 				//$(".name").attr("style", "margin-right: 100px;")
 			}
-			if(result_listObjects.fileCount === 0 && result_listObjects.folderCount === 0){
+			if(result.fileCount === 0 && result.folderCount === 0){
 				$("#list").html('<div id="view-hint" class="l10n-empty">Nothing\'s here, pal</div>');
 			}
-			$("#stats").html(result_listObjects.fileCount + ' file(s), ' + result_listObjects.folderCount + ' folder(s)');
+			$("#stats").html(result.fileCount + ' file(s), ' + result.folderCount + ' folder(s)');
 			if(appConfig.SHOW_STATS){
-				$("#stats").append('<br>listObjects takes ' + result_listObjects.takes + ' ms, memory used ' + bytesToSize(result_listObjects.memUsed));
+				$("#stats").append('<br>listObjects takes ' + result.takes + ' ms, memory used ' + bytesToSize(result.memUsed));
 			}
 		},
 		error: function(textStatus, errorThrown){
 			$("#list").html('');
-			alert('ERROR!\najaxpost listObjects.action failed:\nGo FLUCKING to check for console');
-			console.log(XMLHttpRequest.status);
-			console.log(XMLHttpRequest.readyState);
-			console.log(textStatus);
+			alert('ERROR!\najax listObjects.action failed:\nGo FLUCKING to check for the console');
+			console.error(XMLHttpRequest.status);
+			console.error(XMLHttpRequest.readyState);
+			console.error(textStatus);
 		},
 		complete: function(){
 			//渲染顶部crumbbar和back按钮
@@ -185,14 +187,14 @@ function listObjects(){
 				var prefixSplited = decodeURI(prefix).split("/"); //分割文件夹路径字符串为数组，此处解码是为了防止由于js标准不同导致的对"/"的处理标准不同
 				var nowFolderName = prefixSplited[prefixSplited.length - 2];
 				var parentFolderName = prefixSplited[prefixSplited.length - 3] ? prefixSplited[prefixSplited.length - 3] : '/';    //上一层文件夹的名字，其中一个-1是数组下标，另一个是由于split(prefix)的结果最后一个元素总为空，再一个是当前文件夹名
-				var parentFolder;
+				var parentFolder = "";
 				$.each(prefixSplited, function(i){		//重新编码
 					prefixSplited[i] = encodeURI(prefixSplited[i]);
 				});
 				$("#crumbbar").html(
 					'<a href="#" class="crumb" data="">' +
 						'<span class="name">' + appConfig.SITE_NAME + '</span>' +
-						'<img class="hint" src="static/h5ai/public/images/themes/h5ai-0.27/folder-page.svg" alt="#">' +
+						'<img class="hint" src="static/h5ai/public/images/themes/h5ai-0.27/folder-page.svg" alt=">">' +
 					'</a>' +
 					'<a href="#' + prefix + '" class="crumb" data="' + prefixSplited[0] + '/">' +       //手动定义crumbbar的第一层data
 					//'<img class="sep" src="static/h5ai/public/images/ui/crumb.svg" alt=">">' +
@@ -206,7 +208,7 @@ function listObjects(){
 					parentFolder = prefixSplited[0];
 					$("#crumbbar").append(
 						'<a href="#' + parentFolder + '/' + prefixSplited[1] + '/" class="crumb" data="' + parentFolder + '/' + prefixSplited[1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
-							'<img class="sep" src="static/h5ai/public/images/ui/crumb.svg" alt=">">' +
+							'<img class="sep" src="static/h5ai/public/images/ui/crumb.svg" alt="/">' +
 							'<span class="name">' + decodeURI(prefixSplited[1]) + '</span>' +
 						'</a>'
 						);
@@ -215,7 +217,7 @@ function listObjects(){
 							parentFolder = parentFolder + '/' + prefixSplited[i];
 							$("#crumbbar").append(
 							'<a href="#' + parentFolder + '/' + prefixSplited[i+1] + '" class="crumb" data="' + parentFolder + '/' + prefixSplited[i+1] + '/">' +     //手动定义crumbbar的第一层data后添加每层数据，+1是因为要取得比父级目录多一层，并在结尾添加“/”
-								'<img class="sep" src="static/h5ai/public/images/ui/crumb.svg" alt=">">' +
+								'<img class="sep" src="static/h5ai/public/images/ui/crumb.svg" alt="/">' +
 								'<span class="name">' + decodeURI(prefixSplited[i+1]) + '</span>' +
 							'</a>'
 							);
@@ -223,7 +225,6 @@ function listObjects(){
 					}
 					parentFolder = parentFolder + '/';      //在路径结尾添加“/”才能正确请求
 				}
-				console.log('parentFolder: ' + decodeURI(parentFolder));
 				$("#crumbbar a.crumb:last").attr("class", "crumb active");           //设置crumbbar的最后一层
 				$(document).attr("title", decodeURI(nowFolderName) + " - " + appConfig.SITE_NAME);
 				$("#back").html(
@@ -257,9 +258,98 @@ function listObjects(){
 		}
 	});
 }
-function sortClear(){
-	$(".header a").removeClass("ascending").removeClass("descending");
+function downloadObject(target, who){
+	console.log('getObject("' + decodeURI(target) + '"): ');
+	$(who).attr('style', 'opacity: 0.5;-moz-opacit: 0.5;');
+	$.ajax({
+		type: 'POST',
+		url: 'app/action/getSignedUrlForGettingObject.action.php',
+		data: {
+			target: decodeURI(target),
+		},
+		async: false,		//就相当于执行了两次~
+		dataType: 'text',
+		success: function(resultRow){
+			console.log(resultRow);
+			try{
+				result = JSON.parse(resultRow);
+			}catch(e){           //异常捕获： 捕获请求成功但无法解析JSON的异常，多为listObjects.action抛出的异常
+				alert('ERROR!\najax getSignedUrlForGettingObject.action succeed but JSON.parse() failed:\nGo FLUCKING to check for the console');
+				console.error('JSON.parse() error:\n' + e);
+				return;
+			}
+			if(!(result.stat >= 100 && result.stat <= 199)){
+				if(exceptionHandler(result.stat, result, target) === true){
+					downloadObject(target, who);
+				}
+				return;
+			}
+			$(who).find("a").attr("href", result.url).attr("target", "_blank");
+			//a.appendTo('body');
+		},
+		error: function(textStatus, errorThrown){
+			alert('ERROR!\najax getSignedUrlForGettingObject.action failed:\nGo FLUCKING to check for the console');
+			console.error(XMLHttpRequest.status);
+			console.error(XMLHttpRequest.readyState);
+			console.error(textStatus);
+		},
+		complete: function(){
+			$(who).attr("style", "opacity: 1.0;-moz-opacit: 1.0;");
+		}
+	});
+	$(who).attr("style", "opacity: 1.0;-moz-opacit: 1.0;");
 	return;
+}
+function exceptionHandler(stat, data = ""){
+	var retry = false;
+	if(stat > 200 && stat < 300){
+		retry = authHandler(stat, data, arguments[2]);
+	}else{
+		alert('Unexpected Error, \nGo FLUCKING to check for the console');
+		retry = false;
+	}
+	return retry;
+}
+function authHandler(stat, data){
+	var retry = false;
+	var inputed = "";
+	hfs4OSS_cookies.passwords = hfs4OSS_cookies.passwords ? hfs4OSS_cookies.passwords : {};
+	switch(stat){
+		case 201:
+		case 202:
+			inputed = prompt(data.msg);
+			if(inputed !== null){
+				hfs4OSS_cookies.passwords.index = inputed;
+				$.cookie('hfs4OSS_cookies', JSON.stringify(hfs4OSS_cookies));
+				retry = true;
+			}else{
+				retry = false;
+			}
+			break;
+		case 211:
+		case 212:
+			inputed = prompt(data.msg);
+			if(inputed !== null){
+				hfs4OSS_cookies.passwords[arguments[2]] = inputed;
+				$.cookie('hfs4OSS_cookies', JSON.stringify(hfs4OSS_cookies));
+			retry = true;
+			}else{
+				retry = false;
+			}
+			break;
+		case 221:
+		case 222:
+			inputed = prompt(data.msg);
+			if(inputed !== null){
+				hfs4OSS_cookies.passwords[arguments[2]] = inputed;
+				$.cookie('hfs4OSS_cookies', JSON.stringify(hfs4OSS_cookies));
+			retry = true;
+			}else{
+				retry = false;
+			}
+			break;
+	}
+	return retry;
 }
 function sortSwitch(who){
 	if($(who).hasClass("ascending")){
@@ -277,70 +367,9 @@ function sortSwitch(who){
 	}
 	return;
 }
-function downloadObject(target, who){
-	console.log('-----getObject("' + decodeURI(target) + '")-----');
-	$(who).attr('style', 'opacity: 0.5;-moz-opacit: 0.5;');
-	$.ajax({
-		type: 'POST',
-		url: 'app/action/getSignedUrlForGettingObject.action.php',
-		data: {
-			target: decodeURI(target),
-		},
-		async: false,
-		dataType: 'text',
-		success: function(data){
-			try{
-				result_getSignedUrlForGettingObject = JSON.parse(data);
-				console.log('JSON.parse() succeed');
-			}catch(e){           //异常捕获： 捕获请求成功但无法解析JSON的异常，多为listObjects.action抛出的异常
-				alert('ERROR!\najaxpostgetJSON() succeed but JSON.parse() failed:\nGo FLUCKING to check the console.log');
-				console.error('JSON.parse() error:\n' + e);
-				return;
-			}
-			if(JSON.parse(data).stat >= 200){		//错误处理
-				if(exceptionHandler(JSON.parse(data).stat, data) === false){
-					alert('Unexpected Error, \nGo FLUCKING to check the console.log');
-				}
-				return;
-			}
-			console.log('ajaxpost getSignedUrlForGettingObject.action.php:\n' + decodeURI(result_getSignedUrlForGettingObject.SignedUrlForGettingObject));
-			$(who).find("a").attr("href", result_getSignedUrlForGettingObject.SignedUrlForGettingObject).attr("target", "_blank");
-			//a.appendTo('body');
-		},
-		error: function(textStatus, errorThrown){
-			alert('ERROR!\najaxget app.config failed:\nGo FLUCKING to check for console.log');
-			console.log(XMLHttpRequest.status);
-			console.log(XMLHttpRequest.readyState);
-			console.log(textStatus);
-		},
-		complete: function(){
-			$(who).attr("style", "opacity: 1.0;-moz-opacit: 1.0;");
-		}
-	});
-	$(who).attr("style", "opacity: 1.0;-moz-opacit: 1.0;");
+function sortClear(){
+	$(".header a").removeClass("ascending").removeClass("descending");
 	return;
-}
-function exceptionHandler(stat, data = ""){
-	var handlerFlag = false;
-	switch(stat){
-		case '201':
-			var inputedPassword = prompt(JSON.parse(data).msg);
-			if(inputedPassword !== null){
-				$.cookie('hfs4OSS_indexPassword', inputedPassword);
-				listObjects();
-			}
-			handlerFlag = true;
-			break;
-		case '202':
-			var inputedPassword = prompt(JSON.parse(data).msg);
-			if(inputedPassword !== null){
-				$.cookie('hfs4OSS_indexPassword', inputedPassword)
-				listObjects();
-			}
-			handlerFlag = true;
-			break;
-	}
-	return handlerFlag;
 }
 function getTime() {
 	var ts = arguments[0] || 0;

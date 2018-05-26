@@ -4,7 +4,22 @@ require_once __DIR__ . '/../class/oss.class.php';
 $ossClient = OSS::getOssClient();
 
 $target = @check_var($_POST['target'], null);
-$resultToReturn = array();        //存放action结果的二维数组
+
+foreach($APPConfig['AUTH'] as $key => $value){
+	if($target == $key){
+		if(!@check_var($hfs4OSS_cookies['passwords'][$key])){
+			$resultToSendBack['stat'] = 221;
+			$resultToSendBack['msg'] = $APPConfig['AUTH'][$key]['FIRSTMET'];
+			die(json_encode($resultToSendBack));
+		}else{
+			if($hfs4OSS_cookies['passwords'][$key] !== $APPConfig['AUTH'][$key]['PASSWORD']){
+				$resultToSendBack['stat'] = 222;
+				$resultToSendBack['msg'] = $APPConfig['AUTH'][$key]['IFWRONG'];
+				die(json_encode($resultToSendBack));
+			}
+		}
+	}
+}
 
 if($target){
 	$getSignedUrlForGettingObjectResult =
@@ -14,11 +29,11 @@ if($target){
 			$APPConfig['ROOT_DIR'] . $target,
 			$APPConfig['SIGNEDURL_TIMEOUT']
 		);
-	$resultToReturn['stat'] = "100";
-	$resultToReturn['SignedUrlForGettingObject'] = $getSignedUrlForGettingObjectResult;
+	$resultToSendBack['stat'] = "100";
+	$resultToSendBack['url'] = $getSignedUrlForGettingObjectResult;
 }else{
-	$resultToReturn['stat'] = "301";
-	$resultToReturn['msg'] = "Invalid Target";
+	$resultToSendBack['stat'] = "301";
+	$resultToSendBack['msg'] = "Invalid Target";
 }
 
-print(json_encode($resultToReturn));
+print(json_encode($resultToSendBack));
