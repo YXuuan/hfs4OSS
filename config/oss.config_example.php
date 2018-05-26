@@ -1,6 +1,6 @@
 <?php
 
-final class APPConfig
+final class OSSConfig
 {
     const ACCESS_ID = 'LTAIfsJiANtgIUug';
     const ACCESS_KEY = 'Tu7vB4DgSqRQC71iCO5nBUIvdPs5u5';

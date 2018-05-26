@@ -1,31 +1,29 @@
 <?php
 
 return array(
-	'ROOT_DIR' => "mydir/",
+	'ROOT_DIR' => "mydir1/",
 	'SIGNEDURL_TIMEOUT' => 3600,
 	'SHOW_FILEDATE' => true,
-	'INDEX_AUTH' => array(
-		'FIRSTMET' => '请输入密码：',
-		'PASSWORD' => '2333',
-		'IFWRONG' => '我不会告诉你密码是2333的，请重新输入：'
-	),
-	'PREFIX_AUTH' => array(
-		'mydir/myphotos/' => array(
-			'FIRSTMET' => '请输入相册密码：',
-			'PASSWORD' => '2334',
-			'IFWRONG' => '密码错误，重新输入：'
+	'AUTH' => array(
+		'INDEX' => array(
+			'FIRSTMET' => '你好呀~\n请输入密码：',
+			'PASSWORD' => '2333',
+			'IFWRONG' => '输错了>_<\n再试一次：'
 		),
-		'mydir/myvideos/' => array(
-			'FIRSTMET' => '请输入相册密码：',
-			'PASSWORD' => '2335',
-			'IFWRONG' => '你以为我会给你看吗？'
-		)
-	),
-	'FILE_AUTH' => array(
-		'mydir/something/SNIS-048.avi' => array(
-			'FIRSTMET' => '你真的想看，输密码吧？',
-			'PASSWORD' => '啧',
-			'IFWRONG' => '密码错误，重新输入：'
+		'My Favourite avi/' => array(
+			'FIRSTMET' => '看啥？',
+			'PASSWORD' => '12345678',
+			'IFWRONG' => '不给你看！'
+		),
+		'Private Files/' => array(
+			'FIRSTMET' => '谁他妈需要你的爱\n老子爱你就够了（恶龙咆哮）',
+			'PASSWORD' => '那我不爱了',
+			'IFWRONG' => '好 你竟然敢不爱我（恶龙咆哮）',
+		),
+		'index.html' => array(
+			'FIRSTMET' => '<初次见面显示的文本>',
+			'PASSWORD' => '<密码>',
+			'IFWRONG' => '<验证失败时显示的文本>'
 		),
 	),
 );
