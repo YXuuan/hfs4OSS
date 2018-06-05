@@ -1,6 +1,16 @@
 # hfs4OSS
 
 ## 更新日志/ChangeLog
+### version 2.3.1 2018-06-05
+```
+[新增] 为每个路径/文件单独设置密码
+[优化] 密码验证逻辑
+[优化] 前后端变量命名
+[修改] 重设check_var()判定逻辑
+[修改] 修改配置文件结构
+[优化] 前端显示细节
+```
+ATTENTION: app.config.php有更新
 ### version 2.3.0 2018-05-23
 ```
 [修复] 顶部crumbbar最后一级指向出错，
@@ -10,8 +20,8 @@
 [优化] 配置文件引入逻辑
 [优化] action输出结构
 [优化] 前端显示细节
-ATTENTION: app.config.php、oss.config.php有更新
 ```
+ATTENTION: app.config.php、oss.config.php有更新
 ### version 2.2.2 2018-05-18
 ```
 [修复] 进入新目录时排序方式出错的问题
