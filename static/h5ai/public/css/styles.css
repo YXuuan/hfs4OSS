@@ -1,10 +1,10 @@
 /* h5ai v0.29.0 - https://larsjung.de/h5ai/ */
 @charset "utf-8";/*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */
 html {
-	/*font-family: "Ubuntu","Roboto","Helvetica","Arial","sans-serif"!important;*/      /*Changed*/
+	font-family: 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial, sans-serif;      /*Changed*/
 	line-height: 1.15;
 	-ms-text-size-adjust: 100%;
-	-webkit-text-size-adjust: 100%
+	-webkit-text-size-adjust: 100%;
 }
 
 body {

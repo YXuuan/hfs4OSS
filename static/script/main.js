@@ -8,7 +8,7 @@ $.ajax({
 		try{
 			appConfig = JSON.parse(resultRow);
 		}catch(e){       //异常捕获： 捕获请求成功但无法解析JSON的异常，意思就是有个傻逼把app.config.json改死了
-			alert('ERROR!\najaxget app.config succeed but JSON.parse() failed\nGo FLUCKING to check for the console');
+			alert("Error: ajax app.config succeed but JSON.parse failed, \nGo FLUCKING to check for the console!");
 			console.error('JSON.parse() error:\n' + e);
 		}
 		$(document).attr("title", appConfig.SITE_NAME);
@@ -26,7 +26,7 @@ $.ajax({
 		);
 	},
 	error: function(textStatus, errorThrown){
-		alert('ERROR!\najaxget app.config failed:\nGo FLUCKING to check for the console');
+		alert("Error: ajax app.config failed, \nGo FLUCKING to check for the console!");
 		console.error(XMLHttpRequest.status);
 		console.error(XMLHttpRequest.readyState);
 		console.error(textStatus);
@@ -67,7 +67,7 @@ function listObjects(prefix = ""){
 	var sortBy = arguments[1] !== undefined ? arguments[1] : $(".name").hasClass("descending") || $(".name").hasClass("ascending") ? "name" : $(".time").hasClass("descending") || $(".time").hasClass("ascending") ? "time" : $(".size").hasClass("descending") || $(".size").hasClass("ascending") ? "size" : "name";
 	var descending = arguments[2] !== undefined ? arguments[2] : $(".name, .size, .time").hasClass("descending") ? "true" : $(".name, .size, .time").hasClass("ascending") ? "false" : "true";
 	$("#items").attr("style", "opacity: 0.5;-moz-opacit: 0.5;");
-	console.log('listObjects(' + decodeURI(prefix) + ', ' + sortBy + ', ' + descending + '): ');
+	console.log('listObjects("' + decodeURI(prefix) + '", ' + sortBy + ', ' + descending + ') \nCookies: '+ $.cookie('hfs4OSS_cookies'));
 	$.ajax({
 		type: 'POST',
 		url: 'app/action/listObjects.action.php',
@@ -80,19 +80,22 @@ function listObjects(prefix = ""){
 		success: function(resultRow){
 			console.log(resultRow);
 			$("#list").html('');        //清空原有内容
-			//密码相关处理
 			try{
 				result = JSON.parse(resultRow);
 			}catch(e){           //异常捕获： 捕获请求成功但无法解析JSON的异常，多为listObjects.action抛出的异常
-				alert('ERROR!\najax listObjects.action succeed but JSON.parse() failed:\nGo FLUCKING to check the console');
-				console.error('JSON.parse() error:\n' + e);
-				return false;
-			}
-			if(!(result.stat >= 100 && result.stat <= 199)){
-				if(exceptionHandler(result.stat, result, prefix) === true){
-					listObjects(prefix);
-				}
+				alert("Error: ajax listObjects.action succeed but JSON.parse failed, \nGo FLUCKING to check the console!");
+				console.log(resultRow);
+				console.error(e);
 				return;
+			}
+			switch(statsHandler(result.stat, result, prefix)){
+				case 1:
+					break;
+				case 2:
+					listObjects(prefix);
+					return;
+				default:
+					return;
 			}
 			//列表动作
 			$.each(result.folderList, function(i, folderInfo){
@@ -108,7 +111,7 @@ function listObjects(prefix = ""){
 							'<span class="name" title="'+ decodeURI(prefix) + folderInfo.name.replace("/", "") + '">' +
 								folderInfo.name.replace("/", "") +
 							'</span>' +
-							'<span style="display: none;" class="time" title="-">-</span>' +
+							'<span class="time" title="-">-</span>' +
 							'<span class="size" title="-">-</span>' +
 						'</a>' +
 					'</li>'
@@ -152,7 +155,7 @@ function listObjects(prefix = ""){
 							'<span class="name" title="' + decodeURI(prefix) + fileInfo.name +'">' +
 								fileInfo.name +
 							'</span>' +
-							'<span class="time" style="display: none;" title="' + fileInfo.time +'">' +
+							'<span class="time" title="' + fileInfo.time +'">' +
 								getTime(fileInfo.time) +
 							'</span>' +
 							'<span class="size" title="' + fileInfo.size +'">' +
@@ -162,9 +165,8 @@ function listObjects(prefix = ""){
 					'</li>'
 				);
 			});
-			if(result.stat != 111){
-				$(".time").attr("style", "display: inline;");
-				//$(".name").attr("style", "margin-right: 100px;")
+			if(result.stat == 111){
+				$(".time").attr("style", "display: none;");
 			}
 			if(result.fileCount === 0 && result.folderCount === 0){
 				$("#list").html('<div id="view-hint" class="l10n-empty">Nothing\'s here, pal</div>');
@@ -176,7 +178,7 @@ function listObjects(prefix = ""){
 		},
 		error: function(textStatus, errorThrown){
 			$("#list").html('');
-			alert('ERROR!\najax listObjects.action failed:\nGo FLUCKING to check for the console');
+			alert("Error: ajax listObjects.action failed, \nGo FLUCKING to check for the console!");
 			console.error(XMLHttpRequest.status);
 			console.error(XMLHttpRequest.readyState);
 			console.error(textStatus);
@@ -259,7 +261,7 @@ function listObjects(prefix = ""){
 	});
 }
 function downloadObject(target, who){
-	console.log('getObject("' + decodeURI(target) + '"): ');
+	console.log('getObject("' + decodeURI(target) + '") \nCookies: '+ $.cookie('hfs4OSS_cookies'));
 	$(who).attr('style', 'opacity: 0.5;-moz-opacit: 0.5;');
 	$.ajax({
 		type: 'POST',
@@ -274,12 +276,13 @@ function downloadObject(target, who){
 			try{
 				result = JSON.parse(resultRow);
 			}catch(e){           //异常捕获： 捕获请求成功但无法解析JSON的异常，多为listObjects.action抛出的异常
-				alert('ERROR!\najax getSignedUrlForGettingObject.action succeed but JSON.parse() failed:\nGo FLUCKING to check for the console');
-				console.error('JSON.parse() error:\n' + e);
+				alert("Error: ajax getSignedUrlForGettingObject.action succeed but JSON.parse failed, \nGo FLUCKING to check for the console!");
+				console.log(resultRow);
+				console.error(e);
 				return;
 			}
 			if(!(result.stat >= 100 && result.stat <= 199)){
-				if(exceptionHandler(result.stat, result, target) === true){
+				if(statsHandler(result.stat, result, target) === true){
 					downloadObject(target, who);
 				}
 				return;
@@ -288,7 +291,7 @@ function downloadObject(target, who){
 			//a.appendTo('body');
 		},
 		error: function(textStatus, errorThrown){
-			alert('ERROR!\najax getSignedUrlForGettingObject.action failed:\nGo FLUCKING to check for the console');
+			alert("Error: ajax getSignedUrlForGettingObject.action failed, \nGo FLUCKING to check for the console!");
 			console.error(XMLHttpRequest.status);
 			console.error(XMLHttpRequest.readyState);
 			console.error(textStatus);
@@ -300,56 +303,56 @@ function downloadObject(target, who){
 	$(who).attr("style", "opacity: 1.0;-moz-opacit: 1.0;");
 	return;
 }
-function exceptionHandler(stat, data = ""){
-	var retry = false;
-	if(stat > 200 && stat < 300){
-		retry = authHandler(stat, data, arguments[2]);
+function statsHandler(stat, result = ""){
+	var handleStat = false;		//1：继续执行，2：重试，false：停止执行
+	if(stat){
+		handleStat = authHandler(stat, result, arguments[2]);
 	}else{
-		alert('Unexpected Error, \nGo FLUCKING to check for the console');
-		retry = false;
+		alert("Unexpected Error: No stat code, \nGo FLUCKING to check for the console!");
 	}
-	return retry;
+	return handleStat;
 }
-function authHandler(stat, data){
-	var retry = false;
+function authHandler(stat, result){
+	var handleStat = 1;
 	var inputed = "";
 	hfs4OSS_cookies.passwords = hfs4OSS_cookies.passwords ? hfs4OSS_cookies.passwords : {};
+	//默认执行
+	//密码赋值到Cookies中和AUTH对应的正确路径
+	if(result.authingPrefix && hfs4OSS_cookies.passwords[arguments[2]]){
+		hfs4OSS_cookies.passwords[result.authingPrefix] = hfs4OSS_cookies.passwords[arguments[2]];
+	}
 	switch(stat){
-		case 201:
-		case 202:
-			inputed = prompt(data.msg);
+		case 201: case 202:
+			inputed = prompt(result.msg);
 			if(inputed !== null){
 				hfs4OSS_cookies.passwords.index = inputed;
-				$.cookie('hfs4OSS_cookies', JSON.stringify(hfs4OSS_cookies));
-				retry = true;
+				handleStat = 2;
 			}else{
-				retry = false;
+				handleStat = false;
 			}
 			break;
-		case 211:
-		case 212:
-			inputed = prompt(data.msg);
+		case 211: case 212:
+			inputed = prompt(result.msg);
+			if(inputed !== null){
+				hfs4OSS_cookies.passwords[arguments[2]] = inputed;
+			handleStat = 2;
+			}else{
+				handleStat = false;
+			}
+			break;
+		case 221: case 222:
+			inputed = prompt(result.msg);
 			if(inputed !== null){
 				hfs4OSS_cookies.passwords[arguments[2]] = inputed;
 				$.cookie('hfs4OSS_cookies', JSON.stringify(hfs4OSS_cookies));
-			retry = true;
+			handleStat = 2;
 			}else{
-				retry = false;
-			}
-			break;
-		case 221:
-		case 222:
-			inputed = prompt(data.msg);
-			if(inputed !== null){
-				hfs4OSS_cookies.passwords[arguments[2]] = inputed;
-				$.cookie('hfs4OSS_cookies', JSON.stringify(hfs4OSS_cookies));
-			retry = true;
-			}else{
-				retry = false;
+				handleStat = false;
 			}
 			break;
 	}
-	return retry;
+	$.cookie('hfs4OSS_cookies', JSON.stringify(hfs4OSS_cookies));
+	return handleStat;
 }
 function sortSwitch(who){
 	if($(who).hasClass("ascending")){
