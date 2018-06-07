@@ -198,7 +198,7 @@ function listObjects(prefix = ""){
 						'<span class="name">' + appConfig.SITE_NAME + '</span>' +
 						'<img class="hint" src="static/h5ai/public/images/themes/h5ai-0.27/folder-page.svg" alt=">">' +
 					'</a>' +
-					'<a href="#' + prefix + '" class="crumb" data="' + prefixSplited[0] + '/">' +       //手动定义crumbbar的第一层data
+					'<a href="#' + prefixSplited[0] + '/" class="crumb" data="' + prefixSplited[0] + '/">' +       //手动定义crumbbar的第一层data
 					//'<img class="sep" src="static/h5ai/public/images/ui/crumb.svg" alt=">">' +
 					'<span class="name">' + decodeURI(prefixSplited[0]) + '</span>' +
 					'</a>'
