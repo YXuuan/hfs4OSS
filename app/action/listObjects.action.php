@@ -42,7 +42,6 @@ $options = array(
 $sortBy = @check_var($_POST['sortBy']) ? $_POST['sortBy'] : "name";
 $descending = @check_var($_POST['descending']) ? ($_POST['descending'] == "true" ? SORT_ASC : SORT_DESC) : SORT_ASC;
 
-$t1 = microtime(true);
 $ossClient = OSS::getOssClient();
 $listObjectResult = OSS::listObjects($ossClient, $bucket, $options);
 $objectList = $listObjectResult->getObjectList();
@@ -90,10 +89,9 @@ switch($sortBy){
 		//@array_multisort($resultToSendBack['folderList'], $descending, $resultToSendBack['folderList']);
 		break;
 }
-$t2 = microtime(true);
 $resultToSendBack['fileCount'] = @count($resultToSendBack["fileList"]);
 $resultToSendBack['folderCount'] = @count($resultToSendBack["folderList"]);
-$resultToSendBack['takes'] = floor(($t2-$t1)*1000);
+$resultToSendBack['takes'] = floor((microtime(true) - $_SERVER['REQUEST_TIME']) * 1000);
 $resultToSendBack['memUsed'] = memory_get_usage();
 
 $resultToSendBack['stat'] = $APPConfig['SHOW_FILEDATE'] == true ? 100 : 111;
