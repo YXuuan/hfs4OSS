@@ -2,6 +2,9 @@
 @charset "utf-8";/*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */
 html {
 	font-family: 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial, sans-serif;      /*Changed*/
+	src:url('static/h5ai/public/css/font/poppin.eot'); /* IE9 Compat Modes */  
+	src:url('static/h5ai/public/css/font/poppin.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */  
+		url('static/h5ai/public/css/font/poppin.ttf') format('truetype'); /* Safari, Android, iOS */  
 	line-height: 1.15;
 	-ms-text-size-adjust: 100%;
 	-webkit-text-size-adjust: 100%;
