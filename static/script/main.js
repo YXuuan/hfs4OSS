@@ -1,41 +1,44 @@
 var hfs4OSS_cookies = $.cookie('hfs4OSS_cookies') ? JSON.parse($.cookie('hfs4OSS_cookies')) : {};
 var appConfig = {};
-$.ajax({
-	type: 'GET',
-	url: 'config/static.config.json?t=' + new Date().getTime(),
-	dataType: 'text',
-	success: function(resultRow){
-		try{
-			appConfig = JSON.parse(resultRow);
-		}catch(e){       //异常捕获： 捕获请求成功但无法解析JSON的异常，意思就是有个傻逼把app.config.json改死了
-			alert("Error: ajax app.config succeed but JSON.parse failed, \nGo FLUCKING to check for the console!");
-			console.error('JSON.parse() error:\n' + e);
-		}
-		$(document).attr("title", appConfig.SITE_NAME);
-		if(appConfig.FOOTER !== ""){
-			$("#stats").after(
-				'<div style="margin-top:15px">' +
-					'<span id="footer">' + appConfig.FOOTER + '</span>' +
-				'</div>');
-		}
-		$("#crumbbar").html(        //我也不知道为什么非要在这里加一个才能在会话创建后就显示出站点名字
-			'<a href="#" class="crumb">' +
-				'<span class="name">' + appConfig.SITE_NAME + '</span>' +
-				'<img class="hint" src="static/h5ai/public/images/themes/h5ai-0.27/folder-page.svg" alt="#">' +
-			'</a>'
-		);
-	},
-	error: function(textStatus, errorThrown){
-		alert("Error: ajax app.config failed, \nGo FLUCKING to check for the console!");
-		console.error(XMLHttpRequest.status);
-		console.error(XMLHttpRequest.readyState);
-		console.error(textStatus);
-	}
-});
-listObjects(window.location.hash.substring(1));
 $(document).ready(function(){
-	//Event Loop
-	$(".header").on("click", "a", function(event){     //定义的#back是为了每次覆盖
+	//主线程，Event Loop
+	$.ajax({
+		type: 'GET',
+		url: 'config/static.config.json?t=' + new Date().getTime(),
+		dataType: 'text',
+		success: function(resultRow){
+			try{
+				appConfig = JSON.parse(resultRow);
+			}catch(e){       //异常捕获： 捕获请求成功但无法解析JSON的异常，意思就是有个傻逼把app.config.json改死了
+				alert("Error: ajax app.config succeed but JSON.parse failed, \nGo FLUCKING to check for the console!");
+				console.error('JSON.parse() error:\n' + e);
+			}
+			$(document).attr("title", appConfig.SITE_NAME);
+			if(appConfig.FOOTER !== ""){
+				$("#stats").after(
+					'<div style="margin-top:15px">' +
+						'<span id="footer">' + appConfig.FOOTER + '</span>' +
+					'</div>');
+			}
+			$("#crumbbar").html(        //我也不知道为什么非要在这里加一个才能在会话创建后就显示出站点名字
+				'<a href="#" class="crumb">' +
+					'<span class="name">' + appConfig.SITE_NAME + '</span>' +
+					'<img class="hint" src="static/h5ai/public/images/themes/h5ai-0.27/folder-page.svg" alt="#">' +
+				'</a>'
+			);
+		},
+		error: function(textStatus, errorThrown){
+			alert("Error: ajax app.config failed, \nGo FLUCKING to check for the console!");
+			console.error(XMLHttpRequest.status);
+			console.error(XMLHttpRequest.readyState);
+			console.error(textStatus);
+		}
+	});
+	listObjects(window.location.hash.substring(1));
+	$("#crumbbar").on("click", 'a.crumb', function(event){
+		listObjects($(this).attr("data"));
+	});
+	$(".header").on("click", ".name, .time, .size", function(event){     //定义的#back是为了每次覆盖
 		sortSwitch($(this));
 	});
 	//对Ajax返回数据后新生成的元素进行绑定
@@ -45,17 +48,21 @@ $(document).ready(function(){
 	$("#list").on("click", "li.item.folder", function(event){       //定义的#list是为了不清空所有
 		listObjects($(this).attr("data"));
 	});
-	$("#crumbbar").on("click", 'a.crumb', function(event){
-		listObjects($(this).attr("data"));
-	});
-	$("#list").on("click", "li.item.file", function(event){
+	$("#list").on("click", "li.item.file .name, .time, .size", function(event){
+		$(this).parent("a").parent("li").attr('style', 'opacity: 0.5;-moz-opacit: 0.5;');
 		//如果已经请求过一次则直接下载
-		if($(this).find("a").attr("href")){
-			this.click();
+		if($(this).parent("a").attr("href")){
+			//this.click();
 		}else{
-			downloadObject($(this).attr("data"), this);
-			this.click();
+			//var url = getSignedUrlForGettingObject($(this).parent("a").parent("li").attr("data"));
+			$(this).parent("a").attr("href", getSignedUrlForGettingObject($(this).parent("a").parent("li").attr("data"))).attr("target", "_blank");
+			//a.appendTo('body');
+			//this.click();
 		}
+		$(this).parent("a").parent("li").attr('style', 'opacity: 1.0;-moz-opacit: 1.0;');
+	});
+	$("#list").on("click", "li.item.file .icon.square-action", function(event){
+		$(this).parent("a").attr("href", "ext/DPlayer/index.html#" + getSignedUrlForGettingObject($(this).parent("a").parent("li").attr("data"))).attr("target", "_blank");
 	});
 });
 function listObjects(prefix = ""){
@@ -84,7 +91,6 @@ function listObjects(prefix = ""){
 				result = JSON.parse(resultRow);
 			}catch(e){           //异常捕获： 捕获请求成功但无法解析JSON的异常，多为listObjects.action抛出的异常
 				alert("Error: ajax listObjects.action succeed but JSON.parse failed, \nGo FLUCKING to check the console!");
-				console.log(resultRow);
 				console.error(e);
 				return;
 			}
@@ -102,7 +108,7 @@ function listObjects(prefix = ""){
 				$("#list").append(
 					'<li class="item folder" data="' + prefix + encodeURI(folderInfo.name) + '">' +
 						'<a href="#' + prefix + encodeURI(folderInfo.name) + '">' +
-							'<span class="icon square">' +
+							'<span class="icon square-icon">' +
 								'<img src="static/h5ai/public/images/themes/h5ai-0.27/folder.svg" alt="folder" />' +
 							'</span>' +
 							'<span class="icon landscape">' +
@@ -117,13 +123,18 @@ function listObjects(prefix = ""){
 					'</li>'
 				);
 			});
-			var fileSuffix = "";
-			var fileIcon = "";
+			var fileSuffix = '', fileIcon = '', actionText = '';
 			$.each(result.fileList, function(i, fileInfo){
 				fileSuffix =  fileInfo.name.substring(fileInfo.name.lastIndexOf('.') + 1);
 				switch(fileSuffix){
 					case 'avi': case 'wmv': case 'mpeg': case 'mp4': case 'mov': case 'mkv': case 'flv': case 'f4v': case 'm4v': case 'rmvb': case 'rm': case '3gp': case 'dat': case 'ts': case 'mts':
 						fileIcon = 'static/h5ai/public/images/themes/h5ai-0.27/vid.svg';
+						actionText = 
+							'<a>' +
+								'<span class="icon square-action" title="Play: ' + decodeURI(prefix) + fileInfo.name + '">' +
+									'<img src="static/h5ai/public/images/ext/playvideo.svg" alt="play" />' +
+								'</span>' +
+							'</a>';
 						break;
 					case 'bmp': case 'jpg': case 'png': case 'tiff': case 'gif': case 'pcx': case 'tga': case 'exif': case 'fpx': case 'svg': case 'psd': case 'cdr': case 'pcd': case 'dxf': case 'ufo': case 'eps': case 'ai': case 'raw': case 'wmf': case 'webp':
 						fileIcon = 'static/h5ai/public/images/themes/h5ai-0.27/img.svg';
@@ -146,7 +157,7 @@ function listObjects(prefix = ""){
 				$("#list").append(
 					'<li class="item file" data="' + prefix + encodeURI(fileInfo.name) + '">' +
 						'<a>' +
-							'<span class="icon square">' +
+							'<span class="icon square-icon">' +
 								'<img src="' + fileIcon + '" alt="file" />' +
 							'</span>' +
 							'<span class="icon landscape">' +
@@ -162,8 +173,10 @@ function listObjects(prefix = ""){
 								bytesToSize(fileInfo.size) +
 							'</span>' +
 						'</a>' +
+						actionText +
 					'</li>'
 				);
+				fileSuffix = '', fileIcon = '', actionText = '';
 			});
 			if(result.stat == 111){
 				$(".time").attr("style", "display: none;");
@@ -232,7 +245,7 @@ function listObjects(prefix = ""){
 				$("#back").html(
 					'<li class="item folder folder-parent" data="' + parentFolder + '">' +
 						'<a href="#' + parentFolder + '">' +
-							'<span class="icon square">' +
+							'<span class="icon square-icon">' +
 							'<img src="static/h5ai/public/images/themes/h5ai-0.27/folder-parent.svg" alt="folder">' +
 							'</span>' +
 							'<span class="icon landscape">' +
@@ -259,6 +272,41 @@ function listObjects(prefix = ""){
 			$("#items").attr("style", "opacity: 1.0;-moz-opacit: 1.0;");
 		}
 	});
+}
+function getSignedUrlForGettingObject(target){
+	console.log('getSignedUrlForGettingObject("' + decodeURI(target) + '") \nCookies: '+ $.cookie('hfs4OSS_cookies'));
+	$.ajax({
+		type: 'POST',
+		url: 'app/action/getSignedUrlForGettingObject.action.php',
+		data: {
+			target: decodeURI(target),
+		},
+		async: false,		//就相当于执行了两次~
+		dataType: 'text',
+		success: function(resultRow){
+			console.log(resultRow);
+			try{
+				result = JSON.parse(resultRow);
+			}catch(e){           //异常捕获： 捕获请求成功但无法解析JSON的异常，多为listObjects.action抛出的异常
+				alert("Error: ajax getSignedUrlForGettingObject.action succeed but JSON.parse failed, \nGo FLUCKING to check for the console!");
+				console.error(e);
+				return;
+			}
+			if(!(result.stat >= 100 && result.stat <= 199)){
+				if(statsHandler(result.stat, result, target) === true){
+					getSignedUrlForGettingObject(target);
+				}
+				return;
+			}
+		},
+		error: function(textStatus, errorThrown){
+			alert("Error: ajax getSignedUrlForGettingObject.action failed, \nGo FLUCKING to check for the console!");
+			console.error(XMLHttpRequest.status);
+			console.error(XMLHttpRequest.readyState);
+			console.error(textStatus);
+		},
+	});
+	return result.url;
 }
 function downloadObject(target, who){
 	console.log('getObject("' + decodeURI(target) + '") \nCookies: '+ $.cookie('hfs4OSS_cookies'));
