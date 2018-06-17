@@ -2,9 +2,9 @@
 @charset "utf-8";/*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */
 html {
 	font-family: 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial, sans-serif;      /*Changed*/
-	src:url('static/h5ai/public/css/font/poppin.eot'); /* IE9 Compat Modes */  
-	src:url('static/h5ai/public/css/font/poppin.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */  
-		url('static/h5ai/public/css/font/poppin.ttf') format('truetype'); /* Safari, Android, iOS */  
+	src:url('static/h5ai/public/font/poppin.eot'); /* IE9 Compat Modes */  
+	src:url('static/h5ai/public/font/poppin.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */  
+		url('static/h5ai/public/font/poppin.ttf') format('truetype'); /* Safari, Android, iOS */  
 	line-height: 1.15;
 	-ms-text-size-adjust: 100%;
 	-webkit-text-size-adjust: 100%;
@@ -1303,7 +1303,7 @@ html.no-browser .noBrowserMsg {
 	margin: 2px 0 6px 0
 }
 
-#sidebar .button {
+#sidebar .action {
 	border-radius: 2px;
 	transition: all .2s ease-in-out;
 	display: inline-block;
@@ -1312,16 +1312,16 @@ html.no-browser .noBrowserMsg {
 	cursor: pointer
 }
 
-#sidebar .button:hover {
+#sidebar .action:hover {
 	background: rgba(0,0,0,0.03)
 }
 
-#sidebar .button.active {
+#sidebar .action.active {
 	background: rgba(0,0,0,0.03);
 	box-shadow: inset 0 0 4px 0 rgba(0,0,0,0.4)
 }
 
-#sidebar .button img {
+#sidebar .action img {
 	width: 24px;
 	height: 24px;
 	padding: 12px
@@ -1581,7 +1581,7 @@ html.no-browser .noBrowserMsg {
 	border-radius: 2px 2px 0 0
 }
 
-#view.view-details .header .name,#view.view-details .header .time,#view.view-details .header .size {
+#view.view-details .header .name,#view.view-details .header .time,#view.view-details .header .size,#view.view-details .header .action {
 	transition: all .2s ease-in-out;
 	line-height: 24px;
 	padding: 0 8px 16px 8px;
@@ -1589,7 +1589,7 @@ html.no-browser .noBrowserMsg {
 	outline: 0
 }
 
-#view.view-details .header .name:hover,#view.view-details .header .time:hover,#view.view-details .header .size:hover {
+#view.view-details .header .name:hover,#view.view-details .header .time:hover,#view.view-details .header .size:hover,#view.view-details .header .action:hover {
 	opacity: 1;
 	color: #42a5f5
 }
@@ -1627,7 +1627,7 @@ html.no-browser .noBrowserMsg {
 	border-radius: 0 0 2px 2px
 }
 
-#view.view-details .square {
+#view.view-details .square-icon {
 	display: inline-block;
 	position: absolute;
 	left: 16px;
@@ -1635,43 +1635,49 @@ html.no-browser .noBrowserMsg {
 	padding: 8px
 }
 
-#view.view-details .square .thumb {
+#view.view-details .square-icon .thumb {
 	border-radius: 2px;
 	box-shadow: 0 0 1px 0 rgba(0,0,0,0.2)
 }
 
-#view.view-details .name,#view.view-details .time,#view.view-details .size {
+#view.view-details .name,#view.view-details .time,#view.view-details .size,#view.view-details .action {
 	padding: 0 8px
 }
 
 #view.view-details .time {
 	position: absolute;
-	right: 116px;
+	right: 180px;		/*Changed*/
 	top: 0
 }
 
 #view.view-details .size {
 	position: absolute;
+	right: 80px;
+	top: 0
+}
+
+#view.view-details .action {		/*Added*/
+	position: absolute;
 	right: 16px;
 	top: 0
 }
 
-#view.view-details .item .name,#view.view-details .item .time,#view.view-details .item .size {
+#view.view-details .item .name,#view.view-details .item .time,#view.view-details .item .size,#view.view-details .item .action {
 	line-height: 36px
 }
 
-#view.view-details .square {
+#view.view-details .square-icon {
 	width: 20px;		/*Changed*/
 	height: 20px			/*Changed*/
 }
 	
-#view.view-details .square img {
+#view.view-details .square-icon img {
 	width: 20px;		/*Changed*/
 	height: 20px;		/*Changed*/
 }
 
 #view.view-details .name {
-	margin: 0 246px 0 48px      /*Changed*/
+	margin: 0 326px 0 48px      /*Changed margin: 0 246px 0 48px*/
 }
 
 #view.view-details.width-0 .name {
@@ -1709,7 +1715,7 @@ html.no-browser .noBrowserMsg {
 	box-shadow: 0 1px 10px 0 rgba(0,0,0,0.5)
 }
 
-#view.view-grid .square {
+#view.view-grid .square-icon {
 	display: inline-block;
 	vertical-align: top
 }
@@ -1717,11 +1723,11 @@ html.no-browser .noBrowserMsg {
 #view.view-grid .name {
 	display: inline-block;
 	vertical-align: top;
-	width: 180px;
+	width: 180px;		/*Changed*/
 	padding: 0 8px
 }
 
-#view.view-grid .time,#view.view-grid .size {
+#view.view-grid .time,#view.view-grid .size,#view.view-grid .action {
 	display: none
 }
 
@@ -1729,12 +1735,12 @@ html.no-browser .noBrowserMsg {
 	line-height: 48px
 }
 
-#view.view-grid .square {
+#view.view-grid .square-icon {
 	width: 48px;
 	height: 48px
 }
 
-#view.view-grid .square img {
+#view.view-grid .square-icon img {
 	width: 48px;
 	height: 48px
 }
@@ -1765,7 +1771,7 @@ html.no-browser .noBrowserMsg {
 	text-align: center
 }
 
-#view.view-icons .time,#view.view-icons .size {
+#view.view-icons .time,#view.view-icons .size,#view.view-icons .action {
 	display: none
 }
 
@@ -1815,7 +1821,7 @@ html.no-browser .noBrowserMsg {
 	background: #fafafa
 }
 
-#view .folder-parent .time,#view .folder-parent .size {
+#view .folder-parent .time,#view .folder-parent .size,#view .folder-parent .action {
 	display: none
 }
 
@@ -1835,23 +1841,48 @@ html.no-browser .noBrowserMsg {
 	max-height: none
 }
 
-#view .name {
+#view.view-details .name {
 	display: block;
 	overflow: hidden;
 	text-align: left;
 	text-overflow: ellipsis
 }
 
-#view .time {
+#view.view-details .time {
 	text-align: right;
 	width: 130px
 }
 
-#view .size {
+#view.view-details .size {
 	text-align: right;
 	width: 80px
 }
 
+#view.view-details .action {		/*Added*/
+	text-align: right;
+	width: 24px
+}
+#view.view-details .square-action {
+	display: inline-block;
+	position: absolute;
+	right: 16px;
+	top: -1px;				/*Changed*/
+	padding: 8px
+}
+
+#view.view-details .square-action .thumb {
+	border-radius: 2px;
+	box-shadow: 0 0 1px 0 rgba(0,0,0,0.2)
+}
+#view.view-details .square-action {
+	width: 20px;		/*Changed*/
+	height: 20px			/*Changed*/
+}
+	
+#view.view-details .square-action img {
+	width: 20px;		/*Changed*/
+	height: 20px;		/*Changed*/
+}
 #view #view-hint {
 	display: block;
 	margin-top: 36px;
@@ -1863,8 +1894,8 @@ html.no-browser .noBrowserMsg {
 #autobacklinks{
 	display: none
 }
-@media only screen and (max-width:785px) {      /*Changed*/
-	.time{       /*Changed*/
+@media only screen and (max-width:885px) {      /*Changed*/
+	#view.view-details .time{       /*Changed*/
 		 display: none
 	}
 	#view.view-details .name{
@@ -1882,15 +1913,15 @@ html.no-browser .noBrowserMsg {
 		display: none!important
 	}
 }
-@media only screen and (max-width:500px) {
-	.size, #backlink{       /*Changed*/
+@media only screen and (max-width:660px) {
+	#view.view-details .size, #backlink, #autobacklinks, #view.view-details .header .action{       /*Changed*/
 		 display: none
 	}
-	#autobacklinks{
-		display: inline
-	}
 	#view.view-details .name{
-		margin-right: 4px;
+		margin-right: 32px;
+	}
+	#view.view-details .action {		/*Added*/
+		right: 0;
 	}
 }
 @media print {
