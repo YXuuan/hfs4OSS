@@ -26,7 +26,7 @@ Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuu
 1. 开通OSS服务、新建存储空间、上传文件：[OSS新手入门](https://promotion.aliyun.com/ntms/ossedu2.html)
 2. 了解基本的OSS属性信息，得到Endpoint
 3. 申请具有对应访问权限的AccessKey
-* 配置：
+* 配置：  
 填写APP配置文件config/app.config.php
 ~~~
 ROOT_DIR		：(str)根目录路径，类似于FTP服务器的虚拟目录显示（例如此项为"photo/"则会将photo文件夹下的内容当作根目录显示）。缺省值为空；
@@ -34,12 +34,12 @@ ROOT_DIR		：(str)根目录路径，类似于FTP服务器的虚拟目录显示�
 SIGNEDURL_TIMEOUT	：(int)每次下载文件时请求的签名URL有效期时长（秒）。缺省值：3600；
 SHOW_FILEDATE		：(bool)是否显示文件修改时间；
 ROOT_AUTH		：(arr)网站验证相关：
-[
-	ENABLED			:（bool)是否开启，
-	PASSWORD		：(str)访问密码，程序将在首次访问时要求输入，为空则为不设置，	
-	FIRSTMET		：(str)首次时提示的信息，
-	IFWRONG			：(str)密码错误的提示信息；
-]；
+	[
+		ENABLED			:（bool)是否开启，
+		PASSWORD		：(str)访问密码，程序将在首次访问时要求输入，为空则为不设置，	
+		FIRSTMET		：(str)首次时提示的信息，
+		IFWRONG			：(str)密码错误的提示信息；
+	]；
 AUTH			：(arr)访问验证相关：
 	[			：一个数组设置一个路径，详见example
 		PATH			：(str)需要验证的路径（包含ROOT_DIR的绝对路径），
@@ -47,7 +47,11 @@ AUTH			：(arr)访问验证相关：
 		PASSWORD		：(str)访问密码，程序将在首次访问时要求输入，为空则为不设置，	
 		FIRSTMET		：(str)首次时提示的信息，
 		IFWRONG			：(str)密码错误的提示信息；
-	]；
+	]，
+	[
+		...
+	]，
+	...；
 ~~~
 填写OSS配置文件config/oss.config.json：
 ~~~
@@ -83,16 +87,18 @@ FOOTER			：(str)底部Footer的HTML代码；
 ```
 ## 更新日志/ChangeLog
 ```
-version 2.3.1 2018-06-05
-	[新增] 为每个路径/文件单独设置密码
-	[优化] 密码验证逻辑
-	[优化] 前后端变量命名
-	[修改] 重设check_var()判定逻辑
-	[修改] 修改配置文件结构
-	[优化] 前端显示细节
-ATTENTION: app.config.php有更新
+version 2.4.0 2018-06-17
+	[新增] 视频在线播放
+	[优化] 前端运行逻辑
+	[优化] 前端显示细节，修改默认字体
 ```
 更多：[CHANGELOG.md](https://github.com/YXuuan/hfs4OSS/blob/master/CHANGELOG.md)
+
+## 使用到的开源项目/Reference
+* lrsjng/h5ai  
+	https://github.com/lrsjng/h5ai
+* MoePlayer/DPlayer
+	https://github.com/MoePlayer/DPlayer
 
 ## 已知的问题/Problems
 ```
