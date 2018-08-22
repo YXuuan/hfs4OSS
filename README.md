@@ -28,19 +28,19 @@ Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuu
 3. 申请具有对应访问权限的AccessKey
 * 配置：  
 填写APP配置文件config/app.config.php
-~~~
-ROOT_DIR		：(str)根目录路径，类似于FTP服务器的虚拟目录显示（例如此项为"photo/"则会将photo文件夹下的内容当作根目录显示）。缺省值为空；
+```
+ROOT_DIR		：(str)根目录路径，类似于FTP服务器的虚拟目录显示（例如此项为"photo/"则会将photo文件夹下的内容当作根目录显示），为空则为不设置；
 	注意：必须以"/"结尾且开头无需用"/"表示根目录
 SIGNEDURL_TIMEOUT	：(int)每次下载文件时请求的签名URL有效期时长（秒）。缺省值：3600；
 SHOW_FILEDATE		：(bool)是否显示文件修改时间；
-ROOT_AUTH		：(arr)网站验证相关：
+ROOT_AUTH		：(arr)全站访问验证：
 	[
 		ENABLED			:（bool)是否开启，
 		PASSWORD		：(str)访问密码，程序将在首次访问时要求输入，为空则为不设置，	
 		FIRSTMET		：(str)首次时提示的信息，
 		IFWRONG			：(str)密码错误的提示信息；
 	]；
-AUTH			：(arr)访问验证相关：
+AUTH			：(arr)目录访问验证：
 	[			：一个数组设置一个路径，详见example
 		PATH			：(str)需要验证的路径（包含ROOT_DIR的绝对路径），
 		ENABLED			：(bool)是否开启，
@@ -52,22 +52,22 @@ AUTH			：(arr)访问验证相关：
 		...
 	]，
 	...；
-~~~
+```
 填写OSS配置文件config/oss.config.json：
-~~~
+```
 ACCESS_ID		：(str)AccessKey ID值；
 ACCESS_KEY		：(str)AccessKey Key值；
 ENDPOINT		：(str)Endpoint值；
 	注意：必须带前缀http://或https://
 ENDPOINT_IS_CNAME	：(bool)如果Endpoint为自定义域名，此项为true；
 BUCKET			：(str)存储空间(Bucket)名；
-~~~
+```
 前端配置文件config/static.config.json：
-~~~
+```
 SITE_NAME		：(str)站点名称；
 SHOW_STATS		：(bool)底部是否显示状态信息，缺省值为true；
 FOOTER			：(str)底部Footer的HTML代码；
-~~~
+```
 * 文件结构：
 ```
 /

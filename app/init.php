@@ -8,7 +8,7 @@ date_default_timezone_set("UTC");		//OSS返回的XML Schema时间是UTC时区的
 $hfs4OSS_cookies = @check_var($_COOKIE['hfs4OSS_cookies']) ? json_decode($_COOKIE['hfs4OSS_cookies'], true) : null;
 $resultToSendBack = array();
 
-if(@check_var($APPConfig['ROOT_AUTH']['PASSWORD'] !== "")){
+if($APPConfig['ROOT_AUTH']['PASSWORD'] == true){
 	if(!@check_var($hfs4OSS_cookies['passwords']['index'])){
 		$resultToSendBack['stat'] = 201;
 		$resultToSendBack['msg'] = $APPConfig['ROOT_AUTH']['FIRSTMET'];
