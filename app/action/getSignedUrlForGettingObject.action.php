@@ -17,19 +17,23 @@ if($target){
 				//211：空密码，返回FIRSTMET。前端接管：要求输入密码
 				$resultToSendBack['stat'] = 221;
 				$resultToSendBack['msg'] = $eachAuth['FIRSTMET'];
-			}elseif($autoPassword != $eachAuth['PASSWORD']){
+			}
+			elseif($autoPassword != $eachAuth['PASSWORD']){
 				//212：密码错误，返回IFWRONG。前端接管：重新要求输入密码
 				$resultToSendBack['stat'] = 222;
 				$resultToSendBack['msg'] = $eachAuth['IFWRONG'];
-			}elseif($autoPassword == $eachAuth['PASSWORD']){
+			}
+			elseif($autoPassword == $eachAuth['PASSWORD']){
 				//验证成功出口。
 				break;
-			}else{
+			}
+			else{
 				//210：未知的错误。前端接管：暂无
 				$resultToSendBack['stat'] = 220;
 			}
 			die(json_encode($resultToSendBack));
-		}else{
+		}
+		else{
 			continue;
 		}
 	}
@@ -42,9 +46,16 @@ if($target){
 			$APPConfig['ROOT_DIR'] . $target,
 			$APPConfig['SIGNEDURL_TIMEOUT']
 		);
+
+		//OSSConfig::CDN_ENABLE == true?$getSignedUrlForGettingObjectResult = str_replace(OSSConfig::BUCKET_URL,OSSConfig::CDN,$getSignedUrlForGettingObjectResult):;
+		if(OSSConfig::CDN_ENABLE == true){
+			$getSignedUrlForGettingObjectResult = str_replace(OSSConfig::BUCKET_URL,OSSConfig::CDN,$getSignedUrlForGettingObjectResult);
+		}
+
 	$resultToSendBack['stat'] = "100";
 	$resultToSendBack['url'] = $getSignedUrlForGettingObjectResult;
-}else{
+}
+else{
 	$resultToSendBack['stat'] = "301";
 	$resultToSendBack['msg'] = "Invalid Target";
 }
