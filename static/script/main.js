@@ -65,12 +65,12 @@ $(document).ready(function(){
 		$(this).parent("a").attr("href", "ext/DPlayer/index.html#" + getSignedUrlForGettingObject($(this).parent("a").parent("li").attr("data"))).attr("target", "_blank");
 	});
 });
-function listObjects(prefix = ""){
+function listObjects(){
 	//有参数传入时优先使用参数，无参数传入时判断当前页面已有的状态，两者都无时走默认
 	//哪段程序体现了暴力美学?
 	/*var prefix = arguments[0] !== undefined ? decodeURI(arguments[0]) : window.location.hash.substring(1) ? decodeURI(window.location.hash.substring(1)) : "";
 	*/
-	prefix = decodeURI(prefix);
+	var prefix = arguments[0] ? decodeURI(arguments[0]) : "";
 	var sortBy = arguments[1] !== undefined ? arguments[1] : $(".name").hasClass("descending") || $(".name").hasClass("ascending") ? "name" : $(".time").hasClass("descending") || $(".time").hasClass("ascending") ? "time" : $(".size").hasClass("descending") || $(".size").hasClass("ascending") ? "size" : "name";
 	var descending = arguments[2] !== undefined ? arguments[2] : $(".name, .size, .time").hasClass("descending") ? "true" : $(".name, .size, .time").hasClass("ascending") ? "false" : "true";
 	$("#items").attr("style", "opacity: 0.5;-moz-opacit: 0.5;");
@@ -351,7 +351,8 @@ function downloadObject(target, who){
 	$(who).attr("style", "opacity: 1.0;-moz-opacit: 1.0;");
 	return;
 }
-function statsHandler(stat, result = ""){
+function statsHandler(stat){
+	var result = arguments[1] ? decodeURI(arguments[1]) : "";
 	var handleStat = false;		//1：继续执行，2：重试，false：停止执行
 	if(stat){
 		handleStat = authHandler(stat, result, arguments[2]);
