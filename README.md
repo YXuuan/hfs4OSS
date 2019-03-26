@@ -7,7 +7,7 @@ SDK：aliyun-oss-php-[sdk](https://promotion.aliyun.com/ntms/act/ossdoclist.html
 样式：[h5ai](https://larsjung.de/h5ai/) v0.29.0
 
 ## 预览/Demo
-* oovoo.site：[http://file.oovoo.site/](http://file.oovoo.site/)
+* [http://file.oovoo.site/](http://file.oovoo.site/)
 * ![image](https://yxuuan.github.io/hfs4oss-demo/v2.2.0.png)
 
 ## 部署/Build
@@ -17,7 +17,7 @@ PHP 5 >= 5.3，cURL()支持
 Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuuan/hfs4OSS/releases/)，
 或使用git：
 ~~~
-git clone https://github.com/YXuuan/hfs4OSS.git
+# git clone https://github.com/YXuuan/hfs4OSS.git
 ~~~
 * 更新：
 Releases：[https://github.com/YXuuan/hfs4OSS/releases/](https://github.com/YXuuan/hfs4OSS/releases/)，
@@ -87,17 +87,16 @@ FOOTER			：(str)底部Footer的HTML代码；
 ```
 ## 更新日志/ChangeLog
 ```
-version 2.4.0 2018-06-17
-	[新增] 视频在线播放
-	[优化] 前端运行逻辑
-	[优化] 前端显示细节，修改默认字体
+version 2.4.1 2019-03-26
+	[修复] 全站验证开关无效的问题
+	[优化] 视频播放功能调用细节
 ```
 更多：[CHANGELOG.md](https://github.com/YXuuan/hfs4OSS/blob/master/CHANGELOG.md)
 
 ## 使用到的开源项目/Reference
-* lrsjng/h5ai  
+* lrsjng/h5ai(MIT)  
 	https://github.com/lrsjng/h5ai
-* MoePlayer/DPlayer
+* MoePlayer/DPlayer(MIT)  
 	https://github.com/MoePlayer/DPlayer
 
 ## 已知的问题/Problems

@@ -61,8 +61,10 @@ $(document).ready(function(){
 		}
 		$(this).parent("a").parent("li").attr('style', 'opacity: 1.0;-moz-opacit: 1.0;');
 	});
+	//Action: Play按钮播放视频
 	$("#list").on("click", "li.item.file .icon.square-action", function(event){
-		$(this).parent("a").attr("href", "ext/DPlayer/index.html#" + getSignedUrlForGettingObject($(this).parent("a").parent("li").attr("data"))).attr("target", "_blank");
+		$(this).parent("a").attr("target", "_blank");
+		$(this).parent("a").attr("href", "ext/DPlayer/index.html#" + encodeURIComponent(getSignedUrlForGettingObject($(this).parent("a").parent("li").attr("data"))));
 	});
 });
 function listObjects(){

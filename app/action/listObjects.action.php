@@ -7,7 +7,13 @@ foreach($APPConfig['AUTH'] as $eachAuth){
 	//foreach的作用只是用来找到经过上面排序后的AUTH中符合当前请求路径的第一个，每个分支验证密码成功后都break，也就是说通过上面的排序后，只验证AUTH中距离最接近本次请求路径最接近的那个，即为验证成功
 	$prefixWithoutRootDir = str_replace_limit($APPConfig['ROOT_DIR'], "", $eachAuth['PATH'], 1);		//ROOT_DIR对前端不可视，传入的cookies中不包含ROOT_DIR前缀，故与AppConfig中的路径比较时要截掉每一个key的ROOT_DIR前缀部分
 	substr($_POST['prefix'], 0, strlen($prefixWithoutRootDir)) == $prefixWithoutRootDir;
-	if(($_POST['prefix'] == $prefixWithoutRootDir) || (substr($_POST['prefix'], 0, strlen($prefixWithoutRootDir)) == $prefixWithoutRootDir)){
+	if(
+		($eachAuth['ENABLED'] == true) &&
+		(
+			($_POST['prefix'] == $prefixWithoutRootDir) ||
+			(substr($_POST['prefix'], 0, strlen($prefixWithoutRootDir)) == $prefixWithoutRootDir)
+		)
+	){
 		$autoPassword = @check_var($hfs4OSS_cookies['passwords'][$prefixWithoutRootDir]) ? $hfs4OSS_cookies['passwords'][$prefixWithoutRootDir] : (@check_var($hfs4OSS_cookies['passwords'][$_POST['prefix']]) ? $hfs4OSS_cookies['passwords'][$_POST['prefix']] : null);		//任选其一做为验证的密码
 		$resultToSendBack['authedPrefix'] = $prefixWithoutRootDir;		//用于前端接管：密码赋值到Cookies中和AUTH对应的正确路径
 		if(!$autoPassword){
