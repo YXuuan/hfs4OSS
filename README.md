@@ -7,8 +7,7 @@ SDK：aliyun-oss-php-[sdk](https://promotion.aliyun.com/ntms/act/ossdoclist.html
 样式：[h5ai](https://larsjung.de/h5ai/) v0.29.0
 
 ## 预览/Demo
-* [http://file.oovoo.site/](http://file.oovoo.site/)
-* ![image](https://yxuuan.github.io/hfs4oss-demo/v2.2.0.png)
+![image](https://yxuuan.github.io/hfs4oss-demo/v2.2.0.png)
 
 ## 部署/Build
 * 环境：
